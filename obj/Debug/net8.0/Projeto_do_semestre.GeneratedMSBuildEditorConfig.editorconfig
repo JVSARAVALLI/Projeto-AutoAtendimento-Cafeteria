@@ -1,0 +1,91 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = Projeto_do_semestre
+build_property.RootNamespace = Projeto_do_semestre
+build_property.ProjectDir = /home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = /home/joao/Documentos/vscode/faculdade/Projeto_do_semestre
+build_property._RazorSourceGeneratorDebug = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaPublica/Carrinho.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYVB1YmxpY2EvQ2FycmluaG8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaPublica/Catalogo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYVB1YmxpY2EvQ2F0YWxvZ28uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaPublica/Identificacao.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYVB1YmxpY2EvSWRlbnRpZmljYWNhby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaPublica/IndexPublico.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYVB1YmxpY2EvSW5kZXhQdWJsaWNvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaPublica/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYVB1YmxpY2EvTG9naW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaRestrita/AdmCadastros.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYVJlc3RyaXRhL0FkbUNhZGFzdHJvcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaRestrita/AdmCatalogo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYVJlc3RyaXRhL0FkbUNhdGFsb2dvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaRestrita/AdmVendas.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYVJlc3RyaXRhL0FkbVZlbmRhcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/Shared/_Layout_Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXRfTG9naW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/Shared/_Layout_Publico.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXRfUHVibGljby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/Shared/_Layout_Restrito.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXRfUmVzdHJpdG8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-4w2hlo231v

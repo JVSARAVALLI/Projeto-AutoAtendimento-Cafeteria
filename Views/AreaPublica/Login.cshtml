@@ -1,0 +1,42 @@
+﻿@{
+    Layout = "_Layout_Login";
+    ViewData["Title"] = "Login - AutoCafé";
+}
+
+<div class="container d-flex justify-content-center">
+    <div class="card border-0 shadow rounded-4 p-4 p-md-5" style="width: 100%; max-width: 420px; background-color: #ffffff;">
+
+        <div class="text-center mb-4">
+            <!-- Ícone de xícara de café e identidade da cafeteria -->
+            <span style="font-size: 3rem;">☕</span>
+            <h3 class="fw-bold mb-1" style="color: #3e2723;">AutoCafé</h3>
+            <p class="text-muted small">Acesso restrito para funcionários</p>
+        </div>
+
+        <form asp-controller="AreaRestrita" asp-action="AdmCadastros" method="post">
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold text-secondary small">E-mail Corporativo</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-envelope"></i></span>
+                    <input type="email" class="form-control border-start-0" name="Email" placeholder="funcionario@autocafe.com" required>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold text-secondary small">Senha de Acesso</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-lock"></i></span>
+                    <input type="password" class="form-control border-start-0" name="Senha" placeholder="••••••••" required>
+                </div>
+            </div>
+
+            <!-- Botão com a cor amarela/dourada da cafeteria -->
+            <button type="submit" class="btn w-100 py-2 fw-bold shadow-sm" style="background-color: #ffb300; color: #3e2723; border: none;">
+                Entrar no Sistema <i class="bi bi-box-arrow-in-right ms-1"></i>
+            </button>
+
+        </form>
+
+    </div>
+</div>

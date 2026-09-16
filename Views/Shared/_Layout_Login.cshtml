@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Mokka Café</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Paleta de cores extraída da imagem */
+            --mokka-green: #9ab07a;
+            --mokka-green-dark: #7a8e5f;
+            --mokka-brown: #aa7946;
+            --mokka-brown-dark: #8c6035;
+            --mokka-black: #1a1a1a;
+        }
+
+        body {
+            /* Fundo verde sálvia com um gradiente suave */
+            background: linear-gradient(135deg, var(--mokka-green) 0%, var(--mokka-green-dark) 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--mokka-black);
+        }
+
+        /* 
+           Estilos globais sugeridos para a tela de login que será injetada. 
+           Isso garantirá que o formulário combine com o fundo verde.
+        */
+        .card, .login-container {
+            background-color: #fcfaf8; /* Um tom creme muito claro para o fundo do formulário */
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background-color: var(--mokka-brown);
+            border-color: var(--mokka-brown);
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--mokka-brown-dark);
+            border-color: var(--mokka-brown-dark);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- O ASP.NET Core injetará a view Views/AreaPublica/Login.cshtml aqui dentro -->
+    <main class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                @RenderBody()
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

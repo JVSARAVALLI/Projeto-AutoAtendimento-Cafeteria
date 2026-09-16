@@ -1,0 +1,93 @@
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/bin/Debug/net8.0/appsettings.Development.json
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/bin/Debug/net8.0/appsettings.json
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre.staticwebassets.runtime.json
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre.staticwebassets.endpoints.json
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre.exe
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre.deps.json
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre.runtimeconfig.json
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre.dll
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre.pdb
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/rpswa.dswa.cache.json
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.GeneratedMSBuildEditorConfig.editorconfig
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.AssemblyInfoInputs.cache
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.AssemblyInfo.cs
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.csproj.CoreCompileInputs.cache
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.MvcApplicationPartsAssemblyInfo.cache
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.RazorAssemblyInfo.cache
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.RazorAssemblyInfo.cs
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/rjimswa.dswa.cache.json
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/rjsmrazor.dswa.cache.json
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/rjsmcshtml.dswa.cache.json
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/scopedcss/Views/Shared/_Layout.cshtml.rz.scp.css
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/scopedcss/bundle/Projeto_do_semestre.styles.css
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/scopedcss/projectbundle/Projeto_do_semestre.bundle.scp.css
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets.build.json
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets.build.json.cache
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets.development.json
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets.build.endpoints.json
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets.upToDateCheck.txt
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.dll
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/refint/Projeto_do_semestre.dll
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.pdb
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.genruntimeconfig.cache
+C:/Users/Aluno - Lab/source/repos/Projeto_do_semestre/obj/Debug/net8.0/ref/Projeto_do_semestre.dll
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/bin/Debug/net8.0/appsettings.Development.json
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/bin/Debug/net8.0/appsettings.json
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre.staticwebassets.runtime.json
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre.deps.json
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre.runtimeconfig.json
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre.dll
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre.pdb
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.GeneratedMSBuildEditorConfig.editorconfig
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.AssemblyInfoInputs.cache
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.AssemblyInfo.cs
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.csproj.CoreCompileInputs.cache
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.MvcApplicationPartsAssemblyInfo.cache
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.RazorAssemblyInfo.cache
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.RazorAssemblyInfo.cs
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets.build.json
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets.development.json
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets/msbuild.Projeto_do_semestre.Microsoft.AspNetCore.StaticWebAssets.props
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets/msbuild.build.Projeto_do_semestre.props
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.Projeto_do_semestre.props
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.Projeto_do_semestre.props
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets.pack.json
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/scopedcss/Views/Shared/_Layout.cshtml.rz.scp.css
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/scopedcss/bundle/Projeto_do_semestre.styles.css
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/scopedcss/projectbundle/Projeto_do_semestre.bundle.scp.css
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.dll
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/refint/Projeto_do_semestre.dll
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.pdb
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.genruntimeconfig.cache
+/home/joao/Downloads/Projeto_do_semestre-20260915T181202Z-1-001/Projeto_do_semestre/obj/Debug/net8.0/ref/Projeto_do_semestre.dll
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/bin/Debug/net8.0/appsettings.Development.json
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/bin/Debug/net8.0/appsettings.json
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre.staticwebassets.runtime.json
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre.deps.json
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre.runtimeconfig.json
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre.dll
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/bin/Debug/net8.0/Projeto_do_semestre.pdb
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.GeneratedMSBuildEditorConfig.editorconfig
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.AssemblyInfoInputs.cache
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.AssemblyInfo.cs
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.csproj.CoreCompileInputs.cache
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.MvcApplicationPartsAssemblyInfo.cache
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.RazorAssemblyInfo.cache
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.RazorAssemblyInfo.cs
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets.build.json
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets.development.json
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets/msbuild.Projeto_do_semestre.Microsoft.AspNetCore.StaticWebAssets.props
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets/msbuild.build.Projeto_do_semestre.props
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.Projeto_do_semestre.props
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.Projeto_do_semestre.props
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/staticwebassets.pack.json
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/scopedcss/Views/Shared/_Layout.cshtml.rz.scp.css
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/scopedcss/bundle/Projeto_do_semestre.styles.css
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/scopedcss/projectbundle/Projeto_do_semestre.bundle.scp.css
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.dll
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/refint/Projeto_do_semestre.dll
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.pdb
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/Projeto_do_semestre.genruntimeconfig.cache
+/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/obj/Debug/net8.0/ref/Projeto_do_semestre.dll
