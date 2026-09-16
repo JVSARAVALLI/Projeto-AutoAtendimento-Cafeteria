@@ -18,6 +18,14 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = /home/joao/Documentos/vscode/faculdade/Projeto_do_semestre
 build_property._RazorSourceGeneratorDebug = 
 
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaCozinha/CozIndex.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYUNvemluaGEvQ296SW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaCozinha/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYUNvemluaGEvX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaPublica/Carrinho.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYVB1YmxpY2EvQ2FycmluaG8uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -38,6 +46,18 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYVB1YmxpY2EvTG9naW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaPublica/Opcoes.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYVB1YmxpY2EvT3Bjb2VzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaPublica/Perfil.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYVB1YmxpY2EvUGVyZmlsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaPublica/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYVB1YmxpY2EvX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaRestrita/AdmCadastros.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYVJlc3RyaXRhL0FkbUNhZGFzdHJvcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -46,8 +66,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYVJlc3RyaXRhL0FkbUNhdGFsb2dvLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaRestrita/AdmIndex.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYVJlc3RyaXRhL0FkbUluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaRestrita/AdmVendas.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYVJlc3RyaXRhL0FkbVZlbmRhcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaRestrita/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYVJlc3RyaXRhL19WaWV3U3RhcnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/Home/Index.cshtml]
@@ -60,6 +88,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/Shared/_Layout_Cozinha.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXRfQ296aW5oYS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/Shared/_Layout_Login.cshtml]

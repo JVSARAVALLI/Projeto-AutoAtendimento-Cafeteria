@@ -1,42 +1,76 @@
 ﻿@{
+    ViewData["Title"] = "Acesso - Mokka Café";
+    // Usa o layout específico de login que vi nas suas imagens
     Layout = "_Layout_Login";
-    ViewData["Title"] = "Login - AutoCafé";
 }
 
-<div class="container d-flex justify-content-center">
-    <div class="card border-0 shadow rounded-4 p-4 p-md-5" style="width: 100%; max-width: 420px; background-color: #ffffff;">
+<style>
+    /* Estilo limpo e centralizado para a tela de login */
+    .login-container {
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-        <div class="text-center mb-4">
-            <!-- Ícone de xícara de café e identidade da cafeteria -->
-            <span style="font-size: 3rem;">☕</span>
-            <h3 class="fw-bold mb-1" style="color: #3e2723;">AutoCafé</h3>
-            <p class="text-muted small">Acesso restrito para funcionários</p>
-        </div>
+    .login-card {
+        background: #fff;
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        width: 100%;
+        max-width: 400px;
+    }
 
-        <form asp-controller="AreaRestrita" asp-action="AdmCadastros" method="post">
+    .btn-mokka {
+        background-color: #aa7946; /* var(--mokka-brown) */
+        color: #fff;
+        font-weight: bold;
+        transition: 0.3s;
+    }
 
-            <div class="mb-3">
-                <label class="form-label fw-semibold text-secondary small">E-mail Corporativo</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-envelope"></i></span>
-                    <input type="email" class="form-control border-start-0" name="Email" placeholder="funcionario@autocafe.com" required>
-                </div>
+        .btn-mokka:hover {
+            background-color: #8c6035; /* var(--mokka-brown-dark) */
+            color: #fff;
+        }
+</style>
+
+<div class="login-container">
+    <div class="login-card text-center mx-auto">
+        <h2 class="fw-bold mb-4" style="color: #7a8e5f;">☕ Mokka Café</h2>
+
+        <!-- Bloco que exibe o erro caso a senha esteja errada -->
+        @if (ViewBag.Erro != null)
+        {
+            <div class="alert alert-danger small py-2" role="alert">
+                <i class="bi bi-exclamation-circle me-1"></i> @ViewBag.Erro
+            </div>
+        }
+
+        <!-- Formulário (method="post" envia os dados escondidos para o Controller) -->
+        <form asp-controller="AreaPublica" asp-action="Login" method="post">
+            <div class="mb-3 text-start">
+                <label class="form-label text-muted small fw-bold">E-mail</label>
+                <!-- O "name" aqui tem que ser exatamente igual ao que está no Controller -->
+                <input type="email" class="form-control py-2" name="email" placeholder="Digite seu e-mail" required>
             </div>
 
-            <div class="mb-4">
-                <label class="form-label fw-semibold text-secondary small">Senha de Acesso</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-lock"></i></span>
-                    <input type="password" class="form-control border-start-0" name="Senha" placeholder="••••••••" required>
-                </div>
+            <div class="mb-4 text-start">
+                <label class="form-label text-muted small fw-bold">Senha</label>
+                <!-- O "name" também precisa ser idêntico (senha) -->
+                <input type="password" class="form-control py-2" name="senha" placeholder="***" required>
             </div>
 
-            <!-- Botão com a cor amarela/dourada da cafeteria -->
-            <button type="submit" class="btn w-100 py-2 fw-bold shadow-sm" style="background-color: #ffb300; color: #3e2723; border: none;">
-                Entrar no Sistema <i class="bi bi-box-arrow-in-right ms-1"></i>
-            </button>
-
+            <button type="submit" class="btn btn-mokka w-100 py-2 fs-5">Entrar</button>
         </form>
 
+        <hr class="my-4">
+
+        <p class="mt-4 text-muted small bg-light p-2 rounded">
+            <strong>Credenciais de Teste:</strong><br>
+            Admin: a@a / 123 <br>
+            Cliente: b@b / 456 <br />
+            Cozina: c@c / 789
+        </p>
     </div>
 </div>

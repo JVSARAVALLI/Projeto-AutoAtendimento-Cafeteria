@@ -32,7 +32,7 @@
             align-items: stretch;
             min-height: 100vh;
         }
-        
+
         /* Menu Lateral - Estilo Admin Mokka */
         .sidebar {
             min-width: 250px;
@@ -57,7 +57,7 @@
                 padding: 12px 20px;
                 font-size: 1.05em;
                 display: block;
-                color: #e0e0e0; /* Cinza claro para leitura confortável no fundo preto */
+                color: #e0e0e0;
                 text-decoration: none;
                 transition: 0.2s;
             }
@@ -104,6 +104,11 @@
     </style>
 </head>
 <body>
+    @{
+        // Captura a página atual para acender a aba no menu lateral
+        var actionAtual = ViewContext.RouteData.Values["action"]?.ToString();
+    }
+
     <div class="wrapper">
         <!-- Sidebar -->
         <nav class="sidebar">
@@ -111,9 +116,18 @@
                 <h4 class="m-0 text-white fw-bold">☕ Mokka Café</h4>
             </div>
             <ul class="list-unstyled components">
-                <li><a asp-controller="AreaRestrita" asp-action="AdmCadastros"><i class="bi bi-plus-circle"></i> <span>Cadastrar Produto</span></a></li>
-                <li><a asp-controller="AreaRestrita" asp-action="AdmCatalogo"><i class="bi bi-cup-hot"></i> <span>Gerenciar Cardápio</span></a></li>
-                <li><a asp-controller="AreaRestrita" asp-action="AdmVendas"><i class="bi bi-receipt"></i> <span>Controle de Pedidos</span></a></li>
+                <li class="@(actionAtual == "AdmIndex" ? "active" : "")">
+                    <a asp-controller="AreaRestrita" asp-action="AdmIndex"><i class="bi bi-house-door"></i> <span>Dashboard</span></a>
+                </li>
+                <li class="@(actionAtual == "AdmCadastros" ? "active" : "")">
+                    <a asp-controller="AreaRestrita" asp-action="AdmCadastros"><i class="bi bi-plus-circle"></i> <span>Cadastrar Produto</span></a>
+                </li>
+                <li class="@(actionAtual == "AdmCatalogo" ? "active" : "")">
+                    <a asp-controller="AreaRestrita" asp-action="AdmCatalogo"><i class="bi bi-cup-hot"></i> <span>Gerenciar Cardápio</span></a>
+                </li>
+                <li class="@(actionAtual == "AdmVendas" ? "active" : "")">
+                    <a asp-controller="AreaRestrita" asp-action="AdmVendas"><i class="bi bi-receipt"></i> <span>Controle de Pedidos</span></a>
+                </li>
             </ul>
         </nav>
 

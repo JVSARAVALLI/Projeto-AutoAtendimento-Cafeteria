@@ -1,0 +1,131 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<style>
+    .dash-card {
+        background-color: #fff;
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 4px 12px rgba(26, 26, 26, 0.04);
+        padding: 25px;
+        display: flex;
+        align-items: center;
+        transition: transform 0.2s;
+    }
+
+        .dash-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(26, 26, 26, 0.08);
+        }
+
+    .dash-icon {
+        width: 65px;
+        height: 65px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin-right: 20px;
+    }
+
+    .recent-orders-card {
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(26, 26, 26, 0.04);
+        padding: 25px;
+        margin-top: 30px;
+    }
+</style>
+
+<h3 class="fw-bold mb-4" style="color: var(--mokka-black);">Resumo do Dia</h3>
+
+<div class="row g-4">
+    <!-- Faturamento -->
+    <div class="col-md-6 col-lg-3">
+        <div class="dash-card">
+            <div class="dash-icon" style="background-color: rgba(170, 121, 70, 0.15); color: var(--mokka-brown-dark);">
+                <i class="bi bi-currency-dollar"></i>
+            </div>
+            <div>
+                <p class="text-muted mb-1 small fw-bold">Faturamento Hoje</p>
+                <h4 class="fw-bold m-0 text-success">R$ 1.254,00</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pedidos Concluídos -->
+    <div class="col-md-6 col-lg-3">
+        <div class="dash-card">
+            <div class="dash-icon" style="background-color: rgba(122, 142, 95, 0.15); color: var(--mokka-green-dark);">
+                <i class="bi bi-check2-circle"></i>
+            </div>
+            <div>
+                <p class="text-muted mb-1 small fw-bold">Pedidos Concluídos</p>
+                <h4 class="fw-bold m-0">84</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pedidos em Fila -->
+    <div class="col-md-6 col-lg-3">
+        <div class="dash-card">
+            <div class="dash-icon" style="background-color: #fff3cd; color: #856404;">
+                <i class="bi bi-hourglass-split"></i>
+            </div>
+            <div>
+                <p class="text-muted mb-1 small fw-bold">Pedidos em Fila</p>
+                <h4 class="fw-bold m-0 text-warning">5</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alertas de Estoque -->
+    <div class="col-md-6 col-lg-3">
+        <div class="dash-card">
+            <div class="dash-icon" style="background-color: #f8d7da; color: #721c24;">
+                <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            <div>
+                <p class="text-muted mb-1 small fw-bold">Alerta de Estoque</p>
+                <h4 class="fw-bold m-0 text-danger">2 Itens</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="recent-orders-card">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="fw-bold m-0">Últimas Movimentações</h5>
+        <a asp-controller="AreaRestrita" asp-action="AdmVendas" class="btn btn-sm btn-outline-secondary">Ver todos</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <tbody>
+                <tr>
+                    <td><span class="badge bg-success">Novo Pedido</span></td>
+                    <td class="fw-bold">#1042</td>
+                    <td>2x Cappuccino Mokka, 1x Pão de Queijo</td>
+                    <td class="text-end fw-bold">R$ 42,00</td>
+                    <td class="text-end text-muted small">Há 2 min</td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-warning text-dark">Estoque</span></td>
+                    <td class="fw-bold">Leite de Aveia</td>
+                    <td>Estoque mínimo atingido (Restam 2 litros)</td>
+                    <td class="text-end fw-bold">-</td>
+                    <td class="text-end text-muted small">Há 15 min</td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-success">Novo Pedido</span></td>
+                    <td class="fw-bold">#1041</td>
+                    <td>1x Espresso, 1x Croissant</td>
+                    <td class="text-end fw-bold">R$ 22,00</td>
+                    <td class="text-end text-muted small">Há 20 min</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

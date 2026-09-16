@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"] - Mokka Café</title>
 
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons (Necessário para as estrelas e botões funcionarem visualmente) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
         :root {
@@ -15,8 +18,8 @@
             --mokka-brown: #aa7946;
             --mokka-brown-dark: #8c6035;
             --mokka-black: #1a1a1a;
-            --mokka-bg: #f4f5f0; /* Fundo bem claro com leve tom de sálvia */
-            --mokka-card: #fcfaf8; /* Fundo creme para os cartões */
+            --mokka-bg: #f4f5f0;
+            --mokka-card: #fcfaf8;
         }
 
         body {
@@ -27,7 +30,6 @@
         }
 
         .navbar-custom {
-            /* Navbar no tom verde escuro da marca */
             background-color: var(--mokka-green-dark);
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
@@ -48,7 +50,7 @@
 
                 .navbar-custom .nav-link:hover, .navbar-custom .nav-link.active {
                     color: #fff;
-                    background-color: var(--mokka-brown); /* Destaque em marrom */
+                    background-color: var(--mokka-brown);
                     font-weight: bold;
                 }
 
@@ -113,22 +115,24 @@
             position: fixed;
             bottom: 30px;
             right: 30px;
-            background-color: var(--mokka-brown); /* Botão flutuante marrom */
+            background-color: var(--mokka-brown);
             color: white;
             border-radius: 50px;
             padding: 15px 30px;
             display: flex;
             align-items: center;
             font-weight: bold;
-            box-shadow: 0 6px 15px rgba(136, 96, 53, 0.4); /* Sombra marrom */
+            box-shadow: 0 6px 15px rgba(136, 96, 53, 0.4);
             z-index: 1000;
             cursor: pointer;
             transition: transform 0.2s;
+            text-decoration: none;
         }
 
             .cart-floating:hover {
                 transform: scale(1.05);
                 background-color: var(--mokka-brown-dark);
+                color: white;
             }
 
         .cart-badge {
@@ -141,35 +145,50 @@
     </style>
 </head>
 <body>
+    @{
+        // Descobre em qual tela estamos no momento para acender a aba correta no menu
+        var actionAtual = ViewContext.RouteData.Values["action"]?.ToString();
+    }
 
     <nav class="navbar navbar-expand-lg navbar-custom sticky-top py-3">
         <div class="container">
-            <!-- Texto atualizado para combinar com a marca -->
-            <a class="navbar-brand" asp-controller="AreaPublica" asp-action="Index">☕ Mokka Café</a>
+            <a class="navbar-brand" asp-controller="AreaPublica" asp-action="IndexPublico">☕ Mokka Café</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link" asp-controller="AreaPublica" asp-action="IndexPublico">Home</a></li>
-                    <li class="nav-item"><a class="nav-link active" asp-controller="AreaPublica" asp-action="Catalogo">Catálogo</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Opções</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Identificação</a></li>
-                    <!-- Borda do carrinho ajustada para a cor da marca -->
-                    <li class="nav-item"><a class="nav-link" style="border: 2px solid var(--mokka-brown);" asp-controller="AreaPublica" asp-action="Carrinho">🛒 Carrinho</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link @(actionAtual == "IndexPublico" ? "active" : "")" asp-controller="AreaPublica" asp-action="IndexPublico">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link @(actionAtual == "Catalogo" ? "active" : "")" asp-controller="AreaPublica" asp-action="Catalogo">Catálogo</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link @(actionAtual == "Opcoes" ? "active" : "")" asp-controller="AreaPublica" asp-action="Opcoes">Opções</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link @(actionAtual == "Identificacao" || actionAtual == "Perfil" ? "active" : "")" asp-controller="AreaPublica" asp-action="Identificacao">Identificação</a>
+                    </li>
+
+                    <li class="nav-item ms-2">
+                        <a class="nav-link @(actionAtual == "Carrinho" ? "active" : "")" style="border: 2px solid var(--mokka-brown);" asp-controller="AreaPublica" asp-action="Carrinho">🛒 Carrinho</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Injeção obrigatória do corpo da página -->
     <main class="container mt-4">
         @RenderBody()
     </main>
 
-    <div class="cart-floating" title="Finalizar Pedido">
+    <a asp-controller="AreaPublica" asp-action="Carrinho" class="cart-floating" title="Finalizar Pedido">
         Ver Pedido <span class="cart-badge">0</span>
-    </div>
+    </a>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)

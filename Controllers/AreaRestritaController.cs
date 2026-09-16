@@ -4,6 +4,10 @@ namespace Projeto_do_semestre.Controllers
 {
     public class AreaRestritaController : Controller
     {
+        public IActionResult AdmIndex()
+        {
+            return View();
+        }
         public IActionResult AdmCadastros()
         {
             return View();
