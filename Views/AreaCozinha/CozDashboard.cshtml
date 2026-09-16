@@ -1,0 +1,52 @@
+@{
+    ViewData["Title"] = "Dashboard de Vendas";
+    Layout = "_Layout_Cozinha";
+}
+
+<div class="container mt-4">
+    <h2><i class="bi bi-graph-up"></i> Dashboard de Vendas (Cozinha)</h2>
+
+    <!-- Destaques -->
+    <div class="row mt-4 mb-4">
+        <div class="col-md-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body bg-light">
+                    <h5 class="card-title text-primary">Local com Maior Saída de Pedidos</h5>
+                    <p class="card-text fs-4"><strong>Salão Principal (Mesa 04)</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabela de Últimas Vendas -->
+    <h4>Últimos Pedidos Feitos</h4>
+    <div class="table-responsive mt-3">
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Horário</th>
+                    <th>Cliente / Quem pediu</th>
+                    <th>Item Vendido</th>
+                    <th>Quantidade</th>
+                    <th>Local de Venda</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>15:30</td>
+                    <td>Cliente Avulso</td>
+                    <td>Café Mocha</td>
+                    <td>2x</td>
+                    <td>Balcão</td>
+                </tr>
+                <tr>
+                    <td>15:15</td>
+                    <td>Mesa 04</td>
+                    <td>Pão de Queijo Porção</td>
+                    <td>1x</td>
+                    <td>Salão Principal</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

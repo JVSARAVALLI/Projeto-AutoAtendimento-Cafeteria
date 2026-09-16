@@ -18,8 +18,28 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = /home/joao/Documentos/vscode/faculdade/Projeto_do_semestre
 build_property._RazorSourceGeneratorDebug = 
 
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaCozinha/CozCatalogo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYUNvemluaGEvQ296Q2F0YWxvZ28uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaCozinha/CozCompras.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYUNvemluaGEvQ296Q29tcHJhcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaCozinha/CozDashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYUNvemluaGEvQ296RGFzaGJvYXJkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaCozinha/CozFuncionarios.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYUNvemluaGEvQ296RnVuY2lvbmFyaW9zLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaCozinha/CozIndex.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYUNvemluaGEvQ296SW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaCozinha/CozInsumos.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJlYUNvemluaGEvQ296SW5zdW1vcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/home/joao/Documentos/vscode/faculdade/Projeto_do_semestre/Views/AreaCozinha/_ViewStart.cshtml]

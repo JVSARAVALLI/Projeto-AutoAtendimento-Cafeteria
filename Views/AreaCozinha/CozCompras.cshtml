@@ -1,0 +1,47 @@
+@{
+    ViewData["Title"] = "Compras e Despesas";
+    Layout = "_Layout_Cozinha";
+}
+
+<div class="container mt-4">
+    <h2><i class="bi bi-cart-check"></i> Compras pra Loja</h2>
+    
+    <!-- Resumo Financeiro Rápido -->
+    <div class="row mt-4 mb-4">
+        <div class="col-md-6">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <h5>Total de Gastos (Mês)</h5>
+                    <h3>R$ 4.250,00</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5>Lucro Estimado (Mês)</h5>
+                    <h3>R$ 8.900,00</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabela de Últimas Compras -->
+    <h4>Últimas Aquisições</h4>
+    <table class="table table-bordered mt-2">
+        <thead class="table-light">
+            <tr>
+                <th>Data</th>
+                <th>Fornecedor / Item</th>
+                <th>Valor (Gasto)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>16/09/2026</td>
+                <td>Fornecedor Atacadista - Grãos e Leite</td>
+                <td class="text-danger">- R$ 850,00</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
