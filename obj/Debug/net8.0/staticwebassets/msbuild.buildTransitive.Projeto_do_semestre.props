@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../buildMultiTargeting/Projeto_do_semestre.props" />
-</Project>
