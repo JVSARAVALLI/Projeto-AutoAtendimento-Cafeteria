@@ -75,11 +75,35 @@
     }
 
     function finalizarPedido() {
-        let carrinho = JSON.parse(localStorage.getItem('carrinhoMokka')) || [];
-        if (carrinho.length === 0) {
-            alert("O carrinho está vazio. Volte ao catálogo para adicionar produtos!");
-            return;
-        }
+         let carrinho = JSON.parse(localStorage.getItem('carrinhoMokka')) || [];
+         if (carrinho.length === 0) {
+             alert("O carrinho está vazio. Adicione produtos primeiro!");
+             return;
+         }
+
+         // Vai buscar o modo de consumo que o cliente escolheu anteriormente
+         let modo = localStorage.getItem('modoConsumoMokka') || 'Comer Aqui';
+
+         // Gera a senha (ex: 100 a 999)
+         let numeroSenha = Math.floor(Math.random() * 900) + 100;
+
+         // Simula a impressão da notinha
+         alert(
+             "🧾 MOKKA CAFÉ - RECIBO\n" +
+             "=========================\n" +
+             "✅ Pedido Confirmado!\n" +
+             "Senha: " + numeroSenha + "\n" +
+             "Modo: " + modo + "\n\n" +
+             "Aguarde ser chamado no monitor."
+         );
+
+         // Limpa a máquina após a compra com sucesso
+         localStorage.removeItem('carrinhoMokka');
+         localStorage.removeItem('modoConsumoMokka'); // Limpa também o modo
+
+         // Volta ao ecrã inicial de repouso
+         window.location.href = "/AreaPublica/IndexPublico";
+     }
 
         // Gera uma senha aleatória entre 100 e 999
         let numeroSenha = Math.floor(Math.random() * 900) + 100;

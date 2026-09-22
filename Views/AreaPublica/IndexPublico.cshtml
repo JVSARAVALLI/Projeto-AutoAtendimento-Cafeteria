@@ -1,185 +1,98 @@
 @{
-    ViewData["Title"] = "Início";
+    Layout = null; // Removemos o layout para ocupar 100% do ecrã
 }
 
-<style>
-    /* Reset e Variáveis locais caso o layout principal não as carregue a tempo */
-    .mokka-home {
-        --home-green: #9ab07a;
-        --home-dark: #1a1a1a;
-        --home-brown: #aa7946;
-        --home-bg: #f4f5f0;
-    }
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="utf-8" />
+    <title>Mokka Café - Autoatendimento</title>
+    <style>
+        body, html {
+            margin: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #8c9c6c;
+            color: white;
+            overflow: hidden;
+        }
 
-    /* Seção 1: Destaque / Sazonal (Estilo Pumpkin Spice) */
-    .hero-banner {
-        background: linear-gradient(rgba(170, 121, 70, 0.85), rgba(140, 96, 53, 0.9)), url('https://images.unsplash.com/photo-1514432324607-a2bc7c16050f?w=1200&q=80') center/cover;
-        border-radius: 16px;
-        color: white;
-        padding: 80px 40px;
-        text-align: center;
-        margin-top: 20px;
-        margin-bottom: 40px;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
+        /* A área clicável ocupa o ecrã inteiro */
+        .ecra-toque {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            transition: background 0.3s;
+        }
 
-    .hero-banner h1 {
-        font-size: 3.5rem;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        margin-bottom: 20px;
-    }
+            .ecra-toque:active {
+                background-color: #7a885d;
+            }
 
-    .btn-hero {
-        background-color: var(--home-green);
-        color: white;
-        font-weight: bold;
-        padding: 12px 30px;
-        border-radius: 30px;
-        border: none;
-        transition: 0.3s;
-        font-size: 1.1rem;
-        margin: 5px;
-    }
+        .logo-gigante {
+            font-size: 8em;
+            margin-bottom: 20px;
+        }
 
-    .btn-hero:hover {
-        background-color: #7a8e5f;
-        transform: scale(1.05);
-        color: white;
-    }
+        .titulo {
+            font-size: 4em;
+            font-weight: bold;
+            margin-bottom: 40px;
+        }
 
-    /* Seção 2: Institucional e Qualidade */
-    .split-section {
-        border-radius: 16px;
-        overflow: hidden;
-        margin-bottom: 40px;
-        background-color: white;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }
-    
-    .split-img {
-        min-height: 300px;
-        background-size: cover;
-        background-position: center;
-    }
+        .instrucao {
+            font-size: 2.5em;
+            font-weight: 300;
+            animation: piscar 1.5s infinite;
+        }
 
-    .split-content {
-        padding: 50px 40px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
+        @@keyframes piscar {
+            0%, 100% {
+                opacity: 1;
+            }
 
-    .btn-outline-mokka {
-        color: var(--home-brown);
-        border: 2px solid var(--home-brown);
-        border-radius: 30px;
-        font-weight: bold;
-        padding: 10px 25px;
-        align-self: flex-start;
-        transition: 0.3s;
-        text-decoration: none;
-    }
+            50% {
+                opacity: 0.3;
+            }
+        }
 
-    .btn-outline-mokka:hover {
-        background-color: var(--home-brown);
-        color: white;
-    }
+        0%, 100% {
+            opacity: 1;
+        }
 
-    /* Seção 3: Fidelidade (O que faltou na referência) */
-    .loyalty-banner {
-        background-color: var(--home-green);
-        color: white;
-        border-radius: 16px;
-        padding: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 40px;
-    }
+        50% {
+            opacity: 0.3;
+        }
 
-    /* Rodapé Funcional */
-    .mokka-footer {
-        background-color: var(--home-dark);
-        color: #e0e0e0;
-        padding: 40px 20px 20px;
-        border-radius: 16px 16px 0 0;
-        margin-top: 40px;
-    }
-</style>
+        }
 
-<div class="mokka-home">
+        /* Botão invisível para funcionários no canto inferior direito */
+        .area-secreta {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
 
-    <!-- BANNER 1: Destaque Sazonal (Similar ao Pumpkin Spice) -->
-    <div class="hero-banner">
-        <h5 class="fw-bold mb-3">A MAIS PEDIDA VOLTOU</h5>
-        <h1>Mokka Moca<br>Branco</h1>
-        <p class="lead mb-4">O equilíbrio perfeito entre o nosso espresso premium, leite vaporizado e calda de chocolate branco.</p>
-        <div>
-            <a asp-controller="AreaPublica" asp-action="Catalogo" class="btn btn-hero">Faça seu Pedido</a>
-            <a href="#" class="btn btn-hero" style="background-color: transparent; border: 2px solid white;">Ver Novidades</a>
-        </div>
-    </div>
+    <!-- Altere apenas a linha do href principal no seu IndexPublico.cshtml -->
+    <a href="/AreaPublica/TipoAcesso" class="ecra-toque">
+        <div class="logo-gigante">☕</div>
+        <div class="titulo">Mokka Café</div>
+        <div class="instrucao">👆 Toque no ecrã para iniciar</div>
+    </a>
 
-    <!-- BANNER 2: Qualidade / Origem (Similar ao "Feito Aqui, Apreciado...") -->
-    <div class="row g-0 split-section">
-        <div class="col-md-6 split-img" style="background-image: url('https://images.unsplash.com/photo-1611162458324-aae1eb4129a4?w=600&q=80');">
-        </div>
-        <div class="col-md-6 split-content" style="background-color: var(--home-dark); color: white;">
-            <h2 class="fw-bold mb-3">Feito com paixão. Apreciado a cada gole.</h2>
-            <p class="mb-4 text-light opacity-75">Nossos grãos são selecionados das melhores fazendas locais e torrados artesanalmente para garantir um sabor intenso e inesquecível na sua xícara.</p>
-            <a asp-controller="AreaPublica" asp-action="Catalogo" class="btn btn-outline-mokka" style="color: white; border-color: white;">Acesse nosso cardápio</a>
-        </div>
-    </div>
+    <!-- Clicar neste canto invisível abre o login dos funcionários -->
+    <a href="/AreaPublica/LoginFuncionario" class="area-secreta" title="Área Restrita"></a>
 
-    <!-- BANNER 3: Comunidade / Equipe (Similar ao "Histórias e Notícias") -->
-    <div class="row g-0 split-section flex-md-row-reverse">
-        <div class="col-md-6 split-img" style="background-image: url('https://images.unsplash.com/photo-1525610553991-2bede1a236e2?w=600&q=80');">
-        </div>
-        <div class="col-md-6 split-content" style="background-color: #fff;">
-            <h2 class="fw-bold mb-3" style="color: var(--home-brown);">Conheça nossa História</h2>
-            <p class="mb-4 text-muted">Muito mais do que café. Fique por dentro das novidades, conheça nossos baristas e descubra as iniciativas de sustentabilidade do Mokka Café.</p>
-            <a href="#" class="btn btn-outline-mokka">Saiba mais</a>
-        </div>
-    </div>
-
-    <!-- EXTRA: Programa de Fidelidade (Adição Estratégica) -->
-    <div class="loyalty-banner flex-column flex-md-row text-center text-md-start">
-        <div class="mb-3 mb-md-0">
-            <h3 class="fw-bold mb-1"><i class="bi bi-star-fill text-warning me-2"></i>Clube Mokka</h3>
-            <p class="m-0 opacity-75">Ganhe estrelas a cada compra e troque por cafés e acompanhamentos grátis.</p>
-        </div>
-        <button class="btn btn-light fw-bold px-4 py-2" style="color: var(--home-green);">Cadastre-se Grátis</button>
-    </div>
-
-    <!-- EXTRA: Rodapé Funcional (Endereço, Horários, Redes) -->
-    <footer class="mokka-footer">
-        <div class="row mb-4">
-            <div class="col-md-4 mb-3 mb-md-0">
-                <h4 class="fw-bold text-white mb-3">☕ Mokka Café</h4>
-                <p class="small text-muted">A sua pausa diária para o melhor café da cidade. Autoatendimento rápido, fácil e sem filas.</p>
-            </div>
-            <div class="col-md-4 mb-3 mb-md-0">
-                <h6 class="fw-bold text-white mb-3">Funcionamento</h6>
-                <ul class="list-unstyled small text-muted">
-                    <li class="mb-1">Segunda a Sexta: 07:00 - 20:00</li>
-                    <li class="mb-1">Sábados: 08:00 - 18:00</li>
-                    <li>Domingos: Fechado</li>
-                </ul>
-            </div>
-            <div class="col-md-4 text-md-end">
-                <h6 class="fw-bold text-white mb-3">Siga-nos</h6>
-                <div class="d-flex justify-content-md-end gap-3 fs-5">
-                    <a href="#" class="text-white text-decoration-none"><i class="bi bi-instagram"></i></a>
-                    <a href="#" class="text-white text-decoration-none"><i class="bi bi-facebook"></i></a>
-                    <a href="#" class="text-white text-decoration-none"><i class="bi bi-tiktok"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="text-center border-top border-secondary pt-3 small text-muted">
-            &copy; 2026 Mokka Café. Todos os direitos reservados.
-        </div>
-    </footer>
-
-</div>
+</body>
+</html>

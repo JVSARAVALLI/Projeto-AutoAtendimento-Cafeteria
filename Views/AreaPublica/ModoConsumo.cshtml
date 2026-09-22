@@ -1,0 +1,37 @@
+﻿@{
+    Layout = "_Layout_Publico";
+    ViewData["Title"] = "Onde vai comer?";
+}
+
+<div style="height: calc(100vh - 100px); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+
+    <h1 style="font-size: 3em; color: #333; margin-bottom: 50px;">Onde vai consumir o seu pedido?</h1>
+
+    <div style="display: flex; gap: 40px; justify-content: center; width: 100%; max-width: 800px;">
+
+        <!-- Comer Aqui -->
+        <button onclick="definirModo('Comer Aqui')" style="flex: 1; background-color: #fff; border: 4px solid #8c9c6c; border-radius: 20px; padding: 50px 20px; cursor: pointer; color: #333; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+            <div style="font-size: 6em; margin-bottom: 20px;">🍽️</div>
+            <h2 style="font-size: 2.5em; margin: 0; color: #8c9c6c;">Comer Aqui</h2>
+            <p style="font-size: 1.2em; color: #666; margin-top: 15px;">Servido numa bandeja</p>
+        </button>
+
+        <!-- Para Levar -->
+        <button onclick="definirModo('Para Levar')" style="flex: 1; background-color: #fff; border: 4px solid #dc3545; border-radius: 20px; padding: 50px 20px; cursor: pointer; color: #333; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+            <div style="font-size: 6em; margin-bottom: 20px;">🛍️</div>
+            <h2 style="font-size: 2.5em; margin: 0; color: #dc3545;">Para Levar</h2>
+            <p style="font-size: 1.2em; color: #666; margin-top: 15px;">Embalado para viagem</p>
+        </button>
+
+    </div>
+</div>
+
+<script>
+    function definirModo(escolha) {
+        // Guarda a decisão "Comer Aqui" ou "Para Levar" na memória do Totem
+        localStorage.setItem('modoConsumoMokka', escolha);
+
+        // Redireciona imediatamente para o Catálogo (Menu Principal)
+        window.location.href = "/AreaPublica/Catalogo";
+    }
+</script>

@@ -1,196 +1,95 @@
 ﻿<!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Mokka Café</title>
 
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons (Necessário para as estrelas e botões funcionarem visualmente) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Projeto_do_semestre.styles.css" asp-append-version="true" />
 
     <style>
-        :root {
-            /* Paleta de cores Mokka CAFÉ */
-            --mokka-green: #9ab07a;
-            --mokka-green-dark: #7a8e5f;
-            --mokka-brown: #aa7946;
-            --mokka-brown-dark: #8c6035;
-            --mokka-black: #1a1a1a;
-            --mokka-bg: #f4f5f0;
-            --mokka-card: #fcfaf8;
-        }
-
-        body {
-            background-color: var(--mokka-bg);
-            color: var(--mokka-black);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding-bottom: 80px;
-        }
-
-        .navbar-custom {
-            background-color: var(--mokka-green-dark);
+        .mokka-nav {
+            background-color: #8c9c6c;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-            .navbar-custom .navbar-brand {
-                color: #fff;
-                font-weight: 700;
-                font-size: 1.5rem;
+        .mokka-logo {
+            color: white;
+            text-decoration: none;
+            font-size: 1.8em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .mokka-logo:hover {
+                color: #f8f9fa;
             }
 
-            .navbar-custom .nav-link {
-                color: rgba(255, 255, 255, 0.85);
-                font-weight: 500;
-                margin: 0 5px;
-                border-radius: 8px;
-                transition: all 0.3s;
-            }
-
-                .navbar-custom .nav-link:hover, .navbar-custom .nav-link.active {
-                    color: #fff;
-                    background-color: var(--mokka-brown);
-                    font-weight: bold;
-                }
-
-        .section-title {
-            font-weight: 800;
-            color: var(--mokka-black);
-            border-bottom: 3px solid var(--mokka-brown);
-            display: inline-block;
-            padding-bottom: 5px;
-            margin-bottom: 30px;
-            margin-top: 20px;
+        .mokka-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
 
-        .card-coffee {
-            border: none;
-            border-radius: 16px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
-            transition: transform 0.3s ease;
-            background-color: var(--mokka-card);
-            overflow: hidden;
-        }
-
-            .card-coffee:hover {
-                transform: translateY(-8px);
-                box-shadow: 0 12px 20px rgba(0,0,0,0.12);
-            }
-
-        .card-img-top {
-            height: 220px;
-            object-fit: cover;
-        }
-
-        .price-tag {
-            color: var(--mokka-brown-dark);
-            font-size: 1.4rem;
-            font-weight: 800;
-        }
-
-        .btn-add {
-            background-color: var(--mokka-brown);
-            color: #fff;
-            font-weight: 700;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
+        .mokka-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
             transition: background-color 0.2s;
         }
 
-            .btn-add:hover {
-                background-color: var(--mokka-brown-dark);
-                color: #fff;
-            }
-
-        .nutricional-link {
-            font-size: 0.8rem;
-            color: #6c757d;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
-        .cart-floating {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background-color: var(--mokka-brown);
-            color: white;
-            border-radius: 50px;
-            padding: 15px 30px;
-            display: flex;
-            align-items: center;
-            font-weight: bold;
-            box-shadow: 0 6px 15px rgba(136, 96, 53, 0.4);
-            z-index: 1000;
-            cursor: pointer;
-            transition: transform 0.2s;
-            text-decoration: none;
-        }
-
-            .cart-floating:hover {
-                transform: scale(1.05);
-                background-color: var(--mokka-brown-dark);
+            .mokka-link:hover {
+                background-color: rgba(255,255,255,0.2);
                 color: white;
             }
 
-        .cart-badge {
-            background-color: white;
-            color: var(--mokka-brown-dark);
-            border-radius: 50%;
-            padding: 4px 10px;
+        .mokka-cart {
+            border: 1px solid white;
+            border-radius: 20px;
+            padding: 8px 20px;
             margin-left: 10px;
         }
     </style>
 </head>
-<body>
-    @{
-        // Descobre em qual tela estamos no momento para acender a aba correta no menu
-        var actionAtual = ViewContext.RouteData.Values["action"]?.ToString();
-    }
+<body style="background-color: #f4f6f8; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0;">
 
-    <nav class="navbar navbar-expand-lg navbar-custom sticky-top py-3">
-        <div class="container">
-            <a class="navbar-brand" asp-controller="AreaPublica" asp-action="IndexPublico">☕ Mokka Café</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item">
-                        <a class="nav-link @(actionAtual == "IndexPublico" ? "active" : "")" asp-controller="AreaPublica" asp-action="IndexPublico">Home</a>
-                    </li>
+    <header>
+        <nav class="mokka-nav">
+            <!-- Logótipo -->
+            <a href="/AreaPublica/IndexPublico" class="mokka-logo">
+                <span style="font-size: 1.2em;">☕</span> Mokka Café
+            </a>
 
-                    <li class="nav-item">
-                        <a class="nav-link @(actionAtual == "Catalogo" ? "active" : "")" asp-controller="AreaPublica" asp-action="Catalogo">Catálogo</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link @(actionAtual == "Opcoes" ? "active" : "")" asp-controller="AreaPublica" asp-action="Opcoes">Opções</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link @(actionAtual == "Identificacao" || actionAtual == "Perfil" ? "active" : "")" asp-controller="AreaPublica" asp-action="Identificacao">Identificação</a>
-                    </li>
-
-                    <li class="nav-item ms-2">
-                        <a class="nav-link @(actionAtual == "Carrinho" ? "active" : "")" style="border: 2px solid var(--mokka-brown);" asp-controller="AreaPublica" asp-action="Carrinho">🛒 Carrinho</a>
-                    </li>
-                </ul>
+            <!-- Links do Menu Superior (Identificação removida) -->
+            <div class="mokka-links">
+                <a href="/AreaPublica/IndexPublico" class="mokka-link">Home</a>
+                <a href="/AreaPublica/Catalogo" class="mokka-link">Catálogo</a>
+                <a href="/AreaPublica/Opcoes" class="mokka-link">Opções</a>
+                <a href="/AreaPublica/Carrinho" class="mokka-link mokka-cart">🛒 Carrinho</a>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
 
-    <main class="container mt-4">
-        @RenderBody()
-    </main>
+    <div style="width: 100%;">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
 
-    <a asp-controller="AreaPublica" asp-action="Carrinho" class="cart-floating" title="Finalizar Pedido">
-        Ver Pedido <span class="cart-badge">0</span>
-    </a>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

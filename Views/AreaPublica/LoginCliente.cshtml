@@ -1,0 +1,43 @@
+﻿@{
+    Layout = "_Layout_Publico";
+    ViewData["Title"] = "Acesso Cliente";
+}
+
+<div style="height: calc(100vh - 100px); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+
+    <!-- Cartão Centralizado -->
+    <div style="background-color: #fff; padding: 50px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); width: 100%; max-width: 600px;">
+
+        <div style="font-size: 5em; margin-bottom: 20px;">⭐</div>
+        <h1 style="font-size: 2.5em; color: #333; margin-bottom: 10px;">Bem-vindo de volta!</h1>
+        <p style="font-size: 1.3em; color: #666; margin-bottom: 40px;">Insira o seu telemóvel ou e-mail para acumular pontos na sua conta.</p>
+
+        <!-- Mensagem de Erro (Mostrada apenas se o controlador enviar erro) -->
+        @if (ViewBag.Erro != null)
+        {
+            <div style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 12px; font-size: 1.3em; margin-bottom: 30px; font-weight: bold; border: 2px solid #f5c6cb;">
+                ❌ @ViewBag.Erro
+            </div>
+        }
+
+        <!-- Formulário -->
+        <form method="post" action="/AreaPublica/LoginCliente" style="display: flex; flex-direction: column; gap: 20px;">
+
+            <!-- Campo de Texto Gigante para Ecrã Tátil -->
+            <input type="text" name="telefoneOuEmail" placeholder="O seu Telemóvel ou E-mail" required
+                   style="padding: 25px; font-size: 1.5em; border: 3px solid #ccc; border-radius: 12px; text-align: center; width: 100%; box-sizing: border-box; transition: border-color 0.3s;"
+                   onfocus="this.style.borderColor='#28a745'" onblur="this.style.borderColor='#ccc'" />
+
+            <!-- Botão de Confirmar (Verde e de grande destaque) -->
+            <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 25px; border-radius: 12px; font-size: 1.5em; font-weight: bold; cursor: pointer; box-shadow: 0 6px 12px rgba(40,167,69,0.3); margin-top: 10px;">
+                ✔️ Confirmar e Avançar
+            </button>
+
+            <!-- Botão de Voltar (Cinza, caso o cliente desista do login) -->
+            <a href="/AreaPublica/TipoAcesso" style="background-color: #e9ecef; color: #555; text-decoration: none; padding: 20px; border-radius: 12px; font-size: 1.3em; font-weight: bold; margin-top: 10px; display: block;">
+                🔙 Voltar à Escolha
+            </a>
+        </form>
+
+    </div>
+</div>
