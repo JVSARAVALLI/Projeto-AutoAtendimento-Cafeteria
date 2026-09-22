@@ -1,215 +1,33 @@
 ﻿@{
-    ViewData["Title"] = "Meu Perfil";
+    ViewData["Title"] = "Menu do Cliente";
 }
 
-<style>
-    .profile-header {
-        margin-bottom: 30px;
-        color: var(--mokka-black, #1a1a1a);
-    }
+<div style="text-align: center; padding: 10vh 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    
+    <h1 style="font-size: 3.5em; margin-bottom: 10px; color: #333;">Olá!</h1>
+    <p style="font-size: 1.8em; color: #666; margin-bottom: 50px;">O que deseja fazer hoje?</p>
 
-    .mokka-card {
-        background-color: var(--mokka-card, #fcfaf8);
-        border-radius: 16px;
-        border: none;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-        padding: 25px;
-        margin-bottom: 25px;
-    }
-
-    .loyalty-banner {
-        background: linear-gradient(135deg, var(--mokka-brown, #aa7946) 0%, var(--mokka-brown-dark, #8c6035) 100%);
-        color: white;
-        border-radius: 16px;
-        padding: 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 8px 20px rgba(170, 121, 70, 0.3);
-    }
-
-    .nav-pills .nav-link {
-        color: var(--mokka-black, #1a1a1a);
-        border-radius: 10px;
-        padding: 12px 20px;
-        margin-bottom: 10px;
-        font-weight: 500;
-        transition: 0.2s;
-    }
-
-        .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-            color: #fff;
-            background-color: var(--mokka-green-dark, #7a8e5f);
-        }
-
-        .nav-pills .nav-link:hover:not(.active) {
-            background-color: rgba(154, 176, 122, 0.2);
-            color: var(--mokka-green-dark, #7a8e5f);
-        }
-
-    .order-status {
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 600;
-    }
-
-    .status-preparing {
-        background-color: #fff3cd;
-        color: #856404;
-        border: 1px solid #ffeeba;
-    }
-
-    .status-completed {
-        background-color: rgba(122, 142, 95, 0.2);
-        color: var(--mokka-green-dark, #7a8e5f);
-        border: 1px solid var(--mokka-green, #9ab07a);
-    }
-
-    .btn-outline-mokka {
-        color: var(--mokka-brown-dark, #8c6035);
-        border: 2px solid var(--mokka-brown, #aa7946);
-        background: transparent;
-        font-weight: bold;
-        border-radius: 8px;
-        transition: 0.3s;
-    }
-
-        .btn-outline-mokka:hover {
-            background-color: var(--mokka-brown, #aa7946);
-            color: white;
-        }
-</style>
-
-<div class="container mt-4 mb-5">
-    <div class="profile-header d-flex justify-content-between align-items-center border-bottom pb-3">
-        <div>
-            <h2 class="fw-bold mb-0">Olá, João Silva! 👋</h2>
-            <p class="text-muted mt-1 mb-0">Bem-vindo(a) ao seu espaço Mokka.</p>
-        </div>
-        <a asp-controller="AreaPublica" asp-action="Login" class="btn btn-outline-danger px-4 rounded-pill">
-            <i class="bi bi-box-arrow-right me-2"></i> Sair
+    <div style="display: flex; flex-direction: column; gap: 25px; max-width: 500px; margin: 0 auto;">
+        
+        <a href="/AreaPublica/Catalogo" style="background-color: #007bff; color: white; text-decoration: none; padding: 30px; border-radius: 15px; font-size: 1.8em; font-weight: bold; box-shadow: 0 6px 12px rgba(0,123,255,0.3); display: flex; justify-content: center; align-items: center; gap: 15px;">
+            <span style="font-size: 1.5em;">🍽️</span> Novo Pedido
         </a>
-    </div>
 
-    <div class="row mt-4">
-        <!-- Coluna Esquerda: Menu de Navegação do Perfil -->
-        <div class="col-lg-3 mb-4">
-            <div class="mokka-card p-3">
-                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <button class="nav-link active text-start" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab">
-                        <i class="bi bi-person me-2"></i> Meus Dados
-                    </button>
-                    <button class="nav-link text-start" id="v-pills-orders-tab" data-bs-toggle="pill" data-bs-target="#v-pills-orders" type="button" role="tab">
-                        <i class="bi bi-receipt me-2"></i> Meus Pedidos
-                    </button>
-                    <button class="nav-link text-start" id="v-pills-payment-tab" data-bs-toggle="pill" data-bs-target="#v-pills-payment" type="button" role="tab">
-                        <i class="bi bi-credit-card me-2"></i> Pagamento
-                    </button>
-                </div>
-            </div>
-        </div>
+        <a href="/AreaPublica/Carrinho" style="background-color: #28a745; color: white; text-decoration: none; padding: 30px; border-radius: 15px; font-size: 1.8em; font-weight: bold; box-shadow: 0 6px 12px rgba(40,167,69,0.3); display: flex; justify-content: center; align-items: center; gap: 15px;">
+            <span style="font-size: 1.5em;">🛒</span> Ver o Meu Pedido
+        </a>
 
-        <!-- Coluna Direita: Conteúdo Ativo -->
-        <div class="col-lg-9">
-            <div class="tab-content" id="v-pills-tabContent">
+        <button onclick="encerrarSessaoTotem()" style="background-color: #dc3545; color: white; border: none; padding: 30px; border-radius: 15px; font-size: 1.8em; font-weight: bold; cursor: pointer; box-shadow: 0 6px 12px rgba(220,53,69,0.3); display: flex; justify-content: center; align-items: center; gap: 15px; width: 100%; margin-top: 20px;">
+            <span style="font-size: 1.5em;">❌</span> Encerrar e Sair
+        </button>
 
-                <!-- Aba: Meus Dados & Clube Mokka -->
-                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel">
-
-                    <!-- Banner Clube Mokka -->
-                    <div class="loyalty-banner mb-4 flex-column flex-md-row text-center text-md-start">
-                        <div class="d-flex align-items-center mb-3 mb-md-0">
-                            <div class="bg-white rounded-circle p-3 me-3 d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-                                <i class="bi bi-star-fill text-warning fs-2"></i>
-                            </div>
-                            <div>
-                                <h4 class="fw-bold mb-0">Clube Mokka Ouro</h4>
-                                <p class="mb-0 opacity-75 small">Você tem <strong>450 estrelas</strong> acumuladas.</p>
-                            </div>
-                        </div>
-                        <div class="text-md-end">
-                            <p class="mb-1 small fw-bold">Faltam 50 para um café grátis!</p>
-                            <div class="progress" style="height: 8px; width: 200px; background-color: rgba(255,255,255,0.3);">
-                                <div class="progress-bar bg-warning" role="progressbar" style="width: 90%;"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Informações Cadastrais -->
-                    <div class="mokka-card">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="fw-bold m-0" style="color: var(--mokka-green-dark);">Informações Pessoais</h5>
-                            <button class="btn btn-sm btn-outline-mokka"><i class="bi bi-pencil me-1"></i> Editar</button>
-                        </div>
-
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="text-muted small fw-bold">Nome Completo</label>
-                                <p class="fs-5 mb-0">João Silva Carvalho</p>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="text-muted small fw-bold">CPF</label>
-                                <p class="fs-5 mb-0">123.456.789-00</p>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="text-muted small fw-bold">E-mail</label>
-                                <p class="fs-5 mb-0">joao.silva@email.com</p>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="text-muted small fw-bold">Telefone (WhatsApp)</label>
-                                <p class="fs-5 mb-0">(11) 98765-4321</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Aba: Meus Pedidos -->
-                <div class="tab-pane fade" id="v-pills-orders" role="tabpanel">
-                    <div class="mokka-card">
-                        <h5 class="fw-bold mb-4" style="color: var(--mokka-green-dark);">Histórico de Pedidos</h5>
-
-                        <!-- Pedido 1 (Em andamento) -->
-                        <div class="border rounded p-3 mb-3">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="fw-bold">Pedido #1042</span>
-                                <span class="order-status status-preparing">Preparando</span>
-                            </div>
-                            <p class="text-muted small mb-2">Hoje, 10:45 • Retirada no Balcão</p>
-                            <p class="mb-2">1x Cappuccino Mokka, 1x Croissant de Amêndoas</p>
-                            <div class="d-flex justify-content-between align-items-center border-top pt-2 mt-2">
-                                <span class="fw-bold" style="color: var(--mokka-brown-dark);">R$ 32,50</span>
-                                <button class="btn btn-sm btn-link text-decoration-none">Ver Detalhes</button>
-                            </div>
-                        </div>
-
-                        <!-- Pedido 2 (Concluído) -->
-                        <div class="border rounded p-3">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="fw-bold">Pedido #0988</span>
-                                <span class="order-status status-completed">Concluído</span>
-                            </div>
-                            <p class="text-muted small mb-2">12 de Setembro, 08:30 • Retirada no Balcão</p>
-                            <p class="mb-2">1x Espresso Duplo, 1x Pão de Queijo</p>
-                            <div class="d-flex justify-content-between align-items-center border-top pt-2 mt-2">
-                                <span class="fw-bold" style="color: var(--mokka-brown-dark);">R$ 15,00</span>
-                                <button class="btn btn-sm btn-link text-decoration-none">Refazer Pedido</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Aba: Pagamento (Futuro) -->
-                <div class="tab-pane fade" id="v-pills-payment" role="tabpanel">
-                    <div class="mokka-card text-center py-5">
-                        <i class="bi bi-wallet2 display-1 text-muted mb-3 opacity-50"></i>
-                        <h5 class="fw-bold">Formas de Pagamento</h5>
-                        <p class="text-muted">Você poderá salvar seus cartões de crédito aqui no futuro para um checkout mais rápido.</p>
-                        <button class="btn btn-outline-mokka mt-2" disabled>Adicionar Cartão</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
     </div>
 </div>
+
+<script>
+    function encerrarSessaoTotem() {
+        localStorage.removeItem('carrinhoMokka');
+        // A ação Logout agora redireciona corretamente para a View de Login
+        window.location.href = "/AreaPublica/Logout";
+    }
+</script>

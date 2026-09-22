@@ -1,48 +1,39 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace Projeto_do_semestre.Controllers
 {
     public class AreaPublicaController : Controller
     {
-        // 1. Método GET: Apenas exibe a tela de Login
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
-        // 2. Método POST: Recebe os dados digitados no formulário
         [HttpPost]
         public IActionResult Login(string email, string senha)
         {
-            // Regra A: Administrador
             if (email == "a@a" && senha == "123")
             {
-                // Redireciona para o Dashboard na Área Restrita
                 return RedirectToAction("AdmIndex", "AreaRestrita");
             }
-            // Regra B: Cliente Público
             else if (email == "b@b" && senha == "456")
             {
-
-                // Redireciona para o Perfil (ou IndexPublico) na Área Pública
+                // Entra no sistema de autoatendimento
                 return RedirectToAction("Perfil", "AreaPublica");
             }
-            // Regra B: Cliente Público
             else if (email == "c@c" && senha == "789")
             {
-
-                // Redireciona para o Perfil (ou IndexPublico) na Área Pública
                 return RedirectToAction("CozIndex", "AreaCozinha");
             }
-            // Regra C: Errou a senha
             else
             {
-                // Manda uma mensagem de erro de volta para a tela
                 ViewBag.Erro = "E-mail ou senha incorretos!";
                 return View();
             }
         }
+
         public IActionResult IndexPublico()
         {
             return View();
@@ -50,7 +41,18 @@ namespace Projeto_do_semestre.Controllers
 
         public IActionResult Catalogo()
         {
-            return View();
+            // Mock Data enriquecido com Categoria e Descrição para o Totem
+            var produtos = new List<dynamic>
+            {
+                new { Id = 1, Nome = "Expresso", Preco = 2.50, Imagem = "☕", Categoria = "Bebidas Quentes", Descricao = "Puro e intenso" },
+                new { Id = 2, Nome = "Cappuccino", Preco = 4.80, Imagem = "☕", Categoria = "Bebidas Quentes", Descricao = "Com espuma cremosa" },
+                new { Id = 3, Nome = "Pão de Queijo", Preco = 3.50, Imagem = "🥐", Categoria = "Salgados", Descricao = "Tradicional mineiro" },
+                new { Id = 4, Nome = "Bolo Chocolate", Preco = 5.50, Imagem = "🍰", Categoria = "Sobremesas", Descricao = "Fatia generosa" },
+                new { Id = 5, Nome = "Suco Laranja", Preco = 4.00, Imagem = "🍹", Categoria = "Bebidas Frias", Descricao = "Natural 300ml" },
+                new { Id = 6, Nome = "Croissant", Preco = 6.00, Imagem = "🥐", Categoria = "Salgados", Descricao = "Massa folhada" }
+            };
+
+            return View(produtos);
         }
 
         public IActionResult Carrinho()
@@ -65,25 +67,19 @@ namespace Projeto_do_semestre.Controllers
 
         public IActionResult Identificacao()
         {
-            // Mudei para true para testarmos o novo redirecionamento!
-            bool usuarioEstaLogado = false;
-
-            if (usuarioEstaLogado)
-            {
-                // Se ESTIVER logado, redireciona para a página de Perfil
-                return RedirectToAction("Perfil");
-            }
-            else
-            {
-                // Se NÃO estiver logado, redireciona para a página de Login
-                return RedirectToAction("Login");
-            }
+            return View();
         }
 
-        // Nova ação para a página de Perfil que você vai criar
         public IActionResult Perfil()
         {
             return View();
+        }
+
+        // Método para Encerrar Sessão no Totem
+        public IActionResult Logout()
+        {
+            // Redireciona a máquina de volta para a tela de Login
+            return RedirectToAction("Login", "AreaPublica");
         }
     }
 }

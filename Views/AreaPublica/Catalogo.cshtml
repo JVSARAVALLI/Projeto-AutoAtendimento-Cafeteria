@@ -1,30 +1,121 @@
-﻿@{
-    Layout = "_Layout_Publico";
-    ViewData["Title"] = "Catálogo de Produtos";
+﻿@model IEnumerable<dynamic>
+@{
+    ViewData["Title"] = "Catálogo - Totem";
+    // Aponta para o seu layout personalizado em vez do padrão
+    Layout = "_Layout_Publico"; 
 }
 
-<main class="container" id="catalogo">
-    <h2 class="section-title">Escolha seu Café</h2>
+<style>
+    /* Ocultar scrollbars na página principal do Totem para um visual mais limpo */
+    body { margin: 0; background-color: #f4f6f8; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; }
+    
+    .totem-container { display: flex; height: calc(100vh - 100px); }
+    
+    .sidebar { width: 220px; background-color: #fff; box-shadow: 2px 0 5px rgba(0,0,0,0.05); padding: 20px 10px; overflow-y: auto; }
+    .categoria-btn { display: block; width: 100%; text-align: left; padding: 20px; margin-bottom: 15px; background: #fff; border: 2px solid #eee; border-radius: 12px; font-size: 1.3em; font-weight: bold; color: #555; cursor: pointer; transition: 0.2s; }
+    .categoria-btn.ativo { border-color: #ffc107; background-color: #fff9e6; color: #000; box-shadow: 0 4px 8px rgba(255, 193, 7, 0.2); }
+    
+    .produtos-area { flex-grow: 1; padding: 30px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; align-content: start; padding-bottom: 120px; }
+    
+    .produto-card { background: #fff; border-radius: 20px; padding: 20px; text-align: center; box-shadow: 0 6px 12px rgba(0,0,0,0.06); display: flex; flex-direction: column; transition: transform 0.1s; }
+    .produto-card:active { transform: scale(0.96); }
+    .produto-img { font-size: 5em; margin-bottom: 10px; line-height: 1; }
+    .produto-nome { font-size: 1.5em; font-weight: 800; color: #222; margin: 10px 0 5px 0; }
+    .produto-desc { font-size: 1em; color: #777; margin-bottom: 15px; flex-grow: 1; }
+    .produto-preco { font-size: 1.8em; font-weight: 900; color: #28a745; margin-bottom: 20px; }
+    
+    .btn-adicionar { background-color: #28a745; color: white; border: none; padding: 15px; border-radius: 12px; font-size: 1.3em; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(40,167,69,0.3); }
+    
+    .barra-resumo { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
+    .resumo-info { display: flex; align-items: center; gap: 30px; }
+    .resumo-texto { font-size: 1.5em; color: #555; }
+    .resumo-valor { font-size: 2.5em; font-weight: 900; color: #000; }
+    .btn-avancar { background-color: #007bff; color: white; text-decoration: none; padding: 20px 50px; border-radius: 15px; font-size: 1.8em; font-weight: bold; box-shadow: 0 6px 15px rgba(0,123,255,0.4); display: flex; align-items: center; gap: 10px; }
+    
+    /* Correção do erro CS0103 no Razor usando os dois arrobas */
+    @@keyframes piscarVerde { 0% { background-color: #28a745; } 50% { background-color: #20c997; transform: scale(1.05); } 100% { background-color: #28a745; } }
+    .animar-btn { animation: piscarVerde 0.3s ease-in-out; }
+</style>
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        <!-- Item 1 -->
-        <div class="col">
-            <div class="card card-coffee h-100">
-                <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=500&q=80" class="card-img-top" alt="Expresso">
-                <div class="card-body d-flex flex-column">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h5 class="card-title fw-bold mb-0">Expresso Tradicional</h5>
-                        <span class="badge bg-secondary">Avulso</span>
-                    </div>
-                    <p class="card-text text-muted mb-2">Um shot clássico e encorpado de café 100% arábica.</p>
-                    <div class="mb-4"><span class="nutricional-link">📋 Ver Tabela Nutricional</span></div>
-                    <div class="mt-auto d-flex justify-content-between align-items-center">
-                        <span class="price-tag">R$ 6,50</span>
-                        <button class="btn btn-add">Adicionar +</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Adicione os outros cards aqui seguindo o mesmo padrão -->
+<div class="totem-container">
+    <!-- Menu Lateral Simulado -->
+    <div class="sidebar">
+        <button class="categoria-btn ativo">Todos</button>
+        <button class="categoria-btn">Bebidas Quentes</button>
+        <button class="categoria-btn">Bebidas Frias</button>
+        <button class="categoria-btn">Salgados</button>
+        <button class="categoria-btn">Sobremesas</button>
     </div>
-</main>
+
+    <!-- Grelha de Produtos -->
+    <div class="produtos-area">
+        @foreach (var item in Model)
+        {
+            <div class="produto-card">
+                <div class="produto-img">@item.Imagem</div>
+                <div class="produto-nome">@item.Nome</div>
+                <div class="produto-desc">@item.Descricao</div>
+                <div class="produto-preco">R$ @item.Preco.ToString("0.00")</div>
+                
+                <button class="btn-adicionar" id="btn-@item.Id" onclick="adicionarAoCarrinho(this, @item.Id, '@item.Nome', @item.Preco.ToString().Replace(",", "."))">
+                    <span>➕</span> Adicionar
+                </button>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Barra Fixa Inferior -->
+<div class="barra-resumo">
+    <div class="resumo-info">
+        <div>
+            <span class="resumo-texto" id="qtdItens">0 itens no pedido</span>
+            <div class="resumo-valor" id="valorTotal">R$ 0,00</div>
+        </div>
+    </div>
+    <a href="/AreaPublica/Carrinho" class="btn-avancar">
+        Ver Pedido e Pagar <span>➔</span>
+    </a>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        atualizarBarraInferior();
+    });
+
+    function adicionarAoCarrinho(botao, id, nome, preco) {
+        let carrinho = JSON.parse(localStorage.getItem('carrinhoMokka')) || [];
+        let produtoExistente = carrinho.find(p => p.id === id);
+
+        if (produtoExistente) {
+            produtoExistente.quantidade += 1;
+        } else {
+            carrinho.push({ id: id, nome: nome, preco: preco, quantidade: 1 });
+        }
+
+        localStorage.setItem('carrinhoMokka', JSON.stringify(carrinho));
+        atualizarBarraInferior();
+
+        botao.classList.add("animar-btn");
+        botao.innerHTML = "<span>✔️</span> Adicionado!";
+        setTimeout(() => {
+            botao.classList.remove("animar-btn");
+            botao.innerHTML = "<span>➕</span> Adicionar";
+        }, 800);
+    }
+
+    function atualizarBarraInferior() {
+        let carrinho = JSON.parse(localStorage.getItem('carrinhoMokka')) || [];
+        
+        let quantidadeTotal = 0;
+        let valorTotal = 0;
+
+        carrinho.forEach(item => {
+            quantidadeTotal += item.quantidade;
+            valorTotal += (item.preco * item.quantidade);
+        });
+
+        document.getElementById("qtdItens").innerText = quantidadeTotal === 1 ? "1 item no pedido" : quantidadeTotal + " itens no pedido";
+        document.getElementById("valorTotal").innerText = "R$ " + valorTotal.toFixed(2).replace(".", ",");
+    }
+</script>

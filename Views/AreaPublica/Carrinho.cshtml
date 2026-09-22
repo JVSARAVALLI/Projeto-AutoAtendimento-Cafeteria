@@ -1,166 +1,99 @@
 ﻿@{
-    ViewData["Title"] = "Meu Carrinho";
+    ViewData["Title"] = "Seu Carrinho";
 }
 
-<style>
-    /* Estilos específicos do Carrinho integrados com as variáveis do Layout */
-    .cart-item {
-        background-color: var(--mokka-card, #fcfaf8);
-        border-radius: 12px;
-        border: none;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.04);
-        margin-bottom: 15px;
-        padding: 15px;
-        transition: transform 0.2s;
-    }
+<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
 
-    .cart-item:hover {
-        box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-    }
+    <h2 style="font-size: 2.5em; text-align: center; color: #333;">🛒 O Seu Pedido</h2>
 
-    .cart-item-img {
-        border-radius: 10px;
-        object-fit: cover;
-        width: 100%;
-        height: 100px;
-    }
+    <div id="itensCarrinho" style="margin-top: 30px; margin-bottom: 30px; background: #fff; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 20px;">
+        <!-- Itens injetados via JS -->
+    </div>
 
-    .cart-summary {
-        background-color: var(--mokka-card, #fcfaf8);
-        border-radius: 16px;
-        border: none;
-        box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-        padding: 25px;
-    }
+    <h3 id="totalCarrinho" style="font-size: 2em; color: #28a745; text-align: right; margin-bottom: 40px;">Total: R$ 0.00</h3>
 
-    .btn-mokka {
-        background-color: var(--mokka-brown, #aa7946);
-        color: #fff;
-        font-weight: bold;
-        border-radius: 10px;
-        transition: all 0.2s;
-    }
+    <hr style="border: 1px solid #ddd; margin: 40px 0;" />
 
-    .btn-mokka:hover {
-        background-color: var(--mokka-brown-dark, #8c6035);
-        color: #fff;
-    }
+    <!-- Área de Confirmação e Geração de Senha -->
+    <div style="background-color: #f8f9fa; padding: 40px 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
+        <h3 style="font-size: 2em; color: #333; margin-bottom: 10px;">Finalizar Pedido</h3>
+        <p style="font-size: 1.3em; color: #666; margin-bottom: 30px;">Confirme os seus itens. Uma senha será gerada automaticamente.</p>
+        
+        <button onclick="finalizarPedido()" style="background-color: #28a745; color: white; border: none; padding: 20px 30px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 1.5em; width: 100%; max-width: 400px; box-shadow: 0 6px 12px rgba(40,167,69,0.3);">
+            ✔️ Pagar e Gerar Senha
+        </button>
+        <br />
 
-    .btn-outline-mokka {
-        color: var(--mokka-brown-dark, #8c6035);
-        border: 2px solid var(--mokka-brown, #aa7946);
-        border-radius: 10px;
-        font-weight: 600;
-        background: transparent;
-    }
-
-    .btn-outline-mokka:hover {
-        background-color: var(--mokka-brown, #aa7946);
-        color: #fff;
-    }
-
-    .qty-input {
-        width: 50px;
-        text-align: center;
-        border: 1px solid #dee2e6;
-        border-radius: 8px;
-        font-weight: 600;
-    }
-
-    .text-mokka-dark {
-        color: var(--mokka-brown-dark, #8c6035);
-    }
-</style>
-
-<div class="row">
-    <div class="col-12">
-        <h2 class="section-title">🛒 Meu Carrinho</h2>
+        <button onclick="cancelarPedidoTotem()" style="background-color: #dc3545; color: white; border: none; padding: 20px 30px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 1.5em; width: 100%; max-width: 400px; margin-top: 20px; box-shadow: 0 6px 12px rgba(220,53,69,0.3);">
+            ❌ Cancelar e Sair
+        </button>
     </div>
 </div>
 
-<div class="row">
-    <!-- Coluna Esquerda: Lista de Produtos -->
-    <div class="col-lg-8">
-        
-        <!-- Item 1 Estático de Exemplo -->
-        <div class="cart-item d-flex align-items-center row m-0">
-            <div class="col-3 col-md-2 p-0">
-                <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=300&q=80" alt="Café" class="cart-item-img">
-            </div>
-            <div class="col-9 col-md-10">
-                <div class="d-flex justify-content-between align-items-center h-100 ps-3">
-                    <div>
-                        <h5 class="mb-1 fw-bold">Cappuccino Mokka Especial</h5>
-                        <p class="text-muted mb-2 small">Tamanho: Médio | Extra: Leite de Aveia</p>
-                        <h5 class="text-mokka-dark fw-bold mb-0">R$ 18,50</h5>
-                    </div>
-                    <div class="d-flex flex-column align-items-end">
-                        <button class="btn btn-sm text-danger mb-3 p-0"><i class="bi bi-trash3"></i> Remover</button>
-                        <div class="d-flex align-items-center">
-                            <button class="btn btn-sm btn-outline-secondary px-2">-</button>
-                            <input type="text" class="qty-input mx-2" value="1" readonly>
-                            <button class="btn btn-sm btn-outline-secondary px-2">+</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        carregarCarrinho();
+    });
 
-        <!-- Item 2 Estático de Exemplo -->
-        <div class="cart-item d-flex align-items-center row m-0">
-            <div class="col-3 col-md-2 p-0">
-                <img src="https://images.unsplash.com/photo-1558403194-611308249627?w=300&q=80" alt="Croissant" class="cart-item-img">
-            </div>
-            <div class="col-9 col-md-10">
-                <div class="d-flex justify-content-between align-items-center h-100 ps-3">
-                    <div>
-                        <h5 class="mb-1 fw-bold">Croissant de Amêndoas</h5>
-                        <p class="text-muted mb-2 small">Tradicional, Aquecido</p>
-                        <h5 class="text-mokka-dark fw-bold mb-0">R$ 14,00</h5>
-                    </div>
-                    <div class="d-flex flex-column align-items-end">
-                        <button class="btn btn-sm text-danger mb-3 p-0"><i class="bi bi-trash3"></i> Remover</button>
-                        <div class="d-flex align-items-center">
-                            <button class="btn btn-sm btn-outline-secondary px-2">-</button>
-                            <input type="text" class="qty-input mx-2" value="2" readonly>
-                            <button class="btn btn-sm btn-outline-secondary px-2">+</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    function carregarCarrinho() {
+        let carrinho = JSON.parse(localStorage.getItem('carrinhoMokka')) || [];
+        let container = document.getElementById("itensCarrinho");
+        let elementoTotal = document.getElementById("totalCarrinho");
         
-        <div class="mt-4 mb-5">
-            <a asp-controller="AreaPublica" asp-action="Catalogo" class="btn btn-outline-mokka px-4 py-2">
-                <i class="bi bi-arrow-left me-2"></i> Continuar Comprando
-            </a>
-        </div>
-    </div>
+        container.innerHTML = "";
+        let total = 0;
 
-    <!-- Coluna Direita: Resumo do Pedido -->
-    <div class="col-lg-4">
-        <div class="cart-summary sticky-top" style="top: 100px;">
-            <h4 class="fw-bold mb-4">Resumo do Pedido</h4>
-            
-            <div class="d-flex justify-content-between mb-3 text-muted">
-                <span>Subtotal (3 itens)</span>
-                <span class="fw-semibold">R$ 46,50</span>
-            </div>
-            <div class="d-flex justify-content-between mb-3 text-muted">
-                <span>Desconto</span>
-                <span class="fw-semibold text-success">- R$ 0,00</span>
-            </div>
-            
-            <hr>
-            
-            <div class="d-flex justify-content-between mb-4">
-                <h5 class="fw-bold">Total</h5>
-                <h3 class="fw-bold text-mokka-dark mb-0">R$ 46,50</h3>
-            </div>
-            
-            <button class="btn btn-mokka w-100 py-3 fs-5">
-                Finalizar Pedido <i class="bi bi-bag-check-fill ms-2"></i>
-            </button>
-        </div>
-    </div>
-</div>
+        if (carrinho.length === 0) {
+            container.innerHTML = "<p style='color: #666; font-size: 1.5em; text-align: center;'>O seu carrinho está vazio.</p>";
+            elementoTotal.innerHTML = "Total: R$ 0.00";
+            return;
+        }
+
+        carrinho.forEach((item, index) => {
+            let subtotal = item.preco * item.quantidade;
+            total += subtotal;
+
+            container.innerHTML += `
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 15px 0;">
+                    <span style="font-size: 1.5em; color: #333;"><strong>${item.quantidade}x</strong> ${item.nome}</span>
+                    <span style="font-size: 1.5em; color: #333;">R$ ${subtotal.toFixed(2)}</span>
+                    <button onclick="removerDoCarrinho(${index})" style="background-color: #ffc107; color: #000; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 1.2em; font-weight: bold;">
+                        Remover
+                    </button>
+                </div>
+            `;
+        });
+
+        elementoTotal.innerHTML = "Total: R$ " + total.toFixed(2).replace(".", ",");
+    }
+
+    function removerDoCarrinho(index) {
+        let carrinho = JSON.parse(localStorage.getItem('carrinhoMokka')) || [];
+        carrinho.splice(index, 1);
+        localStorage.setItem('carrinhoMokka', JSON.stringify(carrinho));
+        carregarCarrinho();
+    }
+
+    function finalizarPedido() {
+        let carrinho = JSON.parse(localStorage.getItem('carrinhoMokka')) || [];
+        if (carrinho.length === 0) {
+            alert("O carrinho está vazio. Volte ao catálogo para adicionar produtos!");
+            return;
+        }
+
+        // Gera uma senha aleatória entre 100 e 999
+        let numeroSenha = Math.floor(Math.random() * 900) + 100;
+        
+        alert("✅ Pedido Confirmado!\n\nA sua senha é: " + numeroSenha + "\n\nAguarde ser chamado na receção.");
+        
+        // Limpa a máquina após a compra com sucesso e volta ao Login
+        localStorage.removeItem('carrinhoMokka');
+        window.location.href = "/AreaPublica/Login"; 
+    }
+
+    function cancelarPedidoTotem() {
+        // Limpa a máquina caso o cliente desista a meio
+        localStorage.removeItem('carrinhoMokka');
+        window.location.href = "/AreaPublica/Logout"; 
+    }
+</script>
