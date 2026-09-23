@@ -1,0 +1,47 @@
+﻿@{
+    Layout = "_Layout_Publico";
+    ViewData["Title"] = "Acesso Restrito - Equipa";
+}
+
+<div style="height: calc(100vh - 100px); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+
+    <div style="background-color: #fff; padding: 50px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); width: 100%; max-width: 500px;">
+
+        <div style="font-size: 4em; margin-bottom: 20px;">🔒</div>
+        <h1 style="font-size: 2em; color: #333; margin-bottom: 10px;">Acesso Restrito</h1>
+        <p style="font-size: 1.1em; color: #666; margin-bottom: 30px;">Área exclusiva para funcionários do Mokka Café.</p>
+
+        @if (ViewBag.Erro != null)
+        {
+            <div style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 12px; font-weight: bold; margin-bottom: 20px; border: 1px solid #f5c6cb;">
+                ❌ @ViewBag.Erro
+            </div>
+        }
+
+        <form method="post" action="/AreaPublica/LoginFuncionario" style="display: flex; flex-direction: column; gap: 15px;">
+
+            <input type="email" name="email" placeholder="E-mail corporativo" required
+                   style="padding: 15px; font-size: 1.2em; border: 2px solid #ccc; border-radius: 10px; width: 100%; box-sizing: border-box;" 
+                   onfocus="this.style.borderColor='#333'" onblur="this.style.borderColor='#ccc'"/>
+
+            <input type="password" name="senha" placeholder="Senha" required
+                   style="padding: 15px; font-size: 1.2em; border: 2px solid #ccc; border-radius: 10px; width: 100%; box-sizing: border-box;" 
+                   onfocus="this.style.borderColor='#333'" onblur="this.style.borderColor='#ccc'"/>
+
+            <button type="submit" style="background-color: #333; color: white; border: none; padding: 20px; border-radius: 10px; font-size: 1.3em; font-weight: bold; cursor: pointer; margin-top: 10px; transition: background 0.2s;">
+                Entrar no Sistema
+            </button>
+
+            <a href="/AreaPublica/IndexPublico" style="color: #666; text-decoration: none; margin-top: 15px; font-size: 1.1em;">
+                Cancelar e voltar ao Totem
+            </a>
+        </form>
+
+        <!-- Anotação visível mas com aspeto de rodapé de sistema -->
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 0.9em; color: #888;">
+            <strong>Acessos de Teste:</strong><br />
+            Admin: admin@mokka (123) &nbsp;|&nbsp; Cozinha: cozinha@mokka (789)
+        </div>
+
+    </div>
+</div>

@@ -1,156 +1,37 @@
 ﻿@{
-    ViewData["Title"] = "Opções e Configurações";
+    Layout = "_Layout_Publico";
+    ViewData["Title"] = "Opções e Ajuda";
 }
 
-<style>
-    .options-header {
-        margin-bottom: 30px;
-        color: var(--mokka-black, #1a1a1a);
-    }
+<div style="padding: 40px; max-width: 800px; margin: 0 auto; text-align: center;">
+    <h1 style="font-size: 3em; color: #333; margin-bottom: 40px;">Precisa de Ajuda?</h1>
 
-    .options-card {
-        background-color: var(--mokka-card, #fff);
-        border-radius: 16px;
-        border: none;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-        padding: 30px;
-        height: 100%;
-        transition: transform 0.2s;
-    }
+    <!-- Secção de Ajuda e Suporte -->
+    <div style="background-color: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 20px;">
+        
+        <h2 style="font-size: 2em; color: #8c9c6c; margin-bottom: 20px;">Atendimento</h2>
+        
+        <p style="font-size: 1.3em; color: #666; margin-bottom: 20px;">
+            Se tiver dúvidas sobre alergénios, ingredientes ou necessitar de assistência física no totem, chame a nossa equipa.
+        </p>
 
-        .options-card:hover {
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-        }
+        <!-- Botão que gera a notificação -->
+        <button onclick="chamarAtendente()" style="background-color: #dc3545; color: white; border: none; padding: 25px; border-radius: 15px; font-size: 1.8em; font-weight: bold; cursor: pointer; box-shadow: 0 6px 12px rgba(220,53,69,0.3);">
+            🎧 Falar com um Atendente
+        </button>
 
-    .options-icon-box {
-        width: 50px;
-        height: 50px;
-        background-color: rgba(154, 176, 122, 0.2);
-        color: var(--mokka-green-dark, #7a8e5f);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        margin-bottom: 20px;
-    }
-
-    /* Estilizando os botões de "Switch" (liga/desliga) para a cor Mokka */
-    .form-check-input:checked {
-        background-color: var(--mokka-brown, #aa7946);
-        border-color: var(--mokka-brown, #aa7946);
-    }
-
-    .btn-outline-mokka {
-        color: var(--mokka-brown-dark, #8c6035);
-        border: 2px solid var(--mokka-brown, #aa7946);
-        background: transparent;
-        font-weight: bold;
-        border-radius: 10px;
-        transition: 0.3s;
-    }
-
-        .btn-outline-mokka:hover {
-            background-color: var(--mokka-brown, #aa7946);
-            color: white;
-        }
-
-    .list-group-item {
-        background-color: transparent;
-        border-color: rgba(0,0,0,0.05);
-        padding: 15px 0;
-    }
-</style>
-
-<div class="container mt-4 mb-5">
-    <div class="options-header text-center">
-        <h2 class="fw-bold"><i class="bi bi-gear text-muted me-2"></i>Preferências</h2>
-        <p class="text-muted">Personalize sua experiência no Mokka Café.</p>
-    </div>
-
-    <div class="row g-4">
-        <!-- Card 1: Acessibilidade e Visual -->
-        <div class="col-md-6 col-lg-4">
-            <div class="options-card">
-                <div class="options-icon-box">
-                    <i class="bi bi-universal-access"></i>
-                </div>
-                <h4 class="fw-bold mb-4" style="color: var(--mokka-black);">Acessibilidade</h4>
-
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="mb-0 fw-semibold">Modo de Alto Contraste</h6>
-                            <small class="text-muted">Melhora a leitura da tela</small>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input fs-4 m-0" type="checkbox" role="switch">
-                        </div>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="mb-0 fw-semibold">Texto Grande</h6>
-                            <small class="text-muted">Aumenta a fonte do cardápio</small>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input fs-4 m-0" type="checkbox" role="switch">
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Card 2: Notificações -->
-        <div class="col-md-6 col-lg-4">
-            <div class="options-card">
-                <div class="options-icon-box" style="background-color: rgba(170, 121, 70, 0.15); color: var(--mokka-brown-dark);">
-                    <i class="bi bi-bell"></i>
-                </div>
-                <h4 class="fw-bold mb-4" style="color: var(--mokka-black);">Alertas do Pedido</h4>
-
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="mb-0 fw-semibold">Receber SMS</h6>
-                            <small class="text-muted">Aviso quando o pedido estiver pronto</small>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input fs-4 m-0" type="checkbox" role="switch" checked>
-                        </div>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="mb-0 fw-semibold">Nota Fiscal Eletrônica</h6>
-                            <small class="text-muted">Enviar cupom para o e-mail</small>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input fs-4 m-0" type="checkbox" role="switch" checked>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Card 3: Suporte e Sobre -->
-        <div class="col-md-12 col-lg-4">
-            <div class="options-card">
-                <div class="options-icon-box" style="background-color: rgba(26, 26, 26, 0.1); color: var(--mokka-black);">
-                    <i class="bi bi-info-circle"></i>
-                </div>
-                <h4 class="fw-bold mb-4" style="color: var(--mokka-black);">Ajuda e Suporte</h4>
-
-                <div class="d-grid gap-3">
-                    <button class="btn btn-outline-mokka text-start px-3 py-2">
-                        <i class="bi bi-question-circle me-2"></i> Perguntas Frequentes
-                    </button>
-                    <button class="btn btn-outline-mokka text-start px-3 py-2">
-                        <i class="bi bi-file-earmark-text me-2"></i> Termos de Uso e Privacidade
-                    </button>
-                    <button class="btn btn-outline-mokka text-start px-3 py-2">
-                        <i class="bi bi-headset me-2"></i> Falar com o Atendente
-                    </button>
-                </div>
-            </div>
-        </div>
+        <a href="/AreaPublica/Catalogo" style="background-color: #e9ecef; color: #555; text-decoration: none; padding: 20px; border-radius: 12px; font-size: 1.5em; font-weight: bold; margin-top: 10px;">
+            🔙 Voltar ao Catálogo
+        </a>
     </div>
 </div>
+
+<script>
+    function chamarAtendente() {
+        // Regista o alerta na memória partilhada do navegador
+        localStorage.setItem('alertaAtendimento', 'Pendente');
+        
+        // Feedback visual para o cliente no Totem
+        alert("🔔 A notificação foi enviada! Um atendente irá ter consigo ao Totem em instantes.");
+    }
+</script>

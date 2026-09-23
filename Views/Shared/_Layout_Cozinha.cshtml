@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,23 +13,22 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <style>
-            /* Ajuste simples para garantir que o rodapé fique no fundo */
-            html,
-            body {
-                height: 100%;
-            }
+        /* Ajuste simples para garantir que o rodapé fique no fundo */
+        html,
+        body {
+            height: 100%;
+        }
 
-            body {
-                display: flex;
-                flex-direction: column;
-            }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
 
-            .flex-wrapper {
-                flex: 1 0 auto;
-            }
+        .flex-wrapper {
+            flex: 1 0 auto;
+        }
     </style>
 </head>
-
 <body>
     <div class="flex-wrapper">
         <!-- MENU SUPERIOR -->
@@ -40,6 +38,7 @@
                     <a class="navbar-brand text-warning" asp-controller="AreaCozinha" asp-action="CozIndex">
                         <i class="bi bi-cup-hot-fill"></i> Mokka Café | Cozinha
                     </a>
+                    
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                             data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false"
                             aria-label="Toggle navigation">
@@ -47,75 +46,64 @@
                     </button>
 
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        <!-- LINKS DAS TELAS DA COZINHA -->
+                        
+                        <!-- LINKS DAS TELAS DA COZINHA (Funcionários e Vendas removidos) -->
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-controller="AreaCozinha" asp-action="CozIndex"><i
-                                    class="bi bi-house-door"></i> Início</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-light" asp-controller="AreaCozinha" asp-action="CozCatalogo"><i
-                                        class="bi bi-book"></i> Catálogo</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-light" asp-controller="AreaCozinha" asp-action="CozInsumos"><i
-                                            class="bi bi-box-seam"></i> Insumos</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link text-light" asp-controller="AreaCozinha"
-                                               asp-action="CozFuncionarios"><i class="bi bi-people"></i> Funcionários</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link text-light" asp-controller="AreaCozinha" asp-action="CozCompras"><i
-                                                class="bi bi-cart-check"></i> Compras</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link text-light" asp-controller="AreaCozinha" asp-action="CozDashboard"><i
-                                                    class="bi bi-graph-up"></i> Vendas</a>
-                                                </li>
-                                            </ul>
+                                <a class="nav-link text-light" asp-controller="AreaCozinha" asp-action="CozIndex">
+                                    <i class="bi bi-house-door"></i> Início
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-controller="AreaCozinha" asp-action="CozCatalogo">
+                                    <i class="bi bi-book"></i> Catálogo
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-controller="AreaCozinha" asp-action="CozInsumos">
+                                    <i class="bi bi-box-seam"></i> Insumos
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-controller="AreaCozinha" asp-action="CozCompras">
+                                    <i class="bi bi-cart-check"></i> Compras
+                                </a>
+                            </li>
+                        </ul>
 
-                                            <!-- BOTÃO DE SAIR -->
-                                            <ul class="navbar-nav">
-                                                <li class="nav-item">
-                                                    <!-- Assumindo que seu controller público/login se chame Home ou AreaPublica -->
-                                                    <<!-- BOTÃO DE SAIR -->
-                                                        <ul class="navbar-nav">
-                                                            <li class="nav-item">
-                                                                <a class="nav-link text-danger fw-bold" asp-controller="AreaPublica"
-                                                                   asp-action="Login">
-                                                                    <i class="bi bi-box-arrow-right"></i> Sair
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </nav>
-                            </header>
+                        <!-- BOTÃO DE SAIR (Código limpo e ação ajustada) -->
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link text-danger fw-bold" asp-controller="AreaPublica" asp-action="Logout">
+                                    <i class="bi bi-box-arrow-right"></i> Sair
+                                </a>
+                            </li>
+                        </ul>
+                        
+                    </div>
+                </div>
+            </nav>
+        </header>
 
-                            <!-- ÁREA ONDE AS VIEWS SERÃO RENDERIZADAS -->
-                            <div class="container">
-                                <main role="main" class="pb-3">
-                                    @RenderBody()
-                                </main>
-                            </div>
-                        </div>
+        <!-- ÁREA ONDE AS VIEWS SERÃO RENDERIZADAS -->
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
 
-                        <!-- RODAPÉ -->
-                        <footer class="border-top footer text-muted bg-light py-3 mt-auto">
-                            <div class="container text-center">
-                                &copy; 2026 - Mokka Café - Sistema de Gestão da Cozinha
-                            </div>
-                        </footer>
+    <!-- RODAPÉ -->
+    <footer class="border-top footer text-muted bg-light py-3 mt-auto">
+        <div class="container text-center">
+            &copy; 2026 - Mokka Café - Sistema de Gestão da Cozinha
+        </div>
+    </footer>
 
-                        <!-- SCRIPTS PADRÃO DO ASP.NET -->
-                        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-                        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-                        <script src="~/js/site.js" asp-append-version="true"></script>
-                        @await RenderSectionAsync("Scripts", required: false)
-                    </body>
-
-                </html>
+    <!-- SCRIPTS PADRÃO DO ASP.NET -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

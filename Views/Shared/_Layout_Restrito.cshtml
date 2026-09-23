@@ -10,7 +10,6 @@
 
     <style>
         :root {
-            /* Paleta de cores Mokka CAFÉ */
             --mokka-green: #9ab07a;
             --mokka-green-dark: #7a8e5f;
             --mokka-brown: #aa7946;
@@ -33,7 +32,6 @@
             min-height: 100vh;
         }
 
-        /* Menu Lateral - Estilo Admin Mokka */
         .sidebar {
             min-width: 250px;
             max-width: 250px;
@@ -62,7 +60,7 @@
                 transition: 0.2s;
             }
 
-                .sidebar ul li a:hover, .sidebar ul li.active > a {
+                .sidebar ul li a:hover {
                     color: #fff;
                     background: var(--mokka-green-dark);
                     font-weight: bold;
@@ -105,48 +103,53 @@
 </head>
 <body>
     @{
-        // Captura a página atual para acender a aba no menu lateral
         var actionAtual = ViewContext.RouteData.Values["action"]?.ToString();
     }
 
     <div class="wrapper">
-        <!-- Sidebar -->
         <nav class="sidebar">
             <div class="sidebar-header">
                 <h4 class="m-0 text-white fw-bold">☕ Mokka Café</h4>
             </div>
             <ul class="list-unstyled components">
-                <li class="@(actionAtual == "AdmIndex" ? "active" : "")">
-                    <a asp-controller="AreaRestrita" asp-action="AdmIndex"><i class="bi bi-house-door"></i> <span>Dashboard</span></a>
-                </li>
-                <li class="@(actionAtual == "AdmCadastros" ? "active" : "")">
-                    <a asp-controller="AreaRestrita" asp-action="AdmCadastros"><i class="bi bi-plus-circle"></i> <span>Cadastrar Produto</span></a>
-                </li>
-                <li class="@(actionAtual == "AdmCatalogo" ? "active" : "")">
-                    <a asp-controller="AreaRestrita" asp-action="AdmCatalogo"><i class="bi bi-cup-hot"></i> <span>Gerenciar Cardápio</span></a>
-                </li>
-                <li class="@(actionAtual == "AdmVendas" ? "active" : "")">
-                    <a asp-controller="AreaRestrita" asp-action="AdmVendas"><i class="bi bi-receipt"></i> <span>Controle de Pedidos</span></a>
-                </li>
+                
+                @if (actionAtual != "AdmIndex")
+                {
+                    <li>
+                        <a asp-controller="AreaRestrita" asp-action="AdmIndex"><i class="bi bi-house-door"></i> <span>Dashboard</span></a>
+                    </li>
+                }
+
+                @if (actionAtual != "AdmCadastros")
+                {
+                    <li>
+                        <!-- A Central que gere Produtos, Funcionários e Usuários -->
+                        <a asp-controller="AreaRestrita" asp-action="AdmCadastros"><i class="bi bi-folder-plus"></i> <span>Central de Cadastros</span></a>
+                    </li>
+                }
+
+                @if (actionAtual != "AdmVendas")
+                {
+                    <li>
+                        <a asp-controller="AreaRestrita" asp-action="AdmVendas"><i class="bi bi-receipt"></i> <span>Vendas e Relatórios</span></a>
+                    </li>
+                }
             </ul>
         </nav>
 
-        <!-- Conteúdo Principal -->
         <div class="content">
-            <!-- Barra Superior -->
             <div class="topbar">
                 <h5 class="m-0 fw-bold" style="color: var(--mokka-black);">Painel de Gestão da Cafeteria</h5>
                 <div class="dropdown">
                     <button class="btn btn-light dropdown-toggle d-flex align-items-center border" type="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-person-circle fs-5 me-2" style="color: var(--mokka-brown-dark);"></i><span>Atendente</span>
+                        <i class="bi bi-person-circle fs-5 me-2" style="color: var(--mokka-brown-dark);"></i><span>Administrador</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                        <li><a class="dropdown-item text-danger" asp-controller="AreaPublica" asp-action="Login"><i class="bi bi-box-arrow-right me-2"></i>Sair do Sistema</a></li>
+                        <li><a class="dropdown-item text-danger" asp-controller="AreaPublica" asp-action="Logout"><i class="bi bi-box-arrow-right me-2"></i>Sair do Sistema</a></li>
                     </ul>
                 </div>
             </div>
 
-            <!-- Injeção do corpo da página -->
             @RenderBody()
         </div>
     </div>

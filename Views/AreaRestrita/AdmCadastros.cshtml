@@ -1,69 +1,47 @@
 ﻿@{
-    Layout = "_Layout_Restrito";
-    ViewData["Title"] = "Cadastrar Produto";
+    ViewData["Title"] = "Central de Cadastros";
 }
 
-<div class="card border-0 shadow-sm rounded-4">
-    <div class="card-header bg-white border-0 p-4 pb-0">
-        <h4 class="fw-bold m-0" style="color: #3e2723;"><i class="bi bi-plus-circle-fill text-warning me-2"></i>Cadastrar Novo Item no Cardápio</h4>
-        <p class="text-muted small mt-1">Preencha as informações do produto que aparecerá no totem de autoatendimento.</p>
+<div style="padding: 40px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f8; min-height: 100vh;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h2 style="font-size: 2.5em; color: #333; margin: 0;">📝 Central de Cadastros</h2>
     </div>
 
-    <div class="card-body p-4">
-        <form asp-controller="AreaRestrita" asp-action="AdmCadastros" method="post">
-
-            <h6 class="fw-bold mb-3" style="color: #4e342e;">Informações Básicas</h6>
-            <div class="row g-3 mb-4">
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold text-secondary small">Nome do Produto</label>
-                    <input type="text" class="form-control" name="Nome" placeholder="Ex: Cappuccino Cremoso" required>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold text-secondary small">Categoria</label>
-                    <select class="form-select" name="Categoria">
-                        <option selected disabled>Selecione...</option>
-                        <option>Cafés Quentes</option>
-                        <option>Bebidas Geladas</option>
-                        <option>Salgados / Lanches</option>
-                        <option>Doces / Sobremesas</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold text-secondary small">Preço de Venda</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-light">R$</span>
-                        <input type="text" class="form-control" name="Preco" placeholder="0,00" required>
-                    </div>
-                </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
+        
+        <!-- Cadastrar Produtos -->
+        <div style="background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="font-size: 4em; margin-bottom: 15px;">🍔</div>
+                <h3 style="font-size: 1.5em; color: #333;">Produtos e Cardápio</h3>
+                <p style="color: #666; margin-bottom: 20px;">Adicione novos itens, preços e imagens ao catálogo do Totem.</p>
             </div>
+            <!-- Alterado de <button> para <a> -->
+            <a href="/AreaRestrita/AdmCardapio" style="display: block; text-decoration: none; background-color: #007bff; color: white; padding: 12px 25px; border-radius: 8px; font-weight: bold; width: 100%; box-sizing: border-box; transition: background 0.2s;">Gerir Produtos</a>
+        </div>
 
-            <h6 class="fw-bold mb-3" style="color: #4e342e;">Detalhes e Imagem</h6>
-            <div class="row g-3 mb-4">
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold text-secondary small">Foto Ilustrativa (URL ou Arquivo)</label>
-                    <input type="text" class="form-control" name="Imagem" placeholder="Cole o link da imagem (ex: Unsplash)">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold text-secondary small">Disponibilidade de Combo</label>
-                    <select class="form-select" name="Combo">
-                        <option>Disponível como Combo</option>
-                        <option>Apenas Item Avulso</option>
-                    </select>
-                </div>
-                <div class="col-12">
-                    <label class="form-label fw-semibold text-secondary small">Descrição / Ingredientes</label>
-                    <textarea class="form-control" name="Descricao" rows="3" placeholder="Descreva os ingredientes ou diferenciais do café..."></textarea>
-                </div>
+        <!-- Cadastrar Funcionários -->
+        <div style="background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="font-size: 4em; margin-bottom: 15px;">👨‍🍳</div>
+                <h3 style="font-size: 1.5em; color: #333;">Equipa (Funcionários)</h3>
+                <p style="color: #666; margin-bottom: 20px;">Registo de colaboradores, cargos, salários e turnos.</p>
             </div>
+            <!-- Alterado de <button> para <a> -->
+            <a href="/AreaRestrita/AdmFuncionarios" style="display: block; text-decoration: none; background-color: #17a2b8; color: white; padding: 12px 25px; border-radius: 8px; font-weight: bold; width: 100%; box-sizing: border-box; transition: background 0.2s;">Gerir Equipa</a>
+        </div>
 
-            <hr class="my-4 text-muted">
-
-            <div class="d-flex justify-content-end gap-2">
-                <button type="reset" class="btn btn-outline-secondary px-4 fw-semibold">Limpar Campos</button>
-                <button type="submit" class="btn px-4 fw-bold text-dark" style="background-color: #ffb300;">
-                    <i class="bi bi-check-lg me-1"></i> Salvar no Cardápio
-                </button>
+        <!-- Cadastrar Usuários -->
+        <div style="background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="font-size: 4em; margin-bottom: 15px;">🔐</div>
+                <h3 style="font-size: 1.5em; color: #333;">Usuários do Sistema</h3>
+                <p style="color: #666; margin-bottom: 20px;">Criação de acessos, senhas e permissões (Admin / Cozinha).</p>
             </div>
-        </form>
+            <!-- Alterado de <button> para <a> -->
+            <a href="/AreaRestrita/AdmUsuarios" style="display: block; text-decoration: none; background-color: #6f42c1; color: white; padding: 12px 25px; border-radius: 8px; font-weight: bold; width: 100%; box-sizing: border-box; transition: background 0.2s;">Gerir Acessos</a>
+        </div>
+
     </div>
 </div>

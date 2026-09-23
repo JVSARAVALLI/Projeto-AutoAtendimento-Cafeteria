@@ -1,5 +1,6 @@
 @{
-    Layout = null; // Removemos o layout para ocupar 100% do ecrã
+    // Removemos o layout para este ecrã ocupar 100% do monitor, sem barras
+    Layout = null; 
 }
 
 <!DOCTYPE html>
@@ -8,91 +9,64 @@
     <meta charset="utf-8" />
     <title>Mokka Café - Autoatendimento</title>
     <style>
-        body, html {
-            margin: 0;
-            height: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #8c9c6c;
-            color: white;
-            overflow: hidden;
+        body, html { 
+            margin: 0; 
+            height: 100%; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #8c9c6c; 
+            color: white; 
+            overflow: hidden; 
         }
-
-        /* A área clicável ocupa o ecrã inteiro */
-        .ecra-toque {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            text-decoration: none;
-            color: white;
-            transition: background 0.3s;
+        
+        /* A área clicável para os clientes (ocupa o ecrã inteiro) */
+        .ecra-toque { 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            cursor: pointer; 
+            text-decoration: none; 
+            color: white; 
+            transition: background 0.3s; 
         }
-
-            .ecra-toque:active {
-                background-color: #7a885d;
-            }
-
-        .logo-gigante {
-            font-size: 8em;
-            margin-bottom: 20px;
-        }
-
-        .titulo {
-            font-size: 4em;
-            font-weight: bold;
-            margin-bottom: 40px;
-        }
-
-        .instrucao {
-            font-size: 2.5em;
-            font-weight: 300;
-            animation: piscar 1.5s infinite;
-        }
-
-        @@keyframes piscar {
-            0%, 100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.3;
-            }
-        }
-
-        0%, 100% {
-            opacity: 1;
-        }
-
-        50% {
-            opacity: 0.3;
-        }
-
-        }
-
-        /* Botão invisível para funcionários no canto inferior direito */
-        .area-secreta {
-            position: fixed;
-            bottom: 0;
-            right: 0;
-            width: 100px;
-            height: 100px;
+        
+        .ecra-toque:active { background-color: #7a885d; }
+        
+        .logo-gigante { font-size: 8em; margin-bottom: 20px; }
+        .titulo { font-size: 4em; font-weight: bold; margin-bottom: 40px; }
+        .instrucao { font-size: 2.5em; font-weight: 300; animation: piscar 1.5s infinite; }
+        
+        /* Uso do duplo arroba (@@) para não dar erro no C# (Razor) */
+        @@keyframes piscar { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        
+        /* =========================================================
+           BOTÃO SECRETO DOS FUNCIONÁRIOS (Canto inferior direito)
+           ========================================================= */
+        .area-secreta { 
+            position: fixed; 
+            bottom: 0; 
+            right: 0; 
+            width: 120px; 
+            height: 120px; 
             z-index: 1000;
+            cursor: default; /* Mantém a seta normal para não dar nas vistas */
+            /* DICA: Se quiser ver o quadrado para testar, apague as barras (/*) da linha abaixo: */
+            /* background-color: rgba(255, 0, 0, 0.3); */
         }
     </style>
 </head>
 <body>
 
-    <!-- Altere apenas a linha do href principal no seu IndexPublico.cshtml -->
+    <!-- 1. FLUXO DO CLIENTE: Um clique no meio do ecrã leva para a escolha (Tipo de Acesso) -->
     <a href="/AreaPublica/TipoAcesso" class="ecra-toque">
         <div class="logo-gigante">☕</div>
         <div class="titulo">Mokka Café</div>
         <div class="instrucao">👆 Toque no ecrã para iniciar</div>
     </a>
 
-    <!-- Clicar neste canto invisível abre o login dos funcionários -->
-    <a href="/AreaPublica/LoginFuncionario" class="area-secreta" title="Área Restrita"></a>
+    <!-- 2. FLUXO DA EQUIPA: Clicar no canto inferior direito abre o login -->
+    <a href="/AreaPublica/LoginFuncionario" class="area-secreta" title="Área da Equipa"></a>
 
 </body>
 </html>

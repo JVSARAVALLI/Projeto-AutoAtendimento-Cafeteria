@@ -1,150 +1,58 @@
 ﻿@{
-    ViewData["Title"] = "Painel da Cozinha";
+    ViewData["Title"] = "Monitor de Atendimento";
 }
 
-<style>
-    .order-kitchen-card {
-        background-color: #fff;
-        border-radius: 14px;
-        border: none;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        transition: transform 0.2s;
-        border-top: 5px solid var(--mokka-brown, #aa7946);
-    }
-
-        .order-kitchen-card.urgent {
-            border-top-color: #dc3545; /* Destaque vermelho para pedidos mais antigos */
-        }
-
-    .badge-status {
-        font-size: 0.85rem;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-weight: 600;
-    }
-</style>
-
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h3 class="fw-bold m-0" style="color: var(--mokka-black, #1a1a1a);">🍳 Painel de Produção (Cozinha / Bar)</h3>
-        <p class="text-muted mb-0 mt-1">Acompanhe os itens em tempo real para liberação rápida no balcão.</p>
-    </div>
-    <div>
-        <button class="btn btn-outline-secondary px-3 py-2">
-            <i class="bi bi-arrow-clockwise me-2"></i> Atualizar Fila
+<div style="padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f8; min-height: 100vh;">
+    
+    <h2 style="font-size: 2.5em; color: #333; margin-bottom: 20px;">Monitor de Pedidos e Alertas</h2>
+    
+    <!-- Caixa de Alerta (Escondida por padrão, aparece quando há notificação) -->
+    <div id="painelAlerta" style="display: none; background-color: #dc3545; color: white; padding: 30px; border-radius: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 6px 20px rgba(220,53,69,0.5); animation: pulsarVermelho 1.5s infinite;">
+        
+        <div style="font-size: 2em; font-weight: bold; display: flex; align-items: center; gap: 15px;">
+            <span>🚨</span> ATENÇÃO: Cliente a solicitar ajuda no Totem!
+        </div>
+        
+        <button onclick="resolverChamada()" style="background: white; color: #dc3545; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; font-size: 1.5em; cursor: pointer;">
+            ✔️ Assinalar como Resolvido
         </button>
     </div>
-</div>
 
-<!-- Cards de Status Rápidos -->
-<div class="row g-4 mb-4">
-    <div class="col-md-4">
-        <div class="p-3 bg-white rounded-4 shadow-sm d-flex align-items-center">
-            <div class="p-3 rounded-3 me-3 bg-warning bg-opacity-25 text-warning">
-                <i class="bi bi-clock-history fs-4"></i>
-            </div>
-            <div>
-                <h6 class="text-muted mb-1">Aguardando Preparo</h6>
-                <h4 class="fw-bold m-0">2 Pedidos</h4>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="p-3 bg-white rounded-4 shadow-sm d-flex align-items-center">
-            <div class="p-3 rounded-3 me-3 text-white" style="background-color: var(--mokka-brown, #aa7946);">
-                <i class="bi bi-fire fs-4"></i>
-            </div>
-            <div>
-                <h6 class="text-muted mb-1">Em Execução</h6>
-                <h4 class="fw-bold m-0">3 Pedidos</h4>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="p-3 bg-white rounded-4 shadow-sm d-flex align-items-center">
-            <div class="p-3 rounded-3 m-0 me-3 text-white" style="background-color: var(--mokka-green-dark, #7a8e5f);">
-                <i class="bi bi-check-all fs-4"></i>
-            </div>
-            <div>
-                <h6 class="text-muted mb-1">Prontos Hoje</h6>
-                <h4 class="fw-bold m-0">52 Pedidos</h4>
-            </div>
-        </div>
+    <!-- Restante interface da Cozinha (Fila de pedidos) -->
+    <div style="background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <h3 style="font-size: 1.8em; color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px;">Fila de Preparação</h3>
+        <p style="color: #666; font-size: 1.2em; margin-top: 20px;">Os pedidos confirmados aparecerão aqui...</p>
     </div>
 </div>
 
-<!-- Fila de Pedidos Ativos na Cozinha -->
-<div class="row g-4">
+<style>
+    /* Utilizando o duplo arroba para evitar erros de compilação no Razor */
+    @@keyframes pulsarVermelho { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+</style>
 
-    <!-- Pedido 1 (Urgente / Em preparo) -->
-    <div class="col-md-4">
-        <div class="card order-kitchen-card urgent h-100 p-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="fw-bold m-0">#1044</h4>
-                <span class="badge bg-danger bg-opacity-10 text-danger border border-danger badge-status">Urgente (12 min)</span>
-            </div>
-            <p class="text-muted small mb-3"><i class="bi bi-person me-1"></i> Cliente: Mariana Souza • <span class="fw-semibold">Mesa 02</span></p>
+<script>
+    // A cada 2 segundos (2000ms), o monitor verifica se alguém clicou no botão do Totem
+    setInterval(verificarChamadas, 2000);
 
-            <div class="border-top border-bottom py-3 mb-3">
-                <ul class="list-unstyled mb-0">
-                    <li class="mb-2"><strong>2x</strong> Cappuccino Mokka Especial <br><small class="text-muted">Leite de Aveia, Extra Canela</small></li>
-                    <li class="mb-0"><strong>1x</strong> Croissant de Amêndoas <br><small class="text-muted">Aquecido</small></li>
-                </ul>
-            </div>
+    function verificarChamadas() {
+        let alerta = localStorage.getItem('alertaAtendimento');
+        let painel = document.getElementById('painelAlerta');
+        
+        if (alerta === 'Pendente') {
+            painel.style.display = 'flex';
+        } else {
+            painel.style.display = 'none';
+        }
+    }
 
-            <div class="mt-auto">
-                <button class="btn text-white w-100 py-2 fw-bold" style="background-color: var(--mokka-green-dark, #7a8e5f);">
-                    <i class="bi bi-check-lg me-2"></i> Marcar como Pronto
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Pedido 2 -->
-    <div class="col-md-4">
-        <div class="card order-kitchen-card h-100 p-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="fw-bold m-0">#1045</h4>
-                <span class="badge bg-warning bg-opacity-10 text-warning border border-warning badge-status">Preparando</span>
-            </div>
-            <p class="text-muted small mb-3"><i class="bi bi-person me-1"></i> Cliente: Carlos Lima • <span class="fw-semibold">Retirada Balcão</span></p>
-
-            <div class="border-top border-bottom py-3 mb-3">
-                <ul class="list-unstyled mb-0">
-                    <li class="mb-2"><strong>1x</strong> Espresso Duplo</li>
-                    <li class="mb-0"><strong>1x</strong> Pão de Queijo Tradicional</li>
-                </ul>
-            </div>
-
-            <div class="mt-auto">
-                <button class="btn text-white w-100 py-2 fw-bold" style="background-color: var(--mokka-green-dark, #7a8e5f);">
-                    <i class="bi bi-check-lg me-2"></i> Marcar como Pronto
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Pedido 3 -->
-    <div class="col-md-4">
-        <div class="card order-kitchen-card h-100 p-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="fw-bold m-0">#1046</h4>
-                <span class="badge bg-warning bg-opacity-10 text-warning border border-warning badge-status">Aguardando</span>
-            </div>
-            <p class="text-muted small mb-3"><i class="bi bi-person me-1"></i> Cliente: Ana Beatriz • <span class="fw-semibold">Mesa 05</span></p>
-
-            <div class="border-top border-bottom py-3 mb-3">
-                <ul class="list-unstyled mb-0">
-                    <li class="mb-0"><strong>3x</strong> Moca Branco Gelado</li>
-                </ul>
-            </div>
-
-            <div class="mt-auto">
-                <button class="btn text-white w-100 py-2 fw-bold" style="background-color: var(--mokka-brown, #aa7946);">
-                    <i class="bi bi-fire me-2"></i> Iniciar Preparo
-                </button>
-            </div>
-        </div>
-    </div>
-
-</div>
+    function resolverChamada() {
+        // Limpa o alerta no Local Storage para que a caixa vermelha desapareça
+        localStorage.removeItem('alertaAtendimento');
+        
+        // Esconde imediatamente a caixa no ecrã
+        document.getElementById('painelAlerta').style.display = 'none';
+    }
+    
+    // Executa a verificação imediatamente ao carregar a página da cozinha
+    verificarChamadas();
+</script>
