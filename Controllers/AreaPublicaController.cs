@@ -1,15 +1,76 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace Projeto_do_semestre.Controllers
 {
     public class AreaPublicaController : Controller
     {
-        // 1. ECRÃ DE REPOUSO DO TOTEM (Toque para Iniciar)
+        // Método de entrada padrão da Controller que garante o redirecionamento para o Totem
+        [AllowAnonymous]
+        public IActionResult Index()
+        {
+            return RedirectToAction("IndexPublico");
+        }
+
+        // Tela de Descanso (Attract Screen) do Totem Mokka Café
+        [AllowAnonymous]
         public IActionResult IndexPublico()
         {
             return View();
         }
+        // Tela de Identificação / Programa de Fidelidade (CPF ou Anônimo)
+        [AllowAnonymous]
+        public IActionResult Identificacao()
+        {
+            return View();
+        }
+
+
+        // Carrinho de compras
+        [AllowAnonymous]
+        public IActionResult Carrinho()
+        {
+            return View();
+        }
+
+        // 1. Acesso Interno / Login (GET: Exibe a tela de Login)
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        // 2. Acesso Interno / Login (POST: Processa as credenciais)
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult Login(string email, string senha)
+        {
+            // Regra A: Administrador
+            if (email == "a@a" && senha == "123")
+            {
+                return RedirectToAction("AdmIndex", "AreaRestrita");
+            }
+            // Regra B: Cliente Público
+            else if (email == "b@b" && senha == "456")
+            {
+                return RedirectToAction("Perfil", "AreaPublica");
+            }
+            // Regra C: Cozinha
+            else if (email == "c@c" && senha == "789")
+            {
+                return RedirectToAction("CozIndex", "AreaCozinha");
+            }
+            // Regra D: Credenciais inválidas
+            else
+            {
+                ViewBag.Erro = "E-mail ou senha incorretos!";
+                return View();
+            }
+        }
+
+        // Página de Perfil do cliente (quando logado via acesso interno)
 
         // 2. ESCOLHA DE ACESSO (Com Login vs Sem Login)
         public IActionResult TipoAcesso()
@@ -53,12 +114,6 @@ namespace Projeto_do_semestre.Controllers
                 new { Id = 4, Nome = "Bolo Chocolate", Preco = 5.50, Imagem = "🍰", Categoria = "Sobremesas", Descricao = "Fatia generosa" }
             };
             return View(produtos);
-        }
-
-        // 6. CARRINHO DE COMPRAS
-        public IActionResult Carrinho()
-        {
-            return View();
         }
 
         // 7. OPÇÕES (Acessibilidade e Atendente)

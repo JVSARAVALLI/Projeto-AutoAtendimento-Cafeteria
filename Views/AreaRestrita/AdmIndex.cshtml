@@ -1,32 +1,244 @@
 ﻿@{
-    ViewData["Title"] = "Gestão de Vendas";
+    ViewData["Title"] = "Dashboard";
+    Layout = "_Layout_Restrito";
 }
 
-<div style="padding: 40px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f8; min-height: 100vh;">
-    
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-        <h2 style="font-size: 2.5em; color: #333; margin: 0;">📊 Vendas e Relatórios</h2>
-        <button style="background-color: #28a745; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer;">
-            Exportar PDF
-        </button>
-    </div>
+<style>
+    .dashboard-title {
+        color: var(--mokka-green-dark, #2E3E26);
+        font-weight: 800;
+        font-size: 1.6rem;
+        letter-spacing: -0.4px;
+    }
 
-    <!-- Caixa Principal de Relatório -->
-    <div style="background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-        <h3 style="color: #555; margin-bottom: 20px;">Resumo do Dia</h3>
-        
-        <div style="display: flex; gap: 30px; margin-bottom: 40px;">
-            <div style="flex: 1; background: #e6f9ed; padding: 20px; border-radius: 10px; border-left: 5px solid #28a745;">
-                <span style="color: #28a745; font-weight: bold; text-transform: uppercase; font-size: 0.9em;">Faturação Total</span>
-                <div style="font-size: 2.5em; font-weight: bold; color: #333;">R$ 1.240,00</div>
+    .dash-card {
+        background-color: #ffffff;
+        border-radius: 22px;
+        border: 1px solid rgba(113, 137, 104, 0.15);
+        box-shadow: 0 8px 24px rgba(46, 62, 38, 0.05);
+        padding: 1.25rem 1.4rem;
+        display: flex;
+        align-items: center;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .dash-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(46, 62, 38, 0.1);
+        border-color: var(--mokka-green, #718968);
+    }
+
+    .dash-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        margin-right: 1.2rem;
+        flex-shrink: 0;
+    }
+
+    .dash-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #6C757D;
+        margin-bottom: 0.2rem;
+    }
+
+    .dash-value {
+        font-weight: 800;
+        font-size: 1.55rem;
+        line-height: 1.1;
+        margin: 0;
+    }
+
+    .icon-revenue { background-color: #E6F4EA; color: #137333; }
+    .icon-completed { background-color: #E8EFE6; color: #2E3E26; }
+    .icon-queue { background-color: #FEF7E0; color: #B06000; }
+    .icon-alert { background-color: #FCE8E6; color: #C5221F; }
+
+    .recent-orders-card {
+        background-color: #ffffff;
+        border-radius: 24px;
+        border: 1px solid rgba(113, 137, 104, 0.15);
+        box-shadow: 0 8px 24px rgba(46, 62, 38, 0.05);
+        padding: 1.6rem;
+        margin-top: 2rem;
+    }
+
+    .recent-orders-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.25rem;
+    }
+
+    .recent-orders-title {
+        color: #2E3E26;
+        font-weight: 800;
+        font-size: 1.25rem;
+        margin: 0;
+    }
+
+    .btn-mokka-outline {
+        color: #A66A38;
+        border: 1px solid rgba(166, 106, 56, 0.35);
+        background-color: transparent;
+        font-weight: 700;
+        font-size: 0.85rem;
+        border-radius: 12px;
+        padding: 0.45rem 1rem;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .btn-mokka-outline:hover {
+        background-color: #A66A38;
+        color: #ffffff !important;
+    }
+
+    .mokka-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 0.5rem;
+    }
+
+    .mokka-table tbody tr {
+        background-color: #FAF7F4;
+        transition: transform 0.15s ease;
+    }
+
+    .mokka-table tbody tr:hover {
+        background-color: #F2EBE5;
+        transform: scale(1.003);
+    }
+
+    .mokka-table td {
+        padding: 0.95rem 1.2rem;
+        vertical-align: middle;
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: #3E2012;
+    }
+
+    .mokka-table td:first-child { border-top-left-radius: 14px; border-bottom-left-radius: 14px; }
+    .mokka-table td:last-child { border-top-right-radius: 14px; border-bottom-right-radius: 14px; }
+
+    .mokka-badge {
+        font-weight: 800;
+        font-size: 0.75rem;
+        padding: 0.4rem 0.85rem;
+        border-radius: 30px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        text-transform: uppercase;
+    }
+
+    .badge-pedido { background-color: #E8EFE6; color: #2E3E26; border: 1px solid rgba(113, 137, 104, 0.3); }
+    .badge-estoque { background-color: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+</style>
+
+<h3 class="dashboard-title mb-4">Resumo do Dia</h3>
+
+<div class="row g-3">
+    <div class="col-12 col-sm-6 col-lg-3">
+        <div class="dash-card">
+            <div class="dash-icon icon-revenue">
+                <i class="bi bi-currency-dollar"></i>
             </div>
-            
-            <div style="flex: 1; background: #e6f2ff; padding: 20px; border-radius: 10px; border-left: 5px solid #007bff;">
-                <span style="color: #007bff; font-weight: bold; text-transform: uppercase; font-size: 0.9em;">Pedidos Realizados</span>
-                <div style="font-size: 2.5em; font-weight: bold; color: #333;">84</div>
+            <div>
+                <p class="dash-label">Faturamento Hoje</p>
+                <h4 class="dash-value text-success">R$ 1.254,00</h4>
             </div>
         </div>
 
-        <p style="color: #777;">A integração com os gráficos reais será apresentada aqui...</p>
+    <div class="col-12 col-sm-6 col-lg-3">
+        <div class="dash-card">
+            <div class="dash-icon icon-completed">
+                <i class="bi bi-check2-circle"></i>
+            </div>
+            <div>
+                <p class="dash-label">Pedidos Concluídos</p>
+                <h4 class="dash-value" style="color: #2E3E26;">84</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-lg-3">
+        <div class="dash-card">
+            <div class="dash-icon icon-queue">
+                <i class="bi bi-hourglass-split"></i>
+            </div>
+            <div>
+                <p class="dash-label">Pedidos em Fila</p>
+                <h4 class="dash-value text-warning">5</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-lg-3">
+        <div class="dash-card">
+            <div class="dash-icon icon-alert">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+            </div>
+            <div>
+                <p class="dash-label">Alerta de Estoque</p>
+                <h4 class="dash-value text-danger">2 Itens</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="recent-orders-card">
+    <div class="recent-orders-header">
+        <h5 class="recent-orders-title">Últimas Movimentações</h5>
+        <a asp-controller="AreaRestrita" asp-action="AdmVendas" class="btn-mokka-outline">Ver todos</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="mokka-table align-middle mb-0">
+            <tbody>
+                <tr>
+                    <td style="width: 150px;">
+                        <span class="mokka-badge badge-pedido">
+                            <i class="bi bi-bag-check-fill"></i> Novo Pedido
+                        </span>
+                    </td>
+                    <td class="fw-bold" style="width: 90px;">#1042</td>
+                    <td>2x Cappuccino Mokka, 1x Pão de Queijo</td>
+                    <td class="text-end fw-bold" style="width: 120px;">R$ 42,00</td>
+                    <td class="text-end text-muted small" style="width: 110px;">Há 2 min</td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span class="mokka-badge badge-estoque">
+                            <i class="bi bi-box-seam-fill"></i> Estoque
+                        </span>
+                    </td>
+                    <td class="fw-bold">Leite de Aveia</td>
+                    <td class="text-muted">Estoque mínimo atingido (Restam 2 litros)</td>
+                    <td class="text-end fw-bold text-muted">-</td>
+                    <td class="text-end text-muted small">Há 15 min</td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span class="mokka-badge badge-pedido">
+                            <i class="bi bi-bag-check-fill"></i> Novo Pedido
+                        </span>
+                    </td>
+                    <td class="fw-bold">#1041</td>
+                    <td>1x Espresso, 1x Croissant</td>
+                    <td class="text-end fw-bold">R$ 22,00</td>
+                    <td class="text-end text-muted small">Há 20 min</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
