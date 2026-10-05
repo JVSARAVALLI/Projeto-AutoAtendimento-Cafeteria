@@ -19,13 +19,13 @@ namespace Projeto_do_semestre.Controllers
         {
             return View();
         }
-        // Tela de Identificação / Programa de Fidelidade (CPF ou Anônimo)
+
+        // FLUXO DO CLIENTE AO TOCAR EM "INICIAR": Redireciona para a escolha de acesso do Totem
         [AllowAnonymous]
         public IActionResult Identificacao()
         {
-            return View();
+            return RedirectToAction("TipoAcesso");
         }
-
 
         // Carrinho de compras
         [AllowAnonymous]
@@ -34,7 +34,7 @@ namespace Projeto_do_semestre.Controllers
             return View();
         }
 
-        // 1. Acesso Interno / Login (GET: Exibe a tela de Login)
+        // 1. Acesso Interno / Login (GET: Exibe a tela de Login da equipe)
         [AllowAnonymous]
         [HttpGet]
         public IActionResult Login()
@@ -42,7 +42,7 @@ namespace Projeto_do_semestre.Controllers
             return View();
         }
 
-        // 2. Acesso Interno / Login (POST: Processa as credenciais)
+        // 2. Acesso Interno / Login (POST: Processa as credenciais de Admin e Cozinha)
         [AllowAnonymous]
         [HttpPost]
         public IActionResult Login(string email, string senha)
@@ -51,11 +51,6 @@ namespace Projeto_do_semestre.Controllers
             if (email == "a@a" && senha == "123")
             {
                 return RedirectToAction("AdmIndex", "AreaRestrita");
-            }
-            // Regra B: Cliente Público
-            else if (email == "b@b" && senha == "456")
-            {
-                return RedirectToAction("Perfil", "AreaPublica");
             }
             // Regra C: Cozinha
             else if (email == "c@c" && senha == "789")
@@ -70,25 +65,25 @@ namespace Projeto_do_semestre.Controllers
             }
         }
 
-        // Página de Perfil do cliente (quando logado via acesso interno)
-
-        // 2. ESCOLHA DE ACESSO (Com Login vs Sem Login)
+        // 2. ESCOLHA DE ACESSO DO CLIENTE (Com Fidelidade vs Sem Cadastro)
+        [AllowAnonymous]
         public IActionResult TipoAcesso()
         {
             return View();
         }
 
-        // 3. LOGIN DO CLIENTE (Fidelidade)
+        // 3. LOGIN DO CLIENTE (Programa de Fidelidade)
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult LoginCliente()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult LoginCliente(string telefoneOuEmail)
         {
-            // Simulação simples: se o cliente digitar algo, o sistema avança
             if (!string.IsNullOrEmpty(telefoneOuEmail))
             {
                 return RedirectToAction("ModoConsumo");
@@ -98,12 +93,14 @@ namespace Projeto_do_semestre.Controllers
         }
 
         // 4. MODO DE CONSUMO (Comer Aqui ou Levar)
+        [AllowAnonymous]
         public IActionResult ModoConsumo()
         {
             return View();
         }
 
-        // 5. CATÁLOGO (Menu Principal)
+        // 5. CATÁLOGO (Menu Principal do Cliente)
+        [AllowAnonymous]
         public IActionResult Catalogo()
         {
             var produtos = new List<dynamic>
@@ -117,44 +114,23 @@ namespace Projeto_do_semestre.Controllers
         }
 
         // 7. OPÇÕES (Acessibilidade e Atendente)
+        [AllowAnonymous]
         public IActionResult Opcoes()
         {
             return View();
         }
 
-        // 8. PERFIL (Opcional, para clientes que fizeram login)
+        // 8. PERFIL (Para clientes que fizeram login no programa de fidelidade)
+        [AllowAnonymous]
         public IActionResult Perfil()
         {
             return View();
         }
 
-        // 9. LOGIN RESTRITO (Apenas Funcionários)
-        [HttpGet]
-        public IActionResult LoginFuncionario()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult LoginFuncionario(string email, string senha)
-        {
-            if (email == "admin@mokka" && senha == "123")
-            {
-                return RedirectToAction("AdmIndex", "AreaRestrita");
-            }
-            else if (email == "cozinha@mokka" && senha == "789")
-            {
-                return RedirectToAction("CozIndex", "AreaCozinha");
-            }
-
-            ViewBag.Erro = "Credenciais inválidas!";
-            return View();
-        }
-
-        // 10. ENCERRAR SESSÃO / CANCELAR NO TOTEM
+        // 9. ENCERRAR SESSÃO / CANCELAR NO TOTEM
+        [AllowAnonymous]
         public IActionResult Logout()
         {
-            // Volta para a tela de descanso do Totem
             return RedirectToAction("IndexPublico", "AreaPublica");
         }
     }

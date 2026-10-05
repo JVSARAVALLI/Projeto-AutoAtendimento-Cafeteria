@@ -1,58 +1,310 @@
 ﻿@{
-    ViewData["Title"] = "Monitor de Atendimento";
+    ViewData["Title"] = "Monitor de Pedidos - Mokka Café";
 }
 
-<div style="padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f8; min-height: 100vh;">
-    
-    <h2 style="font-size: 2.5em; color: #333; margin-bottom: 20px;">Monitor de Pedidos e Alertas</h2>
-    
-    <!-- Caixa de Alerta (Escondida por padrão, aparece quando há notificação) -->
-    <div id="painelAlerta" style="display: none; background-color: #dc3545; color: white; padding: 30px; border-radius: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 6px 20px rgba(220,53,69,0.5); animation: pulsarVermelho 1.5s infinite;">
-        
-        <div style="font-size: 2em; font-weight: bold; display: flex; align-items: center; gap: 15px;">
-            <span>🚨</span> ATENÇÃO: Cliente a solicitar ajuda no Totem!
-        </div>
-        
-        <button onclick="resolverChamada()" style="background: white; color: #dc3545; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; font-size: 1.5em; cursor: pointer;">
-            ✔️ Assinalar como Resolvido
-        </button>
-    </div>
-
-    <!-- Restante interface da Cozinha (Fila de pedidos) -->
-    <div style="background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-        <h3 style="font-size: 1.8em; color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px;">Fila de Preparação</h3>
-        <p style="color: #666; font-size: 1.2em; margin-top: 20px;">Os pedidos confirmados aparecerão aqui...</p>
-    </div>
-</div>
-
 <style>
-    /* Utilizando o duplo arroba para evitar erros de compilação no Razor */
-    @@keyframes pulsarVermelho { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+    :root {
+        --mokka-green-dark: #2E3E26;
+        --mokka-green: #718968;
+        --mokka-green-light: #E8EFE6;
+        --mokka-brown: #A66A38;
+        --mokka-brown-dark: #3E2012;
+        --mokka-bg: #FAF7F4;
+    }
+
+    .kitchen-title {
+        color: var(--mokka-green-dark);
+        font-weight: 800;
+        font-size: 1.8rem;
+        letter-spacing: -0.4px;
+    }
+
+    /* COLUNAS KANBAN */
+    .kanban-col-card {
+        background-color: #FFFFFF;
+        border-radius: 22px;
+        border: 1px solid rgba(113, 137, 104, 0.18);
+        box-shadow: 0 8px 24px rgba(46, 62, 38, 0.05);
+        padding: 1.25rem;
+        height: 100%;
+        min-height: 520px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .kanban-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 0.9rem;
+        border-bottom: 2px solid var(--mokka-bg);
+        margin-bottom: 1.2rem;
+    }
+
+    .kanban-title {
+        font-weight: 800;
+        font-size: 1.1rem;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .badge-count {
+        font-weight: 800;
+        font-size: 0.82rem;
+        padding: 0.3rem 0.75rem;
+        border-radius: 20px;
+    }
+
+    /* CORES DAS COLUNAS */
+    .title-pending { color: #B06000; }
+    .badge-pending { background-color: #FEF3C7; color: #92400E; }
+
+    .title-preparing { color: var(--mokka-brown); }
+    .badge-preparing { background-color: #F4EBE3; color: var(--mokka-brown-dark); }
+
+    .title-ready { color: var(--mokka-green-dark); }
+    .badge-ready { background-color: var(--mokka-green-light); color: var(--mokka-green-dark); }
+
+    /* CARD DE PEDIDO INDIVIDUAL */
+    .order-card {
+        background-color: var(--mokka-bg);
+        border: 1px solid rgba(113, 137, 104, 0.2);
+        border-radius: 18px;
+        padding: 1.1rem;
+        margin-bottom: 1rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .order-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 18px rgba(46, 62, 38, 0.08);
+    }
+
+    .order-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.6rem;
+    }
+
+    .order-number {
+        font-weight: 800;
+        font-size: 1.15rem;
+        color: var(--mokka-green-dark);
+    }
+
+    .order-timer {
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 0.25rem 0.6rem;
+        border-radius: 10px;
+        background-color: #FFFFFF;
+        color: #6C757D;
+        border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .order-type-badge {
+        font-size: 0.75rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        padding: 0.2rem 0.6rem;
+        border-radius: 8px;
+        display: inline-block;
+        margin-bottom: 0.8rem;
+    }
+
+    .type-dine-in { background-color: #E8EFE6; color: var(--mokka-green-dark); }
+    .type-takeout { background-color: #F4EBE3; color: var(--mokka-brown-dark); }
+
+    .order-items-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 1rem 0;
+    }
+
+    .order-items-list li {
+        font-weight: 700;
+        font-size: 0.92rem;
+        color: var(--mokka-brown-dark);
+        margin-bottom: 0.35rem;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .order-obs {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #C5221F;
+        background-color: #FCE8E6;
+        padding: 0.4rem 0.6rem;
+        border-radius: 8px;
+        margin-bottom: 0.8rem;
+    }
+
+    /* BOTÕES DE AÇÃO DOS CARDS */
+    .btn-action-status {
+        width: 100%;
+        font-weight: 800;
+        font-size: 0.85rem;
+        padding: 0.6rem;
+        border-radius: 12px;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        transition: all 0.2s ease;
+        color: #FFFFFF !important;
+        cursor: pointer;
+    }
+
+    .btn-start-prep {
+        background: linear-gradient(135deg, var(--mokka-brown) 0%, var(--mokka-brown-dark) 100%);
+        box-shadow: 0 4px 10px rgba(166, 106, 56, 0.2);
+    }
+
+    .btn-finish-prep {
+        background: linear-gradient(135deg, var(--mokka-green-dark) 0%, #3D5233 100%);
+        box-shadow: 0 4px 10px rgba(46, 62, 38, 0.2);
+    }
+
+    .btn-archive {
+        background-color: #6C757D;
+    }
+
+    .btn-action-status:hover {
+        transform: translateY(-2px);
+        opacity: 0.95;
+    }
 </style>
 
-<script>
-    // A cada 2 segundos (2000ms), o monitor verifica se alguém clicou no botão do Totem
-    setInterval(verificarChamadas, 2000);
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="kitchen-title m-0">
+        <i class="bi bi-display me-2"></i> Monitor de Pedidos e Alertas
+    </h3>
+    <span class="text-muted fw-bold small">
+        <i class="bi bi-arrow-repeat me-1 text-success"></i> Atualizado em tempo real
+    </span>
+</div>
 
-    function verificarChamadas() {
-        let alerta = localStorage.getItem('alertaAtendimento');
-        let painel = document.getElementById('painelAlerta');
-        
-        if (alerta === 'Pendente') {
-            painel.style.display = 'flex';
-        } else {
-            painel.style.display = 'none';
-        }
-    }
+<!-- KANBAN DA COZINHA -->
+<div class="row g-4">
 
-    function resolverChamada() {
-        // Limpa o alerta no Local Storage para que a caixa vermelha desapareça
-        localStorage.removeItem('alertaAtendimento');
-        
-        // Esconde imediatamente a caixa no ecrã
-        document.getElementById('painelAlerta').style.display = 'none';
-    }
-    
-    // Executa a verificação imediatamente ao carregar a página da cozinha
-    verificarChamadas();
-</script>
+    <!-- COLUNA 1: NA FILA / PENDENTE -->
+    <div class="col-12 col-md-4">
+        <div class="kanban-col-card">
+            <div class="kanban-header">
+                <h5 class="kanban-title title-pending">
+                    <i class="bi bi-hourglass-split"></i> Na Fila
+                </h5>
+                <span class="badge-count badge-pending">2 Pedidos</span>
+            </div>
+
+            <!-- PEDIDO #1042 -->
+            <div class="order-card">
+                <div class="order-card-header">
+                    <span class="order-number">#1042</span>
+                    <span class="order-timer text-warning"><i class="bi bi-clock me-1"></i> Há 3 min</span>
+                </div>
+                <span class="order-type-badge type-dine-in">Comer Aqui</span>
+
+                <ul class="order-items-list">
+                    <li><span>2x Cappuccino Mokka</span></li>
+                    <li><span>1x Pão de Queijo</span></li>
+                </ul>
+
+                <div class="order-obs">
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i> Obs: 1 Cappuccino Sem Açúcar
+                </div>
+
+                <button class="btn-action-status btn-start-prep">
+                    <span>Iniciar Preparo</span>
+                    <i class="bi bi-arrow-right-circle-fill"></i>
+                </button>
+            </div>
+
+            <!-- PEDIDO #1043 -->
+            <div class="order-card">
+                <div class="order-card-header">
+                    <span class="order-number">#1043</span>
+                    <span class="order-timer"><i class="bi bi-clock me-1"></i> Há 1 min</span>
+                </div>
+                <span class="order-type-badge type-takeout">Para Levar</span>
+
+                <ul class="order-items-list">
+                    <li><span>1x Iced Caramel Mokka</span></li>
+                    <li><span>1x Croissant Manteiga</span></li>
+                </ul>
+
+                <button class="btn-action-status btn-start-prep">
+                    <span>Iniciar Preparo</span>
+                    <i class="bi bi-arrow-right-circle-fill"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- COLUNA 2: EM PREPARO -->
+    <div class="col-12 col-md-4">
+        <div class="kanban-col-card">
+            <div class="kanban-header">
+                <h5 class="kanban-title title-preparing">
+                    <i class="bi bi-fire"></i> Em Preparo
+                </h5>
+                <span class="badge-count badge-preparing">1 Pedido</span>
+            </div>
+
+            <!-- PEDIDO #1041 -->
+            <div class="order-card" style="border-left: 4px solid var(--mokka-brown);">
+                <div class="order-card-header">
+                    <span class="order-number">#1041</span>
+                    <span class="order-timer text-danger"><i class="bi bi-clock me-1"></i> Há 8 min</span>
+                </div>
+                <span class="order-type-badge type-dine-in">Comer Aqui</span>
+
+                <ul class="order-items-list">
+                    <li><span>1x Combo Executivo</span></li>
+                    <li class="ps-3 text-muted small">↳ Latte Grande + Quiche de Queijo</li>
+                </ul>
+
+                <button class="btn-action-status btn-finish-prep">
+                    <i class="bi bi-check-lg"></i>
+                    <span>Concluir Pedido</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- COLUNA 3: PRONTO / ENTREGUE -->
+    <div class="col-12 col-md-4">
+        <div class="kanban-col-card">
+            <div class="kanban-header">
+                <h5 class="kanban-title title-ready">
+                    <i class="bi bi-check-circle-fill"></i> Pronto para Retirada
+                </h5>
+                <span class="badge-count badge-ready">1 Pedido</span>
+            </div>
+
+            <!-- PEDIDO #1040 -->
+            <div class="order-card" style="opacity: 0.85;">
+                <div class="order-card-header">
+                    <span class="order-number">#1040</span>
+                    <span class="order-timer text-success"><i class="bi bi-check2 me-1"></i> Pronto</span>
+                </div>
+                <span class="order-type-badge type-takeout">Para Levar</span>
+
+                <ul class="order-items-list">
+                    <li><span>1x Expresso Tradicional</span></li>
+                    <li><span>1x Brownie Cacau 70%</span></li>
+                </ul>
+
+                <button class="btn-action-status btn-archive">
+                    <span>Finalizar / Entregue</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>

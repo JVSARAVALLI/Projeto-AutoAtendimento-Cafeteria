@@ -1,49 +1,190 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Projeto_do_semestre</title>
+    <title>@ViewData["Title"] - Mokka Café</title>
+
+    <!-- CSS Bootstrap e Ícones -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Projeto_do_semestre.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --mokka-green-dark: #2E3E26;
+            --mokka-green: #718968;
+            --mokka-green-light: #E8EFE6;
+            --mokka-brown: #A66A38;
+            --mokka-brown-dark: #3E2012;
+            --mokka-bg: #FAF7F4;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            background-color: var(--mokka-bg);
+            color: #2D312E;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flex-wrapper {
+            flex: 1 0 auto;
+        }
+
+        /* NAVBAR PÚBLICA / TOTEM */
+        .mokka-navbar-public {
+            background-color: var(--mokka-green-dark) !important;
+            padding: 0.85rem 1.5rem;
+            box-shadow: 0 4px 16px rgba(46, 62, 38, 0.25);
+        }
+
+        .mokka-brand {
+            color: #FFFFFF !important;
+            font-weight: 800;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+        }
+
+        .mokka-brand i {
+            color: var(--mokka-brown);
+            font-size: 1.4rem;
+        }
+
+        .nav-mokka-public-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            text-decoration: none;
+        }
+
+        .nav-mokka-public-link:hover, 
+        .nav-mokka-public-link.active {
+            color: #FFFFFF !important;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* BOTÃO DE ACESSO INTERNO */
+        .btn-mokka-internal-login {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #FFFFFF !important;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            font-weight: 700;
+            font-size: 0.88rem;
+            padding: 0.45rem 1rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .btn-mokka-internal-login:hover {
+            background-color: #FFFFFF;
+            color: var(--mokka-green-dark) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .mokka-footer-public {
+            background-color: #FFFFFF !important;
+            border-top: 1px solid rgba(113, 137, 104, 0.15) !important;
+            color: #6C757D;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+    </style>
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Projeto_do_semestre</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <div class="flex-wrapper">
+        <header>
+            <nav class="navbar navbar-expand-lg mokka-navbar-public mb-3">
+                <div class="container-fluid px-lg-4">
+                    <a class="mokka-brand me-4" asp-controller="AreaPublica" asp-action="IndexPublico">
+                        <i class="bi bi-cup-hot-fill"></i>
+                        <span>Mokka Café</span>
+                    </a>
+
+                    <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#mokkaPublicNavbar" aria-controls="mokkaPublicNavbar" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <i class="bi bi-list fs-2 text-white"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="mokkaPublicNavbar">
+                        <!-- LINKS DO NAVEGAÇÃO DO CLIENTE / TOTEM -->
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1">
+                            <li class="nav-item">
+                                <a class="nav-mokka-public-link" asp-controller="AreaPublica" asp-action="Catalogo">
+                                    <i class="bi bi-book-fill"></i> Cardápio
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-mokka-public-link" asp-controller="AreaPublica" asp-action="Opcoes">
+                                    <i class="bi bi-gear-fill"></i> Opções
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-mokka-public-link" asp-controller="AreaPublica" asp-action="TipoAcesso">
+                                    <i class="bi bi-star-fill text-warning"></i> Fidelidade
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-mokka-public-link" asp-controller="AreaPublica" asp-action="Carrinho">
+                                    <i class="bi bi-cart-fill"></i> Carrinho
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- BOTÃO DE ACESSO INTERNO (EQUIPE) -->
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="btn-mokka-internal-login" asp-controller="AreaPublica" asp-action="Login">
+                                    <i class="bi bi-lock-fill"></i> Acesso Interno
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+            </nav>
+        </header>
+
+        <!-- CORPO DA PÁGINA (CATÁLOGO, OPÇÕES, PERFIL, ETC) -->
+        <main role="main" class="pb-4">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <!-- RODAPÉ PÚBLICO -->
+    <footer class="mokka-footer-public py-3 mt-auto text-center">
         <div class="container">
-            &copy; 2026 - Projeto_do_semestre - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2026 - Mokka Café - Totem de Autoatendimento
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-</html>
+
+</html> 

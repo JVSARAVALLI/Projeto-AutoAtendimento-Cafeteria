@@ -1,27 +1,144 @@
 ﻿@{
     Layout = "_Layout_Publico";
-    ViewData["Title"] = "Como deseja pedir?";
+    ViewData["Title"] = "Tipo de Acesso - Mokka Café";
 }
 
-<div style="height: calc(100vh - 100px); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+<style>
+    .access-section {
+        max-width: 860px;
+        margin: 4rem auto;
+        padding: 0 1.5rem;
+        text-align: center;
+    }
 
-    <h1 style="font-size: 3em; color: #333; margin-bottom: 50px;">Como deseja continuar?</h1>
+    .access-header-title {
+        color: var(--mokka-green-dark, #2E3E26);
+        font-weight: 800;
+        font-size: 2.2rem;
+        letter-spacing: -0.5px;
+        margin-bottom: 0.5rem;
+    }
 
-    <div style="display: flex; gap: 40px; justify-content: center; width: 100%; max-width: 800px;">
+    .access-header-subtitle {
+        color: var(--mokka-brown, #A66A38);
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 3rem;
+    }
 
-        <!-- Opção 1: Sem Login (Anónimo) -->
-        <a href="/AreaPublica/ModoConsumo" style="flex: 1; background-color: #fff; border: 4px solid #28a745; border-radius: 20px; padding: 50px 20px; text-decoration: none; color: #333; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: transform 0.2s;">
-            <div style="font-size: 5em; margin-bottom: 20px;">🏃</div>
-            <h2 style="font-size: 2em; margin: 0; color: #28a745;">Pedido Rápido</h2>
-            <p style="font-size: 1.2em; color: #666; margin-top: 15px;">Avançar sem conta (Apenas gera senha)</p>
-        </a>
+    .card-access-option {
+        background-color: #FFFFFF;
+        border: 2px solid rgba(113, 137, 104, 0.18);
+        border-radius: 24px;
+        padding: 3rem 2rem;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        transition: all 0.25s ease;
+        box-shadow: 0 8px 24px rgba(46, 62, 38, 0.05);
+    }
 
-        <!-- Opção 2: Com Conta (Login) -->
-        <a href="/AreaPublica/LoginCliente" style="flex: 1; background-color: #28a745; border: 4px solid #28a745; border-radius: 20px; padding: 50px 20px; text-decoration: none; color: white; box-shadow: 0 10px 20px rgba(40,167,69,0.3); transition: transform 0.2s;">
-            <div style="font-size: 5em; margin-bottom: 20px;">⭐</div>
-            <h2 style="font-size: 2em; margin: 0;">Tenho Conta</h2>
-            <p style="font-size: 1.2em; color: #e6ffe6; margin-top: 15px;">Acumular pontos e usar os meus dados</p>
-        </a>
+    .card-access-option:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 32px rgba(46, 62, 38, 0.12);
+        border-color: var(--mokka-green, #718968);
+    }
 
+    .card-access-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        transition: all 0.25s ease;
+    }
+
+    .icon-quick {
+        background-color: #E8EFE6;
+        color: var(--mokka-green-dark, #2E3E26);
+    }
+
+    .icon-loyalty {
+        background-color: #F4EBE3;
+        color: var(--mokka-brown-dark, #3E2012);
+    }
+
+    .card-access-title {
+        font-weight: 800;
+        font-size: 1.4rem;
+        color: var(--mokka-green-dark, #2E3E26);
+        margin-bottom: 0.5rem;
+    }
+
+    .card-access-text {
+        color: #6C757D;
+        font-size: 0.92rem;
+        font-weight: 600;
+        line-height: 1.4;
+        margin: 0;
+    }
+
+    .btn-card-action {
+        margin-top: 1.8rem;
+        font-weight: 700;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.6rem 1.2rem;
+        border-radius: 12px;
+    }
+
+    .btn-action-quick {
+        background-color: var(--mokka-green-dark, #2E3E26);
+        color: #FFFFFF !important;
+    }
+
+    .btn-action-loyalty {
+        background-color: var(--mokka-brown, #A66A38);
+        color: #FFFFFF !important;
+    }
+</style>
+
+<div class="access-section">
+    <h2 class="access-header-title">Como prefere continuar?</h2>
+    <p class="access-header-subtitle">Escolha a melhor forma de efetuar o seu pedido no totem</p>
+
+    <div class="row g-4 justify-content-center">
+        <!-- PEDIDO RÁPIDO -->
+        <div class="col-12 col-md-5">
+            <a asp-controller="AreaPublica" asp-action="ModoConsumo" class="card-access-option">
+                <div class="card-access-icon icon-quick">
+                    <i class="bi bi-lightning-charge-fill"></i>
+                </div>
+                <h3 class="card-access-title">Pedido Rápido</h3>
+                <p class="card-access-text">Faça a sua escolha diretamente sem necessidade de registo.</p>
+                <div class="btn-card-action btn-action-quick">
+                    <span>Avançar Direto</span>
+                    <i class="bi bi-arrow-right"></i>
+                </div>
+            </a>
+        </div>
+
+        <!-- CLIENTE FIDELIDADE -->
+        <div class="col-12 col-md-5">
+            <a asp-controller="AreaPublica" asp-action="LoginCliente" class="card-access-option">
+                <div class="card-access-icon icon-loyalty">
+                    <i class="bi bi-person-badge-fill"></i>
+                </div>
+                <h3 class="card-access-title">Cliente Fidelidade</h3>
+                <p class="card-access-text">Identifique-se para acumular pontos e obter vantagens.</p>
+                <div class="btn-card-action btn-action-loyalty">
+                    <span>Identificar Conta</span>
+                    <i class="bi bi-arrow-right"></i>
+                </div>
+            </a>
+        </div>
     </div>
 </div>

@@ -16,20 +16,16 @@ namespace Projeto_do_semestre.Controllers
             return View();
         }
 
-        // 3. Central Única de Cadastros (Menu dos 3 botões)
+        // 3. Central Única de Cadastros
         public IActionResult AdmCadastros()
         {
             return View();
         }
 
-        // ==========================================
-        // NOVAS ROTAS (Para os 3 botões funcionarem)
-        // ==========================================
-
-        // 4. Ecrã de Produtos e Cardápio
-        public IActionResult AdmCardapio()
+        // 4. Ecrã de Produtos e Cardápio (Aponta explicitamente para o arquivo AdmCatalago.cshtml)
+        public IActionResult AdmCatalogo()
         {
-            return View();
+            return View("AdmCatalago");
         }
 
         // 5. Ecrã de Funcionários (Equipa)

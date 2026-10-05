@@ -1,45 +1,962 @@
 @{
-    ViewData["Title"] = "Catálogo de Produção";
-    Layout = "_Layout_Cozinha";
+    ViewData["Title"] = "Catálogo de Produtos - Cozinha";
 }
 
-<div class="container mt-4">
-    <h2><i class="bi bi-book"></i> Catálogo de Produção</h2>
-    <p class="text-muted">Gerencie os itens disponíveis para produção e venda no site.</p>
+<style>
+    :root {
+        --mokka-green-dark: #2E3E26;
+        --mokka-green: #718968;
+        --mokka-green-light: #E8EFE6;
+        --mokka-brown: #A66A38;
+        --mokka-brown-dark: #3E2012;
+        --mokka-bg: #FAF7F4;
+    }
 
-    <div class="table-responsive mt-4">
-        <table class="table table-hover table-bordered">
-            <thead class="table-dark">
-                <tr>
-                    <th>Item</th>
-                    <th>Categoria</th>
-                    <th>Disponibilidade no Site</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Café Espresso Duplo</td>
-                    <td>Bebidas Quentes</td>
-                    <td>
-                        <span class="badge bg-success">Ativo</span>
-                    </td>
-                    <td>
-                        <!-- Botão para simular a desativação -->
-                        <button class="btn btn-sm btn-outline-danger">Desativar</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Bolo de Cenoura com Chocolate</td>
-                    <td>Sobremesas</td>
-                    <td>
-                        <span class="badge bg-secondary">Desativado</span>
-                    </td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-success">Reativar</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    .kitchen-title {
+        color: var(--mokka-green-dark);
+        font-weight: 800;
+        font-size: 1.8rem;
+        letter-spacing: -0.4px;
+        margin-bottom: 0.2rem;
+    }
+
+    .kitchen-subtitle {
+        color: #6C757D;
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-bottom: 1.8rem;
+    }
+
+    /* FILTROS DE CATEGORIA */
+    .categories-scroll-cozinha {
+        display: flex;
+        gap: 0.65rem;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .btn-cat-cozinha {
+        background-color: #FFFFFF;
+        border: 2px solid rgba(113, 137, 104, 0.2);
+        color: var(--mokka-green-dark);
+        font-weight: 700;
+        font-size: 0.9rem;
+        padding: 0.55rem 1.25rem;
+        border-radius: 30px;
+        white-space: nowrap;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        box-shadow: 0 2px 8px rgba(46, 62, 38, 0.04);
+        cursor: pointer;
+    }
+
+    .btn-cat-cozinha:hover,
+    .btn-cat-cozinha.active {
+        background-color: var(--mokka-green-dark);
+        border-color: var(--mokka-green-dark);
+        color: #FFFFFF !important;
+        box-shadow: 0 6px 16px rgba(46, 62, 38, 0.2);
+    }
+
+    /* CARDS DE PRODUTO */
+    .card-cozinha-product {
+        background: #FFFFFF;
+        border-radius: 22px;
+        border: 2px solid rgba(113, 137, 104, 0.15);
+        box-shadow: 0 8px 24px rgba(46, 62, 38, 0.05);
+        overflow: hidden;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        cursor: pointer;
+    }
+
+    .card-cozinha-product:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 14px 32px rgba(46, 62, 38, 0.12);
+        border-color: var(--mokka-green);
+    }
+
+    .cozinha-img-wrapper {
+        position: relative;
+        height: 180px;
+        width: 100%;
+        overflow: hidden;
+        background-color: #EFE8E2;
+    }
+
+    .cozinha-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.35s ease;
+    }
+
+    .card-cozinha-product:hover .cozinha-img-wrapper img {
+        transform: scale(1.05);
+    }
+
+    .badge-code {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background-color: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(4px);
+        color: #FFFFFF;
+        font-weight: 800;
+        font-size: 0.75rem;
+        border-radius: 8px;
+        padding: 4px 10px;
+        letter-spacing: 0.5px;
+    }
+
+    .badge-price-tag {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+        background-color: rgba(62, 32, 18, 0.9);
+        backdrop-filter: blur(4px);
+        color: #FFFFFF;
+        font-weight: 800;
+        font-size: 0.85rem;
+        border-radius: 10px;
+        padding: 4px 10px;
+    }
+
+    .cozinha-card-body {
+        padding: 1.25rem 1.35rem;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .cozinha-card-title {
+        font-weight: 800;
+        color: var(--mokka-green-dark);
+        font-size: 1.1rem;
+        margin-bottom: 0.35rem;
+    }
+
+    .cozinha-card-desc {
+        color: #6C757D;
+        font-size: 0.85rem;
+        font-weight: 600;
+        line-height: 1.4;
+        margin-bottom: 1.2rem;
+        flex-grow: 1;
+    }
+
+    .cozinha-card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 0.8rem;
+        border-top: 1px solid rgba(113, 137, 104, 0.15);
+        margin-top: auto;
+    }
+
+    .badge-avail {
+        background-color: #E8EFE6;
+        color: var(--mokka-green-dark);
+        font-weight: 800;
+        font-size: 0.75rem;
+        padding: 0.3rem 0.7rem;
+        border-radius: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .badge-low-stock {
+        background-color: #FEF3C7;
+        color: #92400E;
+        font-weight: 800;
+        font-size: 0.75rem;
+        padding: 0.3rem 0.7rem;
+        border-radius: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .prep-time {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #6C757D;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    /* MODAL DE FICHA TÉCNICA */
+    .cozinha-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(6px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    .cozinha-modal-card {
+        background: #FFFFFF;
+        border-radius: 28px;
+        width: 90%;
+        max-width: 680px;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 0;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        position: relative;
+        animation: popModal 0.25s ease-out;
+    }
+
+    @@keyframes popModal {
+        from { transform: scale(0.9); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-img-cozinha {
+        width: 100%;
+        height: 230px;
+        object-fit: cover;
+    }
+
+    .btn-close-cozinha {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .nutrition-table {
+        width: 100%;
+        background-color: var(--mokka-bg);
+        border-radius: 16px;
+        padding: 1rem;
+        margin-top: 1rem;
+    }
+
+    .nutrition-table td {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--mokka-brown-dark);
+    }
+
+    .info-box-preparo {
+        background-color: #E8EFE6;
+        border-left: 4px solid var(--mokka-green-dark);
+        border-radius: 12px;
+        padding: 0.9rem 1.1rem;
+        margin-bottom: 1rem;
+    }
+</style>
+
+<div class="container-fluid px-0">
+    <!-- CABEÇALHO -->
+    <h3 class="kitchen-title">
+        📖 Catálogo de Produtos (Cozinha)
+    </h3>
+    <p class="kitchen-subtitle">Toque em qualquer produto para visualizar a ficha técnica, preparo, tabela nutricional e disponibilidade.</p>
+
+    <!-- CATEGORIAS -->
+    <div class="categories-scroll-cozinha">
+        <button class="btn-cat-cozinha active" onclick="filterCozinhaCategory('todos', event)">
+            <i class="bi bi-grid-fill"></i> Todos
+        </button>
+        <button class="btn-cat-cozinha" onclick="filterCozinhaCategory('combos', event)">
+            <i class="bi bi-stars"></i> Combos
+        </button>
+        <button class="btn-cat-cozinha" onclick="filterCozinhaCategory('quentes', event)">
+            <i class="bi bi-cup-hot-fill"></i> Cafés Quentes
+        </button>
+        <button class="btn-cat-cozinha" onclick="filterCozinhaCategory('gelados', event)">
+            <i class="bi bi-cup-straw"></i> Bebidas Geladas
+        </button>
+        <button class="btn-cat-cozinha" onclick="filterCozinhaCategory('salgados', event)">
+            <i class="bi bi-egg-fried"></i> Salgados
+        </button>
+        <button class="btn-cat-cozinha" onclick="filterCozinhaCategory('sobremesas', event)">
+            <i class="bi bi-cake2-fill"></i> Sobremesas
+        </button>
+    </div>
+
+    <!-- GRID DOS 30 PRODUTOS INTERATIVOS -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+
+        <!-- ==================== COMBOS (6 ITENS) ==================== -->
+        <div class="col coz-item combos">
+            <div class="card-cozinha-product" onclick="openFichaModal('#CMB-01', 'Combo Manhã Mokka', 'R$ 14,90', 'Expresso Tradicional + Croissant de Manteiga aquecido na hora.', 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80', '4 min', 'Extrair 1 shot de Expresso (30ml) em xícara quente. Aquecer croissant no forno a 180°C por 2 min.', '265 kcal', '32g', '8g', '12g', 'Glúten, Lactose')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#CMB-01</span>
+                    <span class="badge-price-tag">R$ 14,90</span>
+                    <img src="https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80" alt="Combo Manhã Mokka">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Combo Manhã Mokka</h5>
+                    <p class="cozinha-card-desc">Expresso Tradicional + Croissant de Manteiga aquecido na hora.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Preparo: 4 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item combos">
+            <div class="card-cozinha-product" onclick="openFichaModal('#CMB-02', 'Combo Tarde Doce', 'R$ 21,50', 'Cappuccino Mokka + Brownie Cacau 70% crocante.', 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80', '5 min', 'Vaporizar 150ml de leite com polvilho de cacau. Servir brownie levemente morno.', '450 kcal', '52g', '6g', '22g', 'Glúten, Lactose, Derivados de Soja')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#CMB-02</span>
+                    <span class="badge-price-tag">R$ 21,50</span>
+                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80" alt="Combo Tarde Doce">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Combo Tarde Doce</h5>
+                    <p class="cozinha-card-desc">Cappuccino Mokka + Brownie Cacau 70% crocante.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Preparo: 5 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item combos">
+            <div class="card-cozinha-product" onclick="openFichaModal('#CMB-03', 'Combo Refrescante', 'R$ 22,00', 'Iced Caramel Mokka + Empada de Frango cremosa.', 'https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=600&q=80', '5 min', 'Bater gelo, café e calda de caramelo. Aquecer empada por 3 min na estufa.', '390 kcal', '41g', '14g', '18g', 'Glúten, Lactose, Ovos')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#CMB-03</span>
+                    <span class="badge-price-tag">R$ 22,00</span>
+                    <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=600&q=80" alt="Combo Refrescante">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Combo Refrescante</h5>
+                    <p class="cozinha-card-desc">Iced Caramel Mokka + Empada de Frango cremosa.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Preparo: 5 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item combos">
+            <div class="card-cozinha-product" onclick="openFichaModal('#CMB-04', 'Combo Executivo', 'R$ 27,90', 'Café Latte Grande + Quiche de Queijo + Cookie de Baunilha.', 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=600&q=80', '6 min', 'Montar prato com quiche aquecida e cookie. Preparar Latte com 200ml de leite vaporizado.', '580 kcal', '68g', '18g', '26g', 'Glúten, Lactose')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#CMB-04</span>
+                    <span class="badge-price-tag">R$ 27,90</span>
+                    <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=600&q=80" alt="Combo Executivo">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Combo Executivo</h5>
+                    <p class="cozinha-card-desc">Café Latte Grande + Quiche de Queijo + Cookie de Baunilha.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Preparo: 6 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item combos">
+            <div class="card-cozinha-product" onclick="openFichaModal('#CMB-05', 'Combo Fit Mokka', 'R$ 18,90', 'Cold Brew Puro + Pão de Queijo Multigrãos.', 'https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=600&q=80', '4 min', 'Servir 200ml de Cold Brew gelado com pedra de gelo. Aquecer pão de queijo multigrãos por 2 min.', '210 kcal', '22g', '9g', '8g', 'Lactose, Derivados de Soja')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#CMB-05</span>
+                    <span class="badge-price-tag">R$ 18,90</span>
+                    <img src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=600&q=80" alt="Combo Fit Mokka">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Combo Fit Mokka</h5>
+                    <p class="cozinha-card-desc">Cold Brew Puro + Pão de Queijo Multigrãos recheado.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Preparo: 4 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item combos">
+            <div class="card-cozinha-product" onclick="openFichaModal('#CMB-06', 'Combo Duplo Mokka', 'R$ 38,00', '2 Cappuccinos + 2 Tortas Folhadas.', 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80', '7 min', 'Extrair 2 doses de Cappuccino em paralelo. Aquecer as 2 tortas folhadas por 3 min.', '620 kcal', '74g', '16g', '30g', 'Glúten, Lactose')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#CMB-06</span>
+                    <span class="badge-price-tag">R$ 38,00</span>
+                    <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80" alt="Combo Duplo Mokka">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Combo Duplo Mokka</h5>
+                    <p class="cozinha-card-desc">2 Cappuccinos + 2 Tortas Folhadas de Frango ou Doce.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Preparo: 7 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== CAFÉS QUENTES (6 ITENS) ==================== -->
+        <div class="col coz-item quentes">
+            <div class="card-cozinha-product" onclick="openFichaModal('#CAF-01', 'Expresso Tradicional', 'R$ 6,50', 'Shot clássico e encorpado de café 100% arábica com creme aveludado.', 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=600&q=80', '2 min', 'Moagem média-fina. Extração de 30ml em 25 a 30 segundos.', '5 kcal', '0g', '0g', '0g', 'Livre de Alergênicos')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#CAF-01</span>
+                    <span class="badge-price-tag">R$ 6,50</span>
+                    <img src="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=600&q=80" alt="Expresso Tradicional">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Expresso Tradicional</h5>
+                    <p class="cozinha-card-desc">Shot clássico e encorpado de café 100% arábica com creme aveludado.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Preparo: 2 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item quentes">
+            <div class="card-cozinha-product" onclick="openFichaModal('#CAF-02', 'Cappuccino Mokka', 'R$ 12,90', 'Expresso, leite vaporizado, espuma cremosa e toque de cacau 70%.', 'https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=600&q=80', '4 min', '1 shot expresso + 120ml leite vaporizado com espessura de 1cm de microespuma. Cacau polvilhado.', '140 kcal', '14g', '6g', '5g', 'Lactose')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#CAF-02</span>
+                    <span class="badge-price-tag">R$ 12,90</span>
+                    <img src="https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=600&q=80" alt="Cappuccino Mokka">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Cappuccino Mokka</h5>
+                    <p class="cozinha-card-desc">Expresso, leite vaporizado, espuma cremosa e toque de cacau 70%.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Preparo: 4 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item quentes">
+            <div class="card-cozinha-product" onclick="openFichaModal('#CAF-03', 'Café Latte Cremoso', 'R$ 11,50', 'Dose dupla de expresso combinada com leite vaporizado ultra aveludado.', 'https://images.unsplash.com/photo-1570968915860-54d5c301fa9f?auto=format&fit=crop&w=600&q=80', '3 min', 'Extrair dose dupla (60ml) e adicionar 180ml de leite vaporizado a 65°C.', '160 kcal', '16g', '7g', '6g', 'Lactose')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#CAF-03</span>
+                    <span class="badge-price-tag">R$ 11,50</span>
+                    <img src="https://images.unsplash.com/photo-1570968915860-54d5c301fa9f?auto=format&fit=crop&w=600&q=80" alt="Café Latte Cremoso">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Café Latte Cremoso</h5>
+                    <p class="cozinha-card-desc">Dose dupla de expresso combinada com leite vaporizado ultra aveludado.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Preparo: 3 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item quentes">
+            <div class="card-cozinha-product" onclick="openFichaModal('#CAF-04', 'Mocha com Chocolate', 'R$ 15,00', 'Expresso, leite vaporizado, calda de chocolate nobre e chantilly.', 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=600&q=80', '4 min', '20ml calda chocolate na base + 1 shot expresso + 150ml leite vaporizado + roseta de chantilly.', '280 kcal', '34g', '5g', '12g', 'Lactose, Derivados de Soja')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#CAF-04</span>
+                    <span class="badge-price-tag">R$ 15,00</span>
+                    <img src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=600&q=80" alt="Mocha com Chocolate">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Mocha com Chocolate</h5>
+                    <p class="cozinha-card-desc">Expresso, leite vaporizado, calda de chocolate nobre e chantilly.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Preparo: 4 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item quentes">
+            <div class="card-cozinha-product" onclick="openFichaModal('#CAF-05', 'Macchiato Caramelo', 'R$ 13,50', 'Expresso manchado com espuma de leite e fios de calda doce de caramelo.', 'https://images.unsplash.com/photo-1485808191679-5f86510681a2?auto=format&fit=crop&w=600&q=80', '3 min', '1 shot expresso + 2 colheres de microespuma de leite denso + cobertura em rede de calda de caramelo.', '120 kcal', '18g', '3g', '3g', 'Lactose')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#CAF-05</span>
+                    <span class="badge-price-tag">R$ 13,50</span>
+                    <img src="https://images.unsplash.com/photo-1485808191679-5f86510681a2?auto=format&fit=crop&w=600&q=80" alt="Macchiato Caramelo">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Macchiato Caramelo</h5>
+                    <p class="cozinha-card-desc">Expresso manchado com espuma de leite e fios de calda doce de caramelo.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Preparo: 3 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item quentes">
+            <div class="card-cozinha-product" onclick="openFichaModal('#CAF-06', 'Flat White Especial', 'R$ 12,00', 'Dose dupla de ristretto com fina camada de microespuma de leite densa.', 'https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=600&q=80', '3 min', 'Extrair ristretto duplo (40ml) + 120ml de leite vaporizado super sedoso.', '110 kcal', '10g', '5g', '4g', 'Lactose')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#CAF-06</span>
+                    <span class="badge-price-tag">R$ 12,00</span>
+                    <img src="https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=600&q=80" alt="Flat White Especial">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Flat White Especial</h5>
+                    <p class="cozinha-card-desc">Dose dupla de ristretto com fina camada de microespuma de leite densa.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Preparo: 3 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== BEBIDAS GELADAS (6 ITENS) ==================== -->
+        <div class="col coz-item gelados">
+            <div class="card-cozinha-product" onclick="openFichaModal('#GEL-01', 'Iced Caramel Mokka', 'R$ 14,50', 'Café gelado extraído a frio, leite cremoso e calda de caramelo.', 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=600&q=80', '4 min', 'Copo 400ml com gelo + 150ml leite + 60ml expresso duplo + 15ml calda de caramelo.', '190 kcal', '28g', '4g', '6g', 'Lactose')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#GEL-01</span>
+                    <span class="badge-price-tag">R$ 14,50</span>
+                    <img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=600&q=80" alt="Iced Caramel Mokka">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Iced Caramel Mokka</h5>
+                    <p class="cozinha-card-desc">Café gelado extraído a frio, leite cremoso e calda de caramelo.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Preparo: 4 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item gelados">
+            <div class="card-cozinha-product" onclick="openFichaModal('#GEL-02', 'Frappuccino Baunilha', 'R$ 17,90', 'Batido com gelo, café expresso, essência de baunilha e chantilly.', 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=600&q=80', '5 min', 'Liquidificador: 150g gelo, 1 shot expresso, 100ml leite, 20ml xarope baunilha e base frappé. Servir com chantilly.', '320 kcal', '46g', '5g', '12g', 'Lactose')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#GEL-02</span>
+                    <span class="badge-price-tag">R$ 17,90</span>
+                    <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=600&q=80" alt="Frappuccino Baunilha">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Frappuccino Baunilha</h5>
+                    <p class="cozinha-card-desc">Batido com gelo, café expresso, essência de baunilha e chantilly artesanal.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Preparo: 5 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item gelados">
+            <div class="card-cozinha-product" onclick="openFichaModal('#GEL-03', 'Cold Brew Nitro', 'R$ 13,00', 'Café prensado a frio por 18 horas, servido sob pressão de nitrogênio.', 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=600&q=80', '2 min', 'Extrair 250ml da torneira Nitro diretamente para o copo. Não adicionar gelo para preservar a cascata de creme.', '10 kcal', '1g', '0g', '0g', 'Livre de Alergênicos')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#GEL-03</span>
+                    <span class="badge-price-tag">R$ 13,00</span>
+                    <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=600&q=80" alt="Cold Brew Nitro">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Cold Brew Nitro</h5>
+                    <p class="cozinha-card-desc">Café prensado a frio por 18 horas, servido sob pressão de nitrogênio.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Preparo: 2 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item gelados">
+            <div class="card-cozinha-product" onclick="openFichaModal('#GEL-04', 'Iced Latte Avelã', 'R$ 15,50', 'Dose dupla de café, leite gelado e xarope concentrado de avelãs.', 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=600&q=80', '4 min', 'Copo 400ml com gelo + 15ml xarope avelã + 180ml leite + extração lenta de dose dupla no topo.', '210 kcal', '26g', '6g', '8g', 'Lactose, Oleaginosas')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#GEL-04</span>
+                    <span class="badge-price-tag">R$ 15,50</span>
+                    <img src="https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=600&q=80" alt="Iced Latte Avelã">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Iced Latte Avelã</h5>
+                    <p class="cozinha-card-desc">Dose dupla de café, leite gelado e xarope concentrado de avelãs tostadas.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Preparo: 4 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item gelados">
+            <div class="card-cozinha-product" onclick="openFichaModal('#GEL-05', 'Chá Gelado Mokka Citrus', 'R$ 9,90', 'Infusão artesanal de chá preto, limão siciliano e hortelã.', 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80', '3 min', '200ml de infusão concentrada de chá preto + 20ml xarope simples + rodelas de limão e bastantes pedras de gelo.', '75 kcal', '18g', '0g', '0g', 'Livre de Alergênicos')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#GEL-05</span>
+                    <span class="badge-price-tag">R$ 9,90</span>
+                    <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80" alt="Chá Gelado Mokka Citrus">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Chá Gelado Mokka Citrus</h5>
+                    <p class="cozinha-card-desc">Infusão artesanal de chá preto, limão siciliano fresquinho e hortelã.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Preparo: 3 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item gelados">
+            <div class="card-cozinha-product" onclick="openFichaModal('#GEL-06', 'Milkshake Mokka Crock', 'R$ 18,50', 'Sorvete de baunilha, expresso concentrado e pedacinhos de chocolate.', 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=600&q=80', '5 min', '3 bolas sorvete baunilha + 1 shot expresso frio + 50ml leite. Bater levemente e adicionar pedaços de chocolate.', '410 kcal', '58g', '7g', '18g', 'Lactose, Derivados de Soja')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#GEL-06</span>
+                    <span class="badge-price-tag">R$ 18,50</span>
+                    <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=600&q=80" alt="Milkshake Mokka Crock">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Milkshake Mokka Crock</h5>
+                    <p class="cozinha-card-desc">Sorvete de baunilha, expresso concentrado e pedacinhos de chocolate.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Preparo: 5 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SALGADOS (6 ITENS) ==================== -->
+        <div class="col coz-item salgados">
+            <div class="card-cozinha-product" onclick="openFichaModal('#SLG-01', 'Croissant de Manteiga', 'R$ 9,80', 'Massa folhada francesa, dourada e crocante por fora e macia por dentro.', 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=600&q=80', '3 min', 'Aquecer no forno rápido a 180°C por 2 minutos. Servir no prato Mokka com guardanapo.', '260 kcal', '28g', '5g', '14g', 'Glúten, Lactose, Ovos')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#SLG-01</span>
+                    <span class="badge-price-tag">R$ 9,80</span>
+                    <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=600&q=80" alt="Croissant de Manteiga">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Croissant de Manteiga</h5>
+                    <p class="cozinha-card-desc">Massa folhada francesa, dourada e crocante por fora e macia por dentro.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-fire"></i> Aquecer: 3 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item salgados">
+            <div class="card-cozinha-product" onclick="openFichaModal('#SLG-02', 'Pão de Batata Recheado', 'R$ 8,50', 'Massa leve de batata recheada com requeijão e ervas finas.', 'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?auto=format&fit=crop&w=600&q=80', '2 min', 'Aquecer na estufa a 160°C por 2 min ou 20s no micro-ondas.', '230 kcal', '31g', '6g', '9g', 'Glúten, Lactose')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#SLG-02</span>
+                    <span class="badge-price-tag">R$ 8,50</span>
+                    <img src="https://images.unsplash.com/photo-1586444248902-2f64eddc13df?auto=format&fit=crop&w=600&q=80" alt="Pão de Batata Recheado">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Pão de Batata Recheado</h5>
+                    <p class="cozinha-card-desc">Massa leve de batata recheada com requeijão e ervas finas.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-fire"></i> Aquecer: 2 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item salgados">
+            <div class="card-cozinha-product" onclick="openFichaModal('#SLG-03', 'Empada de Frango', 'R$ 8,90', 'Massa podre tradicional com recheio bem temperado e cremoso.', 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=600&q=80', '3 min', 'Aquecer na estufa de salgados a 170°C por 3 min. Servir com prato pequeno.', '290 kcal', '26g', '11g', '15g', 'Glúten, Lactose, Ovos')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#SLG-03</span>
+                    <span class="badge-price-tag">R$ 8,90</span>
+                    <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=600&q=80" alt="Empada de Frango com Requeijão">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Empada de Frango</h5>
+                    <p class="cozinha-card-desc">Massa podre tradicional com recheio bem temperado e cremoso.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-low-stock"><i class="bi bi-exclamation-triangle-fill"></i> Poucas unidades</span>
+                        <span class="prep-time"><i class="bi bi-fire"></i> Aquecer: 3 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item salgados">
+            <div class="card-cozinha-product" onclick="openFichaModal('#SLG-04', 'Quiche de Alho Poró', 'R$ 12,50', 'Fatia de quiche leve recheada com alho poró e queijo gruyère.', 'https://images.unsplash.com/photo-1608039829572-78524f79c4c7?auto=format&fit=crop&w=600&q=80', '4 min', 'Aquecer a fatia no forno turbo a 180°C durante 3 minutos até gratinar o topo.', '310 kcal', '22g', '9g', '21g', 'Glúten, Lactose, Ovos')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#SLG-04</span>
+                    <span class="badge-price-tag">R$ 12,50</span>
+                    <img src="https://images.unsplash.com/photo-1608039829572-78524f79c4c7?auto=format&fit=crop&w=600&q=80" alt="Quiche de Alho Poró">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Quiche de Alho Poró</h5>
+                    <p class="cozinha-card-desc">Fatia de quiche leve recheada com alho poró e queijo gruyère.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-fire"></i> Aquecer: 4 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item salgados">
+            <div class="card-cozinha-product" onclick="openFichaModal('#SLG-05', 'Sanduíche Peito de Peru', 'R$ 16,00', 'Pão ciabatta artesanal, peito de peru, queijo branco e vinagrete.', 'https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=600&q=80', '4 min', 'Prensar pão na chapa por 2 min com fio de azeite. Montar com recheio fatiado e fresco.', '340 kcal', '42g', '19g', '11g', 'Glúten, Lactose')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#SLG-05</span>
+                    <span class="badge-price-tag">R$ 16,00</span>
+                    <img src="https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=600&q=80" alt="Sanduíche Peito de Peru">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Sanduíche Peito de Peru</h5>
+                    <p class="cozinha-card-desc">Pão ciabatta artesanal, peito de peru, queijo branco e vinagrete.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Montar: 4 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item salgados">
+            <div class="card-cozinha-product" onclick="openFichaModal('#SLG-06', 'Croissant de Chocolate', 'R$ 11,50', 'Massa folhada bem amanteigada recheada com chocolate belga.', 'https://images.unsplash.com/photo-1530610476181-d83430b64dcd?auto=format&fit=crop&w=600&q=80', '2 min', 'Aquecer 1.5 min a 160°C para derreter o chocolate interno sem queimar a crosta.', '310 kcal', '36g', '5g', '17g', 'Glúten, Lactose, Derivados de Soja')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#SLG-06</span>
+                    <span class="badge-price-tag">R$ 11,50</span>
+                    <img src="https://images.unsplash.com/photo-1530610476181-d83430b64dcd?auto=format&fit=crop&w=600&q=80" alt="Croissant Folhado de Chocolate">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Croissant de Chocolate</h5>
+                    <p class="cozinha-card-desc">Massa folhada amanteigada recheada com gotas de chocolate belga.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-fire"></i> Aquecer: 2 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SOBREMESAS (6 ITENS) ==================== -->
+        <div class="col coz-item sobremesas">
+            <div class="card-cozinha-product" onclick="openFichaModal('#SOB-01', 'Brownie Cacau 70%', 'R$ 11,00', 'Brownie denso de chocolate amargo com nozes crocantes selecionadas.', 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80', '1 min', 'Se solicitado quente, aquecer 15s no micro-ondas. Servir com garfo especial.', '310 kcal', '38g', '4g', '16g', 'Glúten, Lactose, Nozes')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#SOB-01</span>
+                    <span class="badge-price-tag">R$ 11,00</span>
+                    <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80" alt="Brownie Cacau 70%">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Brownie Cacau 70%</h5>
+                    <p class="cozinha-card-desc">Brownie denso de chocolate amargo com nozes crocantes selecionadas.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-fire"></i> Aquecer: 1 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item sobremesas">
+            <div class="card-cozinha-product" onclick="openFichaModal('#SOB-02', 'Donut Red Velvet', 'R$ 9,50', 'Rosquinha americana macia com glacê de cream cheese e granulado.', 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80', '1 min', 'Produto pronto em vitrine refrigerada. Embalar com papel vegetal Mokka.', '280 kcal', '36g', '3g', '14g', 'Glúten, Lactose, Ovos')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#SOB-02</span>
+                    <span class="badge-price-tag">R$ 9,50</span>
+                    <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80" alt="Donut Red Velvet">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Donut Red Velvet</h5>
+                    <p class="cozinha-card-desc">Rosquinha americana macia com glacê de cream cheese e granulado.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Servir: 1 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item sobremesas">
+            <div class="card-cozinha-product" onclick="openFichaModal('#SOB-03', 'Cheesecake Frutas Vermelhas', 'R$ 15,90', 'Massa crocante de biscoito, creme leve de queijo e geleia caseira.', 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=600&q=80', '2 min', 'Servir a fatia bem gelada com 1 colher extra de calda de frutas frescas por cima.', '360 kcal', '40g', '5g', '20g', 'Glúten, Lactose, Ovos')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#SOB-03</span>
+                    <span class="badge-price-tag">R$ 15,90</span>
+                    <img src="https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=600&q=80" alt="Cheesecake de Frutas Vermelhas">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Cheesecake Frutas Vermelhas</h5>
+                    <p class="cozinha-card-desc">Massa crocante de biscoito, creme leve de queijo e geleia caseira.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Servir: 2 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item sobremesas">
+            <div class="card-cozinha-product" onclick="openFichaModal('#SOB-04', 'Cookie Gotas de Chocolate', 'R$ 7,90', 'Cookie tradicional ao estilo americano, macio com gotas de chocolate.', 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=600&q=80', '1 min', 'Aquecer 10s para derreter levemente o chocolate interno. Servir em guardanapo.', '240 kcal', '32g', '3g', '11g', 'Glúten, Lactose, Ovos')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#SOB-04</span>
+                    <span class="badge-price-tag">R$ 7,90</span>
+                    <img src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=600&q=80" alt="Cookie com Gotas de Chocolate">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Cookie Gotas de Chocolate</h5>
+                    <p class="cozinha-card-desc">Cookie tradicional ao estilo americano, macio com gotas de chocolate.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Servir: 1 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item sobremesas">
+            <div class="card-cozinha-product" onclick="openFichaModal('#SOB-05', 'Tiramisù Tradicional', 'R$ 16,50', 'Camadas de biscoito champagne em café Mokka e mascarpone.', 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=600&q=80', '2 min', 'Servir bem gelado direto da taça individual com cacau 100% polvilhado na hora.', '320 kcal', '34g', '6g', '18g', 'Glúten, Lactose, Ovos')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#SOB-05</span>
+                    <span class="badge-price-tag">R$ 16,50</span>
+                    <img src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=600&q=80" alt="Tiramisù Tradicional">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Tiramisù Tradicional</h5>
+                    <p class="cozinha-card-desc">Camadas de biscoito champagne embebidas em café Mokka e mascarpone.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-low-stock"><i class="bi bi-exclamation-triangle-fill"></i> Poucas unidades</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Servir: 2 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col coz-item sobremesas">
+            <div class="card-cozinha-product" onclick="openFichaModal('#SOB-06', 'Torta de Limão Merengue', 'R$ 12,90', 'Creme ácido de limão taiti coberto por suspiro maçaricado.', 'https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=600&q=80', '2 min', 'Retirar da vitrine gelada. Se necessário, remaçaricar suavemente o topo do merengue.', '290 kcal', '41g', '4g', '12g', 'Glúten, Lactose, Ovos')">
+                <div class="cozinha-img-wrapper">
+                    <span class="badge-code">#SOB-06</span>
+                    <span class="badge-price-tag">R$ 12,90</span>
+                    <img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=600&q=80" alt="Torta de Limão com Merengue">
+                </div>
+                <div class="cozinha-card-body">
+                    <h5 class="cozinha-card-title">Torta de Limão Merengue</h5>
+                    <p class="cozinha-card-desc">Creme ácido de limão taiti coberto por suspiro maçaricado.</p>
+                    <div class="cozinha-card-footer">
+                        <span class="badge-avail"><i class="bi bi-check-circle-fill"></i> Disponível</span>
+                        <span class="prep-time"><i class="bi bi-clock"></i> Servir: 2 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
+
+<!-- MODAL FICHA TÉCNICA E PREPARO DA COZINHA -->
+<div class="cozinha-modal-overlay" id="fichaModalOverlay">
+    <div class="cozinha-modal-card">
+        <button type="button" class="btn-close-cozinha" onclick="closeFichaModal()">
+            <i class="bi bi-x-lg"></i>
+        </button>
+
+        <img id="modalImgCoz" src="" class="modal-img-cozinha" alt="Produto">
+
+        <div class="p-4">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="badge bg-dark text-white fw-bold px-3 py-2 rounded-3" id="modalCodeCoz">#CAT-00</span>
+                <span class="fs-4 fw-800 text-success" id="modalPriceCoz">R$ 0,00</span>
+            </div>
+
+            <h3 class="fw-bold mb-1" id="modalTitleCoz" style="color: var(--mokka-green-dark);">Nome do Produto</h3>
+            <p class="text-muted fs-6 mb-3" id="modalDescCoz">Descrição completa...</p>
+
+            <!-- MODO DE PREPARO / FICHA -->
+            <div class="info-box-preparo">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                    <span class="fw-bold text-success"><i class="bi bi-journal-text me-1"></i> Modo de Preparo & Insumos</span>
+                    <span class="fw-bold text-muted small" id="modalPrepTimeCoz"><i class="bi bi-clock me-1"></i> Preparo: 0 min</span>
+                </div>
+                <p class="m-0 text-dark small fw-semibold" id="modalPreparoInstrucoes">
+                    Instruções de preparo vão aparecer aqui...
+                </p>
+            </div>
+
+            <!-- TABELA NUTRICIONAL -->
+            <h6 class="fw-bold text-dark mb-2"><i class="bi bi-table me-1"></i> Tabela Nutricional (Porção)</h6>
+            <div class="nutrition-table">
+                <div class="row text-center g-2">
+                    <div class="col-3">
+                        <span class="d-block text-muted small fw-bold">Calorias</span>
+                        <strong class="text-dark fs-6" id="modalNutriCal">0 kcal</strong>
+                    </div>
+                    <div class="col-3">
+                        <span class="d-block text-muted small fw-bold">Carboidratos</span>
+                        <strong class="text-dark fs-6" id="modalNutriCarb">0g</strong>
+                    </div>
+                    <div class="col-3">
+                        <span class="d-block text-muted small fw-bold">Proteínas</span>
+                        <strong class="text-dark fs-6" id="modalNutriProt">0g</strong>
+                    </div>
+                    <div class="col-3">
+                        <span class="d-block text-muted small fw-bold">Gorduras</span>
+                        <strong class="text-dark fs-6" id="modalNutriGord">0g</strong>
+                    </div>
+                </div>
+                <div class="mt-2 pt-2 border-top text-muted small fw-bold text-center">
+                    ⚠️ Alergênicos: <span class="text-danger" id="modalAlergenicos">Nenhum</span>
+                </div>
+            </div>
+
+            <!-- CONTROLE DE DISPONIBILIDADE NA COZINHA -->
+            <div class="mt-4 pt-3 border-top d-flex align-items-center justify-content-between">
+                <span class="fw-bold text-dark small">Status no Totem:</span>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-success btn-sm active fw-bold">Disponível</button>
+                    <button type="button" class="btn btn-outline-warning btn-sm fw-bold">Poucas Unidades</button>
+                    <button type="button" class="btn btn-outline-danger btn-sm fw-bold">Esgotado</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openFichaModal(codigo, nome, preco, descricao, imagem, tempo, instrucoes, cal, carb, prot, gord, alergenicos) {
+        document.getElementById('modalCodeCoz').innerText = codigo;
+        document.getElementById('modalTitleCoz').innerText = nome;
+        document.getElementById('modalPriceCoz').innerText = preco;
+        document.getElementById('modalDescCoz').innerText = descricao;
+        document.getElementById('modalImgCoz').src = imagem;
+        document.getElementById('modalPrepTimeCoz').innerHTML = `<i class="bi bi-clock me-1"></i> Preparo: ${tempo}`;
+        document.getElementById('modalPreparoInstrucoes').innerText = instrucoes;
+
+        document.getElementById('modalNutriCal').innerText = cal;
+        document.getElementById('modalNutriCarb').innerText = carb;
+        document.getElementById('modalNutriProt').innerText = prot;
+        document.getElementById('modalNutriGord').innerText = gord;
+        document.getElementById('modalAlergenicos').innerText = alergenicos;
+
+        document.getElementById('fichaModalOverlay').style.display = 'flex';
+    }
+
+    function closeFichaModal() {
+        document.getElementById('fichaModalOverlay').style.display = 'none';
+    }
+
+    function filterCozinhaCategory(category, evt) {
+        const buttons = document.querySelectorAll('.btn-cat-cozinha');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        if (evt) evt.currentTarget.classList.add('active');
+
+        const items = document.querySelectorAll('.coz-item');
+        items.forEach(item => {
+            if (category === 'todos' || item.classList.contains(category)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+</script>

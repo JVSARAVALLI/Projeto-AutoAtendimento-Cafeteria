@@ -1,31 +1,1116 @@
-﻿@model IEnumerable<dynamic>
-@{
+﻿@{
     Layout = "_Layout_Publico";
-    ViewData["Title"] = "Catálogo de Produtos";
+    ViewData["Title"] = "Cardápio - Mokka Café";
 }
 
-<main class="container" id="catalogo">
-    <h2 class="section-title">Escolha seu Café</h2>
+<style>
+    .catalog-wrapper {
+        padding-bottom: 120px;
+    }
 
+    .catalog-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+        font-weight: 800;
+        color: var(--mokka-green-dark, #2E3E26);
+        font-size: 2.2rem;
+        letter-spacing: -0.5px;
+        margin-bottom: 0.25rem;
+    }
+
+    .section-subtitle {
+        color: var(--mokka-brown, #A66A38);
+        font-size: 1.05rem;
+        font-weight: 600;
+    }
+
+    .categories-scroll {
+        display: flex;
+        gap: 0.75rem;
+        overflow-x: auto;
+        padding: 0.5rem 0 1.5rem 0;
+        scrollbar-width: none;
+    }
+
+    .categories-scroll::-webkit-scrollbar {
+        display: none;
+    }
+
+    .btn-category {
+        background-color: #FAF7F4;
+        color: var(--mokka-brown-dark, #3E2012);
+        border: 2px solid rgba(113, 137, 104, 0.2);
+        border-radius: 50px;
+        padding: 0.6rem 1.4rem;
+        font-weight: 700;
+        font-size: 0.95rem;
+        white-space: nowrap;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+    }
+
+    .btn-category.active, .btn-category:hover {
+        background-color: var(--mokka-green-dark, #2E3E26);
+        color: #ffffff;
+        border-color: var(--mokka-green-dark, #2E3E26);
+        box-shadow: 0 4px 12px rgba(46, 62, 38, 0.2);
+    }
+
+    .card-coffee {
+        border: 2px solid rgba(113, 137, 104, 0.15) !important;
+        border-radius: 24px !important;
+        box-shadow: 0 8px 24px rgba(46, 62, 38, 0.06) !important;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        background-color: #FFFFFF !important;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .card-coffee:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 16px 32px rgba(46, 62, 38, 0.14) !important;
+        border-color: var(--mokka-green, #718968) !important;
+    }
+
+    .card-img-container {
+        position: relative;
+        height: 190px;
+        overflow: hidden;
+    }
+
+    .card-img-top {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+    .card-coffee:hover .card-img-top {
+        transform: scale(1.05);
+    }
+
+    .badge-category {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background-color: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(4px);
+        color: var(--mokka-green-dark, #2E3E26);
+        font-weight: 800;
+        font-size: 0.75rem;
+        border-radius: 30px;
+        padding: 6px 14px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .card-title {
+        color: var(--mokka-green-dark, #2E3E26);
+        font-size: 1.2rem;
+        font-weight: 800;
+    }
+
+    .price-tag {
+        color: var(--mokka-brown-dark, #3E2012);
+        font-size: 1.4rem;
+        font-weight: 800;
+    }
+
+    .btn-add {
+        background: linear-gradient(135deg, var(--mokka-brown, #A66A38) 0%, var(--mokka-brown-dark, #3E2012) 100%);
+        color: #ffffff !important;
+        font-weight: 700;
+        border: none !important;
+        border-radius: 14px !important;
+        padding: 10px 18px;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(166, 106, 56, 0.25);
+    }
+
+    .floating-cart-bar {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 92%;
+        max-width: 900px;
+        background: var(--mokka-green-dark, #2E3E26);
+        color: #ffffff;
+        border-radius: 24px;
+        padding: 1rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 12px 32px rgba(46, 62, 38, 0.35);
+        z-index: 1000;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .cart-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .cart-badge-count {
+        background-color: var(--mokka-brown, #A66A38);
+        color: white;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 1.2rem;
+    }
+
+    .cart-total-label {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        opacity: 0.8;
+    }
+
+    .cart-total-value {
+        font-size: 1.4rem;
+        font-weight: 800;
+        line-height: 1;
+    }
+
+    .btn-checkout {
+        background-color: #FFFFFF;
+        color: var(--mokka-green-dark, #2E3E26) !important;
+        font-weight: 800;
+        font-size: 1.1rem;
+        border-radius: 16px;
+        padding: 0.8rem 1.8rem;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .custom-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(5px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    .custom-modal-card {
+        background: #FFFFFF;
+        border-radius: 28px;
+        width: 90%;
+        max-width: 650px;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 0;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        position: relative;
+        animation: popModal 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @@keyframes popModal {
+        from { transform: scale(0.85); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-img-header {
+        width: 100%;
+        height: 230px;
+        object-fit: cover;
+    }
+
+    .btn-close-modal {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .custom-option-item {
+        background-color: #FAF7F4;
+        border: 1px solid rgba(113, 137, 104, 0.15);
+        border-radius: 14px;
+        padding: 0.8rem 1rem;
+        margin-bottom: 0.6rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .btn-qty-modal {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        border: 1px solid #D6CEC7;
+        background-color: #FFFFFF;
+        font-weight: 800;
+        font-size: 1.2rem;
+        cursor: pointer;
+    }
+</style>
+
+<div class="catalog-wrapper mt-3">
+    
+    <div class="catalog-header">
+        <h2 class="section-title">Nosso Cardápio</h2>
+        <p class="section-subtitle">Toque em qualquer item para personalizar o seu pedido</p>
+    </div>
+
+    <!-- Categorias -->
+    <div class="categories-scroll mb-4">
+        <button class="btn-category active" onclick="filterCategory('todos', event)">
+            <i class="bi bi-grid-fill"></i> Todos
+        </button>
+        <button class="btn-category" onclick="filterCategory('combos', event)">
+            <i class="bi bi-stars"></i> Combos
+        </button>
+        <button class="btn-category" onclick="filterCategory('quentes', event)">
+            <i class="bi bi-cup-hot-fill"></i> Cafés Quentes
+        </button>
+        <button class="btn-category" onclick="filterCategory('gelados', event)">
+            <i class="bi bi-cup-straw"></i> Bebidas Geladas
+        </button>
+        <button class="btn-category" onclick="filterCategory('salgados', event)">
+            <i class="bi bi-egg-fried"></i> Salgados
+        </button>
+        <button class="btn-category" onclick="filterCategory('sobremesas', event)">
+            <i class="bi bi-cake2-fill"></i> Sobremesas
+        </button>
+    </div>
+
+    <!-- Grid de Produtos -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        <!-- Item 1 -->
-        <div class="col">
-            <div class="card card-coffee h-100">
-                <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=500&q=80" class="card-img-top" alt="Expresso">
-                <div class="card-body d-flex flex-column">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h5 class="card-title fw-bold mb-0">Expresso Tradicional</h5>
-                        <span class="badge bg-secondary">Avulso</span>
-                    </div>
-                    <p class="card-text text-muted mb-2">Um shot clássico e encorpado de café 100% arábica.</p>
-                    <div class="mb-4"><span class="nutricional-link">📋 Ver Tabela Nutricional</span></div>
-                    <div class="mt-auto d-flex justify-content-between align-items-center">
-                        <span class="price-tag">R$ 6,50</span>
-                        <button class="btn btn-add">Adicionar +</button>
+        
+        <!-- ==================== COMBOS (6 ITENS) ==================== -->
+        <div class="col product-item combos">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Combo Manhã Mokka', 14.90, 'Expresso Tradicional + Croissant de Manteiga aquecido na hora.', 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80', '265 kcal | 8g Proteínas', 'combo')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Combo Manhã Mokka">
+                    <span class="badge-category">Combo</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Combo Manhã Mokka</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Expresso Tradicional + Croissant de Manteiga aquecido na hora.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 14,90</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Adicione os outros cards aqui seguindo o mesmo padrão -->
+
+        <div class="col product-item combos">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Combo Tarde Doce', 21.50, 'Cappuccino Mokka + Brownie Cacau 70% crocante.', 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80', '450 kcal | 36g Açúcar', 'combo')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Combo Tarde Doce">
+                    <span class="badge-category">Combo</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Combo Tarde Doce</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Cappuccino Mokka + Brownie Cacau 70% crocante.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 21,50</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item combos">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Combo Refrescante', 22.00, 'Iced Caramel Mokka + Empada de Frango cremosa.', 'https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=600&q=80', '390 kcal | 35g Carboidratos', 'combo')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Combo Refrescante">
+                    <span class="badge-category">Combo</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Combo Refrescante</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Iced Caramel Mokka + Empada de Frango cremosa.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 22,00</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item combos">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Combo Executivo', 27.90, 'Café Latte Grande + Quiche de Queijo + Cookie de Baunilha.', 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=600&q=80', '580 kcal | 15g Proteínas', 'combo')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Combo Executivo">
+                    <span class="badge-category">Combo</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Combo Executivo</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Café Latte Grande + Quiche de Queijo + Cookie de Baunilha.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 27,90</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item combos">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Combo Fit Mokka', 18.90, 'Cold Brew Puro + Pão de Queijo Multigrãos e recheado.', 'https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=600&q=80', '190 kcal | 0g Açúcar', 'combo')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Combo Fit Mokka">
+                    <span class="badge-category">Combo</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Combo Fit Mokka</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Cold Brew Puro + Pão de Queijo Multigrãos e recheado.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 18,90</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item combos">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Combo Duplo Mokka', 38.00, '2 Cappuccinos + 2 Tortas Folhadas de Frango ou Doce.', 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80', '720 kcal | Serve 2 pessoas', 'combo')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Combo Duplo Mokka">
+                    <span class="badge-category">Combo</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Combo Duplo Mokka</h5>
+                    <p class="card-text text-muted fs-6 mb-3">2 Cappuccinos + 2 Tortas Folhadas de Frango ou Doce.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 38,00</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== CAFÉS QUENTES (6 ITENS) ==================== -->
+        <div class="col product-item quentes">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Expresso Tradicional', 6.50, 'Shot clássico e encorpado de café 100% arábica com creme aveludado.', 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=600&q=80', '5 kcal | 0g Açúcar', 'bebida')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Expresso Tradicional">
+                    <span class="badge-category">Quente</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Expresso Tradicional</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Shot clássico e encorpado de café 100% arábica com creme aveludado.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 6,50</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item quentes">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Cappuccino Mokka', 12.90, 'Expresso, leite vaporizado, espuma cremosa e toque de cacau 70%.', 'https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=600&q=80', '140 kcal | 12g Açúcar', 'bebida')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Cappuccino Mokka">
+                    <span class="badge-category">Quente</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Cappuccino Mokka</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Expresso, leite vaporizado, espuma cremosa e toque de cacau 70%.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 12,90</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item quentes">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Café Latte Cremoso', 11.50, 'Dose dupla de expresso combinada com leite vaporizado ultra aveludado.', 'https://images.unsplash.com/photo-1570968915860-54d5c301fa9f?auto=format&fit=crop&w=600&q=80', '120 kcal | Proteínas: 6g', 'bebida')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1570968915860-54d5c301fa9f?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Café Latte Cremoso">
+                    <span class="badge-category">Quente</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Café Latte Cremoso</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Dose dupla de expresso combinada com leite vaporizado ultra aveludado.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 11,50</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item quentes">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Mocha com Chocolate', 15.00, 'Expresso, leite vaporizado, calda de chocolate nobre e chantilly.', 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=600&q=80', '210 kcal | Açúcar: 24g', 'bebida')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Mocha com Chocolate">
+                    <span class="badge-category">Quente</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Mocha com Chocolate</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Expresso, leite vaporizado, calda de chocolate nobre e chantilly.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 15,00</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item quentes">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Macchiato Caramelo', 13.50, 'Expresso manchado com espuma de leite e fios de calda doce de caramelo.', 'https://images.unsplash.com/photo-1485808191679-5f86510681a2?auto=format&fit=crop&w=600&q=80', '160 kcal | Açúcar: 18g', 'bebida')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1485808191679-5f86510681a2?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Macchiato Caramelo">
+                    <span class="badge-category">Quente</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Macchiato Caramelo</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Expresso manchado com espuma de leite e fios de calda doce de caramelo.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 13,50</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item quentes">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Flat White Especial', 12.00, 'Dose dupla de ristretto com fina camada de microespuma de leite densa.', 'https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=600&q=80', '110 kcal | Cafeína: 130mg', 'bebida')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Flat White Especial">
+                    <span class="badge-category">Quente</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Flat White Especial</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Dose dupla de ristretto com fina camada de microespuma de leite densa.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 12,00</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== BEBIDAS GELADAS (6 ITENS) ==================== -->
+        <div class="col product-item gelados">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Iced Caramel Mokka', 14.50, 'Café gelado extraído a frio, leite cremoso e calda de caramelo.', 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=600&q=80', '180 kcal | Açúcar: 22g', 'bebida')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Iced Caramel Mokka">
+                    <span class="badge-category">Gelado</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Iced Caramel Mokka</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Café gelado extraído a frio, leite cremoso e calda de caramelo.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 14,50</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item gelados">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Frappuccino Baunilha', 17.90, 'Batido com gelo, café expresso, essência de baunilha e chantilly artesanal.', 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=600&q=80', '290 kcal | Açúcar: 32g', 'bebida')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Frappuccino Baunilha">
+                    <span class="badge-category">Gelado</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Frappuccino Baunilha</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Batido com gelo, café expresso, essência de baunilha e chantilly artesanal.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 17,90</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item gelados">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Cold Brew Nitro', 13.00, 'Café prensado a frio por 18 horas, servido sob pressão de nitrogênio.', 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=600&q=80', '2 kcal | Sem açúcar', 'bebida')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Cold Brew Nitro">
+                    <span class="badge-category">Gelado</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Cold Brew Nitro</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Café prensado a frio por 18 horas, servido sob pressão de nitrogênio.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 13,00</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item gelados">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Iced Latte Avelã', 15.50, 'Dose dupla de café, leite gelado e xarope concentrado de avelãs tostadas.', 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=600&q=80', '165 kcal | Açúcar: 19g', 'bebida')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Iced Latte Avelã">
+                    <span class="badge-category">Gelado</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Iced Latte Avelã</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Dose dupla de café, leite gelado e xarope concentrado de avelãs tostadas.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 15,50</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item gelados">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Chá Gelado Mokka Citrus', 9.90, 'Infusão artesanal de chá preto, limão siciliano fresquinho e hortelã.', 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80', '45 kcal | Vitamina C', 'bebida')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Chá Gelado Mokka Citrus">
+                    <span class="badge-category">Gelado</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Chá Gelado Mokka Citrus</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Infusão artesanal de chá preto, limão siciliano fresquinho e hortelã.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 9,90</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item gelados">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Milkshake Mokka Crock', 18.50, 'Sorvete de baunilha, expresso concentrado e pedacinhos de chocolate.', 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=600&q=80', '380 kcal | Açúcar: 40g', 'bebida')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Milkshake Mokka Crock">
+                    <span class="badge-category">Gelado</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Milkshake Mokka Crock</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Sorvete de baunilha, expresso concentrado e pedacinhos de chocolate.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 18,50</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SALGADOS (IMAGENS 100% GARANTIDAS E CORRETAS) ==================== -->
+        <div class="col product-item salgados">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Croissant de Manteiga', 9.80, 'Massa folhada francesa, dourada e crocante por fora e macia por dentro.', 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=600&q=80', '260 kcal | 28g Carboidratos', 'comida')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Croissant Manteiga">
+                    <span class="badge-category">Salgado</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Croissant de Manteiga</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Massa folhada francesa, dourada e crocante por fora e macia por dentro.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 9,80</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SALGADO 2: Pão de Batata Recheado -->
+        <div class="col product-item salgados">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Pão de Batata Recheado', 8.50, 'Massa leve de batata recheada com requeijão e ervas finas.', 'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?auto=format&fit=crop&w=600&q=80', '230 kcal | Proteínas: 7g', 'comida')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1586444248902-2f64eddc13df?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Pão de Batata Recheado">
+                    <span class="badge-category">Salgado</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Pão de Batata Recheado</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Massa leve de batata recheada com requeijão e ervas finas.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 8,50</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item salgados">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Empada de Frango com Requeijão', 8.90, 'Massa podre tradicional com recheio bem temperado e cremoso.', 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=600&q=80', '280 kcal | Proteínas: 11g', 'comida')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Empada de Frango">
+                    <span class="badge-category">Salgado</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Empada de Frango com Requeijão</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Massa podre tradicional com recheio bem temperado e cremoso.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 8,90</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item salgados">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Quiche de Alho Poró', 12.50, 'Fatia de quiche leve recheada com alho poró e creme de queijo gruyère.', 'https://images.unsplash.com/photo-1608039829572-78524f79c4c7?auto=format&fit=crop&w=600&q=80', '230 kcal | Vegetariano', 'comida')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1608039829572-78524f79c4c7?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Quiche Alho Poró">
+                    <span class="badge-category">Salgado</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Quiche de Alho Poró</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Fatia de quiche leve recheada com alho poró e creme de queijo gruyère.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 12,50</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item salgados">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Sanduíche Mokka Peito de Peru', 16.00, 'Pão ciabatta artesanal, peito de peru, queijo branco e vinagrete.', 'https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=600&q=80', '320 kcal | Proteínas: 18g', 'comida')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Sanduíche Peito de Peru">
+                    <span class="badge-category">Salgado</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Sanduíche Mokka Peito de Peru</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Pão ciabatta artesanal, peito de peru, queijo branco e vinagrete.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 16,00</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SALGADO 6: Croissant Folhado de Chocolate -->
+        <div class="col product-item salgados">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Croissant Folhado de Chocolate', 11.50, 'Massa folhada bem amanteigada recheada com gotas de chocolate belga.', 'https://images.unsplash.com/photo-1530610476181-d83430b64dcd?auto=format&fit=crop&w=600&q=80', '310 kcal | Doces & Salgados', 'comida')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1530610476181-d83430b64dcd?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Croissant Folhado de Chocolate">
+                    <span class="badge-category">Salgado</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Croissant Folhado de Chocolate</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Massa folhada bem amanteigada recheada com gotas de chocolate belga.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 11,50</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SOBREMESAS (6 ITENS) ==================== -->
+        <div class="col product-item sobremesas">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Brownie Cacau 70%', 11.00, 'Brownie denso de chocolate amargo com nozes crocantes selecionadas.', 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80', '310 kcal | 24g Açúcar', 'sobremesa')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Brownie Cacau">
+                    <span class="badge-category">Sobremesa</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Brownie Cacau 70%</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Brownie denso de chocolate amargo com nozes crocantes selecionadas.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 11,00</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item sobremesas">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Donut Red Velvet', 9.50, 'Rosquinha americana macia com glacê de cream cheese e granulado.', 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80', '270 kcal | Açúcar: 21g', 'sobremesa')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Donut Red Velvet">
+                    <span class="badge-category">Sobremesa</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Donut Red Velvet</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Rosquinha americana macia com glacê de cream cheese e granulado.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 9,50</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item sobremesas">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Cheesecake de Frutas Vermelhas', 15.90, 'Massa crocante de biscoito, creme leve de queijo e geleia caseira.', 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=600&q=80', '340 kcal | Açúcar: 28g', 'sobremesa')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Cheesecake Frutas Vermelhas">
+                    <span class="badge-category">Sobremesa</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Cheesecake de Frutas Vermelhas</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Massa crocante de biscoito, creme leve de queijo e geleia caseira.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 15,90</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item sobremesas">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Cookie com Gotas de Chocolate', 7.90, 'Cookie tradicional ao estilo americano, macio com gotas de chocolate.', 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=600&q=80', '220 kcal | Açúcar: 18g', 'sobremesa')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Cookie Gotas Chocolate">
+                    <span class="badge-category">Sobremesa</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Cookie com Gotas de Chocolate</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Cookie tradicional ao estilo americano, macio com gotas de chocolate.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 7,90</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item sobremesas">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Tiramisù Tradicional', 16.50, 'Camadas de biscoito champagne embebidas em café Mokka e mascarpone.', 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=600&q=80', '310 kcal | Contém café', 'sobremesa')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Tiramisù Tradicional">
+                    <span class="badge-category">Sobremesa</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Tiramisù Tradicional</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Camadas de biscoito champagne embebidas em café Mokka e mascarpone.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 16,50</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col product-item sobremesas">
+            <div class="card card-coffee h-100" onclick="openCustomizeModal('Torta de Limão com Merengue', 12.90, 'Creme ácido de limão taiti coberto por suspiro maçaricado.', 'https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=600&q=80', '280 kcal | Açúcar: 25g', 'sobremesa')">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Torta de Limão">
+                    <span class="badge-category">Sobremesa</span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title mb-2">Torta de Limão com Merengue</h5>
+                    <p class="card-text text-muted fs-6 mb-3">Creme ácido de limão taiti coberto por suspiro maçaricado.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="price-tag">R$ 12,90</span>
+                        <button class="btn btn-add"><span>Personalizar</span> <i class="bi bi-sliders"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-</main>
+</div>
+
+<!-- BARRA FLUTUANTE DE CHECKOUT -->
+<div class="floating-cart-bar">
+    <div class="cart-info">
+        <div class="cart-badge-count" id="cartCount">0</div>
+        <div>
+            <div class="cart-total-label">Total do Pedido</div>
+            <div class="cart-total-value" id="cartTotal">R$ 0,00</div>
+        </div>
+    </div>
+    <a asp-controller="AreaPublica" asp-action="Carrinho" class="btn-checkout">
+        <span>Ver Pedido</span>
+        <i class="bi bi-arrow-right-circle-fill"></i>
+    </a>
+</div>
+
+<!-- MODAL DINÂMICO DE CUSTOMIZAÇÃO -->
+<div class="custom-modal-overlay" id="customizeModalOverlay">
+    <div class="custom-modal-card">
+        <button type="button" class="btn-close-modal" onclick="closeCustomizeModal()">
+            <i class="bi bi-x-lg"></i>
+        </button>
+
+        <img id="modalImg" src="" class="modal-img-header" alt="Produto">
+
+        <div class="p-4">
+            <h3 class="fw-bold mb-1" id="modalTitle" style="color: var(--mokka-green-dark, #2E3E26);">Nome do Produto</h3>
+            <p class="text-muted fs-6 mb-2" id="modalDescription">Descrição do produto vai aqui...</p>
+            
+            <div class="badge bg-light text-dark border p-2 mb-4 fs-6 rounded-3" id="modalNutricional">
+                <i class="bi bi-info-circle text-primary me-1"></i> Info: 120 kcal
+            </div>
+
+            <!-- OPÇÕES DINÂMICAS -->
+            <div id="customizeOptionsSection">
+                <h5 class="fw-bold mb-3" style="color: var(--mokka-brown-dark, #3E2012);">Personalize o seu pedido</h5>
+
+                <div id="optionsForDrinks" style="display: none;">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted small text-uppercase">Deseja remover algo?</label>
+                        <div class="form-check custom-option-item">
+                            <label class="form-check-label fw-semibold" for="removeSugar">Sem Açúcar / Adoçante</label>
+                            <input class="form-check-input" type="checkbox" id="removeSugar">
+                        </div>
+                        <div class="form-check custom-option-item">
+                            <label class="form-check-label fw-semibold" for="removeCacao">Sem Cacau / Canela em pó</label>
+                            <input class="form-check-input" type="checkbox" id="removeCacao">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-muted small text-uppercase">Adicionar Extras (Opcional)</label>
+                        <div class="form-check custom-option-item">
+                            <label class="form-check-label fw-semibold" for="addShot">Shot Extra de Expresso (+R$ 3,50)</label>
+                            <input class="form-check-input extra-option" type="checkbox" id="addShot" value="3.50" onchange="calculateModalTotal()">
+                        </div>
+                        <div class="form-check custom-option-item">
+                            <label class="form-check-label fw-semibold" for="addChantilly">Chantilly Artesanal (+R$ 2,50)</label>
+                            <input class="form-check-input extra-option" type="checkbox" id="addChantilly" value="2.50" onchange="calculateModalTotal()">
+                        </div>
+                        <div class="form-check custom-option-item">
+                            <label class="form-check-label fw-semibold" for="addOatMilk">Trocar Leite por Leite de Aveia (+R$ 2,00)</label>
+                            <input class="form-check-input extra-option" type="checkbox" id="addOatMilk" value="2.00" onchange="calculateModalTotal()">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="optionsForFood" style="display: none;">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted small text-uppercase">Preparo</label>
+                        <div class="form-check custom-option-item">
+                            <label class="form-check-label fw-semibold" for="serveWarm">Servir Quentinho (Aquecido)</label>
+                            <input class="form-check-input" type="checkbox" id="serveWarm" checked>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-muted small text-uppercase">Adicionar Acompanhamento</label>
+                        <div class="form-check custom-option-item">
+                            <label class="form-check-label fw-semibold" for="addExpressoOption">Adicionar Expresso Tradicional (+R$ 6,50)</label>
+                            <input class="form-check-input extra-option" type="checkbox" id="addExpressoOption" value="6.50" onchange="calculateModalTotal()">
+                        </div>
+                        <div class="form-check custom-option-item">
+                            <label class="form-check-label fw-semibold" for="addSodaOption">Adicionar Refrigerante / Suco (+R$ 7,50)</label>
+                            <input class="form-check-input extra-option" type="checkbox" id="addSodaOption" value="7.50" onchange="calculateModalTotal()">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="optionsForDessert" style="display: none;">
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-muted small text-uppercase">Acompanhamentos Especiais</label>
+                        <div class="form-check custom-option-item">
+                            <label class="form-check-label fw-semibold" for="addIceCream">Bola de Sorvete de Baunilha (+R$ 5,00)</label>
+                            <input class="form-check-input extra-option" type="checkbox" id="addIceCream" value="5.00" onchange="calculateModalTotal()">
+                        </div>
+                        <div class="form-check custom-option-item">
+                            <label class="form-check-label fw-semibold" for="addExtraSyrup">Calda Extra de Chocolate / Caramelo (+R$ 3,00)</label>
+                            <input class="form-check-input extra-option" type="checkbox" id="addExtraSyrup" value="3.00" onchange="calculateModalTotal()">
+                        </div>
+                        <div class="form-check custom-option-item">
+                            <label class="form-check-label fw-semibold" for="addCoffeeSide">Expresso Acompanhante (+R$ 6,50)</label>
+                            <input class="form-check-input extra-option" type="checkbox" id="addCoffeeSide" value="6.50" onchange="calculateModalTotal()">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="optionsForCombos" style="display: none;">
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-muted small text-uppercase">Opções do Combo</label>
+                        <div class="form-check custom-option-item">
+                            <label class="form-check-label fw-semibold" for="upgradeDrink">Upgrade para Bebida Grande (+R$ 4,00)</label>
+                            <input class="form-check-input extra-option" type="checkbox" id="upgradeDrink" value="4.00" onchange="calculateModalTotal()">
+                        </div>
+                        <div class="form-check custom-option-item">
+                            <label class="form-check-label fw-semibold" for="addExtraSauce">Adicionar Geléia / Manteiga Extra (+R$ 2,50)</label>
+                            <input class="form-check-input extra-option" type="checkbox" id="addExtraSauce" value="2.50" onchange="calculateModalTotal()">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between gap-3 pt-3 border-top">
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn-qty-modal" onclick="changeModalQty(-1)">-</button>
+                    <span class="fw-bold fs-4 px-2" id="modalQty">1</span>
+                    <button class="btn-qty-modal" onclick="changeModalQty(1)">+</button>
+                </div>
+
+                <button class="btn btn-success flex-grow-1 py-3 fw-bold rounded-4 fs-5" onclick="confirmAddToCart()" style="background-color: var(--mokka-green-dark, #2E3E26); border: none;">
+                    Adicionar • <span id="modalTotalPrice">R$ 0,00</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    let currentItem = {
+        name: '',
+        basePrice: 0.00,
+        image: '',
+        quantity: 1,
+        type: 'bebida'
+    };
+
+    function openCustomizeModal(nome, preco, descricao, imagem, nutri, type) {
+        currentItem.name = nome;
+        currentItem.basePrice = preco;
+        currentItem.image = imagem;
+        currentItem.quantity = 1;
+        currentItem.type = type;
+
+        document.getElementById('modalTitle').innerText = nome;
+        document.getElementById('modalDescription').innerText = descricao;
+        document.getElementById('modalImg').src = imagem;
+        document.getElementById('modalNutricional').innerHTML = `<i class="bi bi-info-circle text-primary me-1"></i> ${nutri}`;
+        document.getElementById('modalQty').innerText = '1';
+
+        document.querySelectorAll('.form-check-input').forEach(chk => chk.checked = false);
+
+        document.getElementById('optionsForDrinks').style.display = 'none';
+        document.getElementById('optionsForFood').style.display = 'none';
+        document.getElementById('optionsForDessert').style.display = 'none';
+        document.getElementById('optionsForCombos').style.display = 'none';
+
+        if (type === 'bebida') {
+            document.getElementById('optionsForDrinks').style.display = 'block';
+        } else if (type === 'comida') {
+            document.getElementById('optionsForFood').style.display = 'block';
+            document.getElementById('serveWarm').checked = true;
+        } else if (type === 'sobremesa') {
+            document.getElementById('optionsForDessert').style.display = 'block';
+        } else if (type === 'combo') {
+            document.getElementById('optionsForCombos').style.display = 'block';
+        }
+
+        calculateModalTotal();
+        document.getElementById('customizeModalOverlay').style.display = 'flex';
+    }
+
+    function closeCustomizeModal() {
+        document.getElementById('customizeModalOverlay').style.display = 'none';
+    }
+
+    function changeModalQty(delta) {
+        currentItem.quantity += delta;
+        if (currentItem.quantity < 1) currentItem.quantity = 1;
+        document.getElementById('modalQty').innerText = currentItem.quantity;
+        calculateModalTotal();
+    }
+
+    function calculateModalTotal() {
+        let totalPerUnit = currentItem.basePrice;
+
+        document.querySelectorAll('.extra-option:checked').forEach(chk => {
+            totalPerUnit += parseFloat(chk.value);
+        });
+
+        const finalTotal = totalPerUnit * currentItem.quantity;
+        document.getElementById('modalTotalPrice').innerText = 'R$ ' + finalTotal.toFixed(2).replace('.', ',');
+    }
+
+    function confirmAddToCart() {
+        let finalPriceUnit = currentItem.basePrice;
+        let obs = [];
+
+        if (currentItem.type === 'bebida') {
+            if (document.getElementById('removeSugar').checked) obs.push("Sem Açúcar");
+            if (document.getElementById('removeCacao').checked) obs.push("Sem Cacau");
+            if (document.getElementById('addShot').checked) { obs.push("+Shot Expresso"); finalPriceUnit += 3.50; }
+            if (document.getElementById('addChantilly').checked) { obs.push("+Chantilly"); finalPriceUnit += 2.50; }
+            if (document.getElementById('addOatMilk').checked) { obs.push("+Leite Aveia"); finalPriceUnit += 2.00; }
+        } else if (currentItem.type === 'comida') {
+            if (document.getElementById('serveWarm').checked) obs.push("Aquecido");
+            if (document.getElementById('addExpressoOption').checked) { obs.push("+Expresso"); finalPriceUnit += 6.50; }
+            if (document.getElementById('addSodaOption').checked) { obs.push("+Bebida"); finalPriceUnit += 7.50; }
+        } else if (currentItem.type === 'sobremesa') {
+            if (document.getElementById('addIceCream').checked) { obs.push("+Sorvete"); finalPriceUnit += 5.00; }
+            if (document.getElementById('addExtraSyrup').checked) { obs.push("+Calda Extra"); finalPriceUnit += 3.00; }
+            if (document.getElementById('addCoffeeSide').checked) { obs.push("+Expresso"); finalPriceUnit += 6.50; }
+        } else if (currentItem.type === 'combo') {
+            if (document.getElementById('upgradeDrink').checked) { obs.push("+Bebida Grande"); finalPriceUnit += 4.00; }
+            if (document.getElementById('addExtraSauce').checked) { obs.push("+Geleia/Manteiga"); finalPriceUnit += 2.50; }
+        }
+
+        let displayName = currentItem.name;
+        if (obs.length > 0) {
+            displayName += ` (${obs.join(', ')})`;
+        }
+
+        let cart = JSON.parse(localStorage.getItem('mokkaCart')) || [];
+        const existing = cart.find(i => i.name === displayName);
+
+        if (existing) {
+            existing.quantity += currentItem.quantity;
+        } else {
+            cart.push({
+                name: displayName,
+                price: finalPriceUnit,
+                image: currentItem.image,
+                quantity: currentItem.quantity
+            });
+        }
+
+        localStorage.setItem('mokkaCart', JSON.stringify(cart));
+        updateFloatingBar();
+        closeCustomizeModal();
+    }
+
+    function updateFloatingBar() {
+        const cart = JSON.parse(localStorage.getItem('mokkaCart')) || [];
+        let totalCount = 0;
+        let totalPrice = 0.00;
+
+        cart.forEach(item => {
+            totalCount += item.quantity;
+            totalPrice += item.price * item.quantity;
+        });
+
+        const countBadge = document.getElementById('cartCount');
+        const totalText = document.getElementById('cartTotal');
+
+        if (countBadge && totalText) {
+            countBadge.innerText = totalCount;
+            totalText.innerText = 'R$ ' + totalPrice.toFixed(2).replace('.', ',');
+        }
+    }
+
+    function filterCategory(category, evt) {
+        const buttons = document.querySelectorAll('.btn-category');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        if (evt) evt.currentTarget.classList.add('active');
+
+        const items = document.querySelectorAll('.product-item');
+        items.forEach(item => {
+            if (category === 'todos' || item.classList.contains(category)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', updateFloatingBar);
+</script>

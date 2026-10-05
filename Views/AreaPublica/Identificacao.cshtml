@@ -1,0 +1,333 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Identificação - Mokka Café";
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+    <!-- Bootstrap local e Ícones -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --mokka-green-dark: #2E3E26;
+            --mokka-green: #718968;
+            --mokka-brown: #A66A38;
+            --mokka-brown-dark: #3E2012;
+            --mokka-bg: #FAF7F4;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, rgba(46, 62, 38, 0.85) 0%, rgba(62, 32, 18, 0.90) 100%),
+                        url('https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* BOTÃO FLUTUANTE DE VOLTAR À HOME */
+        .btn-back-home {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #FFFFFF !important;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 30px;
+            padding: 0.6rem 1.2rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+        }
+
+        .btn-back-home:hover {
+            background: rgba(255, 255, 255, 0.35);
+            color: #FFFFFF !important;
+            transform: translateX(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* CARD PRINCIPAL DE LOGIN */
+        .login-card-clean {
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 420px;
+            padding: 2.5rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            margin: 1.5rem;
+        }
+
+        .brand-logo-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .brand-icon {
+            width: 46px;
+            height: 46px;
+            background: linear-gradient(135deg, var(--mokka-brown) 0%, var(--mokka-brown-dark) 100%);
+            color: #ffffff;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: 0 6px 16px rgba(166, 106, 56, 0.3);
+        }
+
+        .brand-title {
+            font-weight: 800;
+            color: var(--mokka-green-dark);
+            font-size: 1.8rem;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: var(--mokka-brown);
+            font-size: 0.88rem;
+            margin-bottom: 1.8rem;
+            font-weight: 700;
+        }
+
+        .form-label-custom {
+            font-weight: 700;
+            color: var(--mokka-green-dark);
+            font-size: 0.88rem;
+            margin-bottom: 0.4rem;
+            display: block;
+        }
+
+        .input-group-custom {
+            position: relative;
+            margin-bottom: 1.25rem;
+        }
+
+        .input-group-custom .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--mokka-green);
+            font-size: 1.1rem;
+            z-index: 5;
+        }
+
+        .form-control-custom {
+            width: 100%;
+            padding: 0.85rem 1rem 0.85rem 2.8rem;
+            border: 2px solid rgba(113, 137, 104, 0.2);
+            border-radius: 16px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            background-color: var(--mokka-bg);
+            transition: all 0.2s ease;
+            color: var(--mokka-brown-dark);
+            box-sizing: border-box;
+        }
+
+        .form-control-custom:focus {
+            outline: none;
+            border-color: var(--mokka-green);
+            background-color: #FFFFFF;
+            box-shadow: 0 0 0 4px rgba(113, 137, 104, 0.15);
+        }
+
+        .btn-mokka-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--mokka-brown) 0%, var(--mokka-brown-dark) 100%);
+            color: #ffffff !important;
+            font-weight: 800;
+            font-size: 1.05rem;
+            border: none;
+            border-radius: 16px;
+            padding: 0.9rem;
+            margin-top: 0.5rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 20px rgba(62, 32, 18, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-mokka-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(62, 32, 18, 0.35);
+            opacity: 0.96;
+        }
+
+        /* CREDENCIAIS DE TESTE */
+        .test-credentials-box {
+            background-color: var(--mokka-bg);
+            border: 1px dashed rgba(166, 106, 56, 0.35);
+            border-radius: 18px;
+            padding: 1.1rem;
+            margin-top: 1.8rem;
+        }
+
+        .test-title {
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--mokka-brown-dark);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+
+        .cred-chips {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .cred-btn {
+            background: #FFFFFF;
+            border: 1px solid rgba(113, 137, 104, 0.18);
+            border-radius: 12px;
+            padding: 0.55rem 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.84rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .cred-btn:hover {
+            border-color: var(--mokka-green);
+            background-color: #F2EBE5;
+            transform: scale(1.01);
+        }
+
+        .cred-role {
+            font-weight: 800;
+            color: var(--mokka-green-dark);
+        }
+
+        .cred-val {
+            font-family: monospace;
+            color: #6c757d;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BOTÃO FLUTUANTE DE VOLTAR À HOME PAGE -->
+    <a asp-controller="AreaPublica" asp-action="Index" class="btn-back-home">
+        <i class="bi bi-arrow-left"></i>
+        <span>Voltar à Home</span>
+    </a>
+
+    <!-- CARD PRINCIPAL -->
+    <div class="login-card-clean">
+        
+        <div class="brand-logo-wrapper">
+            <div class="brand-icon">
+                <i class="bi bi-cup-hot-fill"></i>
+            </div>
+            <h2 class="brand-title">Mokka Café</h2>
+        </div>
+        <p class="login-subtitle">Acesso ao Painel Interno de Gestão</p>
+
+        <!-- MENSAGEM DE ERRO DE AUTENTICAÇÃO -->
+        @if (ViewBag.Erro != null)
+        {
+            <div class="alert alert-danger border-0 shadow-sm rounded-4 small py-2.5 px-3 mb-3 d-flex align-items-center gap-2" role="alert">
+                <i class="bi bi-exclamation-circle-fill fs-5 text-danger"></i>
+                <span class="fw-semibold">@ViewBag.Erro</span>
+            </div>
+        }
+
+        <!-- FORMULÁRIO -->
+        <form asp-controller="AreaPublica" asp-action="Login" method="post">
+            
+            <div class="text-start">
+                <label class="form-label-custom">E-mail</label>
+                <div class="input-group-custom">
+                    <i class="bi bi-envelope-fill input-icon"></i>
+                    <input type="email" id="emailInput" class="form-control-custom" name="email" placeholder="Digite seu e-mail" required>
+                </div>
+            </div>
+
+            <div class="text-start">
+                <label class="form-label-custom">Senha</label>
+                <div class="input-group-custom">
+                    <i class="bi bi-lock-fill input-icon"></i>
+                    <input type="password" id="passwordInput" class="form-control-custom" name="senha" placeholder="***" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-mokka-submit">
+                <span>Entrar no Sistema</span>
+                <i class="bi bi-arrow-right-circle-fill"></i>
+            </button>
+        </form>
+
+        <!-- CREDENCIAIS DE TESTE (EQUIPE INTERNA) -->
+        <div class="test-credentials-box text-center">
+            <div class="test-title">
+                <i class="bi bi-key-fill text-warning"></i>
+                Credenciais de Teste (Equipe Interna)
+            </div>
+            <div class="cred-chips">
+                <div class="cred-btn" onclick="fillLogin('a@a', '123')">
+                    <span class="cred-role"><i class="bi bi-shield-lock-fill text-danger me-1"></i> Admin</span>
+                    <span class="cred-val">a@a / 123</span>
+                </div>
+                <div class="cred-btn" onclick="fillLogin('c@c', '789')">
+                    <span class="cred-role"><i class="bi bi-fire text-success me-1"></i> Cozinha</span>
+                    <span class="cred-val">c@c / 789</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SCRIPTS PADRÃO -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function fillLogin(email, senha) {
+            document.getElementById('emailInput').value = email;
+            document.getElementById('passwordInput').value = senha;
+        }
+    </script>
+</body>
+</html>

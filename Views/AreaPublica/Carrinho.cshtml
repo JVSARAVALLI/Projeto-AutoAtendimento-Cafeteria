@@ -4,509 +4,466 @@
 }
 
 <style>
-    .cart-card {
+    :root {
+        --mokka-green-dark: #2E3E26;
+        --mokka-green: #718968;
+        --mokka-green-light: #E8EFE6;
+        --mokka-brown: #A66A38;
+        --mokka-brown-dark: #3E2012;
+        --mokka-bg: #FAF7F4;
+    }
+
+    .cart-section {
+        max-width: 1050px;
+        margin: 2.5rem auto;
+        padding: 0 1.5rem;
+    }
+
+    .cart-title {
+        color: var(--mokka-green-dark);
+        font-weight: 800;
+        font-size: 1.8rem;
+        margin-bottom: 1.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .cart-card-box {
+        background: #FFFFFF;
+        border-radius: 24px;
         border: 2px solid rgba(113, 137, 104, 0.15);
-        border-radius: 20px;
-        background-color: #FFFFFF;
-        box-shadow: 0 4px 12px rgba(46, 62, 38, 0.05);
-        transition: all 0.2s ease;
+        box-shadow: 0 8px 24px rgba(46, 62, 38, 0.05);
+        padding: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .cart-item-row {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--mokka-bg);
+    }
+
+    .cart-item-row:last-child {
+        border-bottom: none;
+    }
+
+    .cart-item-thumb {
+        width: 72px;
+        height: 72px;
+        border-radius: 16px;
+        object-fit: cover;
+    }
+
+    .cart-item-details {
+        flex-grow: 1;
+    }
+
+    .cart-item-title {
+        font-weight: 800;
+        color: var(--mokka-green-dark);
+        font-size: 1.05rem;
+        margin: 0;
+    }
+
+    .cart-item-obs {
+        font-size: 0.82rem;
+        color: var(--mokka-brown);
+        font-weight: 700;
+        margin-top: 0.2rem;
+    }
+
+    .cart-qty-control {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        background-color: var(--mokka-bg);
+        border-radius: 12px;
+        padding: 0.3rem 0.6rem;
     }
 
     .btn-qty {
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
-        border: 1px solid #D6CEC7;
-        background-color: #FAF7F4;
+        border: none;
+        background: #FFFFFF;
+        color: var(--mokka-green-dark);
         font-weight: 800;
+        font-size: 1.1rem;
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
-        transition: all 0.2s;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        transition: all 0.15s ease;
     }
 
     .btn-qty:hover {
-        background-color: var(--mokka-green, #718968);
-        color: white;
-        border-color: var(--mokka-green, #718968);
-    }
-
-    .btn-remove {
-        color: #C0392B;
-        background: none;
-        border: none;
-        font-weight: 700;
-        font-size: 0.85rem;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-
-    .btn-remove:hover {
-        text-decoration: underline;
+        background-color: var(--mokka-green-dark);
+        color: #FFFFFF;
     }
 
     .summary-card {
-        border: 2px solid rgba(113, 137, 104, 0.2);
+        background: #FFFFFF;
         border-radius: 24px;
-        background-color: #FFFFFF;
-        padding: 1.8rem;
-        box-shadow: 0 8px 24px rgba(46, 62, 38, 0.08);
+        border: 2px solid rgba(113, 137, 104, 0.15);
+        box-shadow: 0 8px 24px rgba(46, 62, 38, 0.05);
+        padding: 2rem;
+        position: sticky;
+        top: 20px;
     }
 
-    .btn-checkout-final {
-        background: linear-gradient(135deg, var(--mokka-brown, #A66A38) 0%, var(--mokka-brown-dark, #3E2012) 100%);
-        color: #ffffff !important;
-        font-weight: 800;
-        border-radius: 16px;
-        padding: 1.1rem;
-        border: none;
+    .btn-go-payment {
         width: 100%;
-        font-size: 1.2rem;
-        box-shadow: 0 8px 20px rgba(166, 106, 56, 0.3);
-        transition: all 0.2s ease;
+        background: linear-gradient(135deg, var(--mokka-brown) 0%, var(--mokka-brown-dark) 100%);
+        color: #FFFFFF !important;
+        font-weight: 800;
+        font-size: 1.05rem;
+        border: none;
+        border-radius: 16px;
+        padding: 1rem;
         cursor: pointer;
+        transition: all 0.25s ease;
+        box-shadow: 0 6px 18px rgba(62, 32, 18, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
     }
 
-    .btn-checkout-final:hover {
-        transform: scale(1.02);
+    .btn-go-payment:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 22px rgba(62, 32, 18, 0.3);
     }
 
-    /* Modal Overlay Nativo */
-    .custom-modal-overlay {
+    /* OVERLAY / MODAIS */
+    .mokka-modal-overlay {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background-color: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(4px);
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        background: rgba(0,0,0,0.65);
+        backdrop-filter: blur(6px);
         display: none;
         align-items: center;
         justify-content: center;
-        z-index: 9999;
+        z-index: 99999;
     }
 
-    .custom-modal-card {
+    .mokka-modal-card {
         background: #FFFFFF;
         border-radius: 28px;
-        width: 90%;
-        max-width: 600px;
         padding: 2.2rem;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
         box-shadow: 0 20px 50px rgba(0,0,0,0.3);
         position: relative;
-        animation: popModal 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        animation: modalPop 0.25s ease-out;
     }
 
-    @@keyframes popModal {
-        from { transform: scale(0.8); opacity: 0; }
+    @@keyframes modalPop {
+        from { transform: scale(0.9); opacity: 0; }
         to { transform: scale(1); opacity: 1; }
     }
 
     .payment-option-card {
         border: 2px solid rgba(113, 137, 104, 0.2);
-        border-radius: 18px;
+        border-radius: 16px;
         padding: 1rem;
         cursor: pointer;
         transition: all 0.2s ease;
         text-align: center;
-        background-color: #FAF7F4;
+        background-color: var(--mokka-bg);
     }
 
-    .payment-option-card:hover, .payment-option-card.selected {
-        border-color: var(--mokka-green-dark, #2E3E26);
-        background-color: rgba(113, 137, 104, 0.15);
+    .payment-option-card:hover,
+    .payment-option-card.active {
+        border-color: var(--mokka-green-dark);
+        background-color: #FFFFFF;
+        box-shadow: 0 4px 14px rgba(46, 62, 38, 0.12);
     }
 
-    .payment-option-card i {
-        font-size: 2.2rem;
-        color: var(--mokka-green-dark, #2E3E26);
+    .ticket-badge {
+        font-size: 2.8rem;
+        font-weight: 900;
+        color: var(--mokka-brown-dark);
+        background-color: var(--mokka-green-light);
+        padding: 0.8rem 1.5rem;
+        border-radius: 20px;
+        display: inline-block;
+        letter-spacing: 2px;
+        margin: 1rem 0;
+        border: 2px dashed var(--mokka-green);
+    }
+
+    .timer-btn-badge {
+        background-color: rgba(255,255,255,0.25);
+        padding: 0.2rem 0.6rem;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        margin-left: 0.4rem;
     }
 </style>
 
-<div class="container my-4" style="max-width: 1050px;">
-    <h2 class="fw-extrabold mb-4" style="color: var(--mokka-green-dark, #2E3E26); font-weight: 800;">
-        <i class="bi bi-cart3"></i> Meu Pedido
-    </h2>
+<div class="cart-section">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="cart-title m-0">
+            <i class="bi bi-cart-fill text-success"></i> Meu Pedido
+        </h2>
+        <a asp-controller="AreaPublica" asp-action="Cardapio" class="btn btn-outline-secondary rounded-4 fw-bold">
+            ← Continuar Comprando
+        </a>
+    </div>
 
     <div class="row g-4">
-        <!-- Lista de Itens do Pedido -->
-        <div class="col-lg-8">
-            <div id="cartItemsContainer">
-                <!-- Itens gerados dinamicamente -->
-            </div>
+        <!-- COLUNA DA ESQUERDA: LISTA DE ITENS -->
+        <div class="col-12 col-lg-7">
+            <div class="cart-card-box">
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                    <h5 class="fw-bold m-0" style="color: var(--mokka-green-dark);">Itens Selecionados</h5>
+                    <button class="btn btn-sm btn-outline-danger border-0 fw-bold" onclick="clearCart()">
+                        <i class="bi bi-trash"></i> Limpar Pedido
+                    </button>
+                </div>
 
-            <div class="mt-4 d-flex justify-content-between align-items-center">
-                <a asp-controller="AreaPublica" asp-action="Catalogo" class="btn btn-outline-secondary px-4 py-2" style="border-radius: 12px; font-weight: 700;">
-                    <i class="bi bi-arrow-left"></i> Continuar Comprando
-                </a>
-                <button class="btn btn-sm btn-outline-danger" onclick="clearCart()" style="border-radius: 10px; font-weight: 700;">
-                    <i class="bi bi-trash"></i> Limpar Pedido
-                </button>
+                <div id="cartItemsContainer">
+                    <!-- Gerado via JavaScript dinamicamente -->
+                </div>
             </div>
         </div>
 
-        <!-- Resumo do Pedido -->
-        <div class="col-lg-4">
+        <!-- COLUNA DA DIREITA: RESUMO -->
+        <div class="col-12 col-lg-5">
             <div class="summary-card">
-                <h4 class="fw-bold mb-3" style="color: var(--mokka-green-dark, #2E3E26);">Resumo do Pedido</h4>
+                <h4 class="fw-bold mb-3" style="color: var(--mokka-green-dark);">Resumo do Pedido</h4>
                 
-                <div class="d-flex justify-content-between mb-2 text-muted">
-                    <span id="summaryCount">Subtotal (0 itens)</span>
-                    <span id="summarySubtotal" class="fw-bold">R$ 0,00</span>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted fw-bold">Subtotal (<span id="totalItemsCount">0</span> itens)</span>
+                    <span class="fw-bold" id="subtotalVal">R$ 0,00</span>
                 </div>
-                
-                <div class="d-flex justify-content-between mb-3 text-success">
-                    <span>Desconto</span>
-                    <span class="fw-bold">- R$ 0,00</span>
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-success fw-bold">Desconto Fidelidade</span>
+                    <span class="text-success fw-bold" id="discountVal">- R$ 0,00</span>
                 </div>
 
                 <hr>
 
-                <div class="d-flex justify-content-between mb-4">
-                    <span class="fs-5 fw-bold" style="color: var(--mokka-brown-dark, #3E2012);">Total</span>
-                    <span class="fs-4 fw-extrabold" id="summaryTotal" style="color: var(--mokka-brown-dark, #3E2012); font-weight: 800;">R$ 0,00</span>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <span class="fs-5 fw-bold text-dark">Total</span>
+                    <span class="fs-3 fw-bold" id="totalVal" style="color: var(--mokka-brown-dark);">R$ 0,00</span>
                 </div>
 
-                <button class="btn-checkout-final" onclick="openCheckoutModal()">
-                    Finalizar Pedido <i class="bi bi-arrow-right-circle-fill"></i>
+                <button class="btn-go-payment" id="btnPaymentTrigger" onclick="openPaymentModal()">
+                    <span>Ir para o Pagamento</span>
+                    <i class="bi bi-credit-card-fill fs-5"></i>
                 </button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- MODAL NATIVO DE FINALIZAÇÃO -->
-<div class="custom-modal-overlay" id="checkoutModalOverlay">
-    <div class="custom-modal-card">
+<!-- MODAL 1: FORMA DE PAGAMENTO -->
+<div class="mokka-modal-overlay" id="paymentModalOverlay">
+    <div class="mokka-modal-card">
+        <button class="btn-close position-absolute top-0 end-0 m-3" onclick="closePaymentModal()"></button>
         
-        <!-- Etapa 1: Nome e Forma de Pagamento -->
-        <div id="stepPayment">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 class="fw-bold mb-0" style="color: var(--mokka-green-dark, #2E3E26);">Finalizando seu Pedido</h3>
-                <button type="button" class="btn-close" onclick="closeCheckoutModal()"></button>
-            </div>
+        <h4 class="fw-bold mb-1" style="color: var(--mokka-green-dark);">Forma de Pagamento</h4>
+        <p class="text-muted small mb-4">Escolha como deseja realizar o pagamento do seu pedido no Totem:</p>
 
-            <!-- Identificação pelo Nome -->
-            <div class="mb-4">
-                <label class="form-label fw-bold" style="color: var(--mokka-brown-dark, #3E2012);">
-                    Como podemos te chamar quando o pedido estiver pronto?
-                </label>
-                <input type="text" id="clientNameInput" class="form-control form-control-lg fs-5 rounded-3" placeholder="Digite seu primeiro nome (ex: Ana, Carlos)">
-            </div>
-
-            <!-- Opções de Pagamento -->
-            <div class="mb-3">
-                <label class="form-label fw-bold mb-3" style="color: var(--mokka-brown-dark, #3E2012);">
-                    Selecione a forma de pagamento:
-                </label>
-                <div class="row row-cols-3 g-3">
-                    <div class="col">
-                        <div class="payment-option-card selected" onclick="selectPayment('pix', this)">
-                            <i class="bi bi-qr-code-scan mb-2 d-block"></i>
-                            <span class="fw-bold">Pix</span>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="payment-option-card" onclick="selectPayment('credito', this)">
-                            <i class="bi bi-credit-card-fill mb-2 d-block"></i>
-                            <span class="fw-bold">Crédito</span>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="payment-option-card" onclick="selectPayment('debito', this)">
-                            <i class="bi bi-credit-card-2-front-fill mb-2 d-block"></i>
-                            <span class="fw-bold">Débito</span>
-                        </div>
-                    </div>
+        <div class="row g-3 mb-4">
+            <div class="col-4">
+                <div class="payment-option-card active" onclick="selectPayment(this, 'pix')">
+                    <i class="bi bi-qr-code-scan fs-2 text-success d-block mb-1"></i>
+                    <span class="fw-bold small">PIX Totem</span>
                 </div>
             </div>
-
-            <div class="alert alert-light border rounded-3 text-center my-3 p-3" id="paymentInstruction">
-                <i class="bi bi-info-circle text-primary me-1"></i> Aponte a câmera para o totem para pagar via Pix.
+            <div class="col-4">
+                <div class="payment-option-card" onclick="selectPayment(this, 'cartao')">
+                    <i class="bi bi-credit-card-fill fs-2 text-primary d-block mb-1"></i>
+                    <span class="fw-bold small">Cartão</span>
+                </div>
             </div>
-
-            <button type="button" class="btn btn-lg btn-success w-100 py-3 fw-bold rounded-3 fs-5 mt-2" onclick="processPayment()">
-                Confirmar Pagamento e Enviar
-            </button>
+            <div class="col-4">
+                <div class="payment-option-card" onclick="selectPayment(this, 'balcao')">
+                    <i class="bi bi-cash-stack fs-2 text-warning d-block mb-1"></i>
+                    <span class="fw-bold small">Balcão</span>
+                </div>
+            </div>
         </div>
 
-        <!-- Etapa 2: Confirmação do Pedido -->
-        <div id="stepSuccess" style="display: none;" class="text-center py-2">
-            <div class="mb-3">
-                <i class="bi bi-check-circle-fill display-1 text-success"></i>
-            </div>
-            <h2 class="fw-extrabold" style="color: var(--mokka-green-dark, #2E3E26); font-weight: 800;">
-                Pedido Finalizado com Sucesso!
-            </h2>
-            <p class="fs-5 text-muted mb-2">
-                Obrigado, <strong id="displayClientName" style="color: var(--mokka-brown-dark, #3E2012);">Cliente</strong>!
-            </p>
-            <div class="bg-light p-3 rounded-4 d-inline-block my-3 border">
-                <span class="text-uppercase text-muted d-block small fw-bold">Número da sua senha</span>
-                <span class="display-3 fw-extrabold" style="color: var(--mokka-brown, #A66A38); font-weight: 800;">#104</span>
-            </div>
-            <p class="text-muted mb-4">Fique atento ao painel da cozinha. Seu pedido já está sendo preparado!</p>
-
-            <a asp-controller="AreaPublica" asp-action="IndexPublico" class="btn btn-lg w-100 py-3 fw-bold rounded-4 fs-5 text-white" onclick="clearCartAndReset()" style="background-color: var(--mokka-green-dark, #2E3E26);">
-                Toque para voltar ao menu principal <i class="bi bi-house-fill ms-2"></i>
-            </a>
-        </div>
-
+        <button class="btn-go-payment w-100" onclick="confirmPaymentAndFinish()">
+            <span>Confirmar e Pagar</span>
+            <i class="bi bi-check-circle-fill fs-5"></i>
+        </button>
     </div>
 </div>
 
-<script>
-    function renderCart() {
-        const cart = JSON.parse(localStorage.getItem('mokkaCart')) || [];
-        const container = document.getElementById('cartItemsContainer');
-        container.innerHTML = '';
-
-        if (cart.length === 0) {
-            container.innerHTML = `
-                <div class="text-center py-5 bg-white rounded-4 border p-4">
-                    <i class="bi bi-cart-x display-1 text-muted"></i>
-                    <h4 class="mt-3 text-muted">Seu carrinho está vazio</h4>
-                    <p class="text-muted">Adicione deliciosos cafés no nosso cardápio!</p>
-                </div>`;
-            updateSummary(0, 0);
-            return;
-        }
-
-        let subtotal = 0;
-        let totalCount = 0;
-
-        cart.forEach((item, index) => {
-            const itemTotal = item.price * item.quantity;
-            subtotal += itemTotal;
-            totalCount += item.quantity;
-
-            container.innerHTML += `
-                <div class="cart-card p-3 mb-3 d-flex align-items-center justify-content-between gap-3">
-                    <img src="${item.image}" alt="${item.name}" class="rounded-3" style="width: 90px; height: 90px; object-fit: cover;">
-                    
-                    <div class="flex-grow-1">
-                        <h5 class="fw-bold mb-1" style="color: var(--mokka-green-dark, #2E3E26);">${item.name}</h5>
-                        <div class="fw-bold text-muted mb-1">R$ ${item.price.toFixed(2).replace('.', ',')}</div>
-                        <button class="btn-remove" onclick="removeItem(${index})">
-                            <i class="bi bi-trash"></i> Remover
-                        </button>
-                    </div>
-
-                    <div class="d-flex align-items-center gap-2">
-                        <button class="btn-qty" onclick="changeQty(${index}, -1)">-</button>
-                        <span class="fw-bold fs-5 px-2">${item.quantity}</span>
-                        <button class="btn-qty" onclick="changeQty(${index}, 1)">+</button>
-                    </div>
-
-                    <div class="text-end fw-extrabold fs-5" style="min-width: 90px; color: var(--mokka-brown-dark, #3E2012);">
-                        R$ ${itemTotal.toFixed(2).replace('.', ',')}
-                    </div>
-                </div>`;
-        });
-
-        updateSummary(totalCount, subtotal);
-    }
-
-    function changeQty(index, delta) {
-        let cart = JSON.parse(localStorage.getItem('mokkaCart')) || [];
-        cart[index].quantity += delta;
-
-        if (cart[index].quantity <= 0) {
-            cart.splice(index, 1);
-        }
-
-        localStorage.setItem('mokkaCart', JSON.stringify(cart));
-        renderCart();
-    }
-
-    function removeItem(index) {
-        let cart = JSON.parse(localStorage.getItem('mokkaCart')) || [];
-        cart.splice(index, 1);
-        localStorage.setItem('mokkaCart', JSON.stringify(cart));
-        renderCart();
-    }
-
-    function clearCart() {
-        localStorage.removeItem('mokkaCart');
-        renderCart();
-    }
-
-    function updateSummary(count, subtotal) {
-        document.getElementById('summaryCount').innerText = `Subtotal (${count} itens)`;
-        document.getElementById('summarySubtotal').innerText = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
-        document.getElementById('summaryTotal').innerText = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
-    }
-
-    /* Abertura e Fechamento do Modal Nativo */
-    function openCheckoutModal() {
-        const cart = JSON.parse(localStorage.getItem('mokkaCart')) || [];
-        if (cart.length === 0) {
-            alert('Seu carrinho está vazio! Adicione produtos antes de finalizar.');
-            return;
-        }
-
-        document.getElementById('stepPayment').style.display = 'block';
-        document.getElementById('stepSuccess').style.display = 'none';
-        document.getElementById('checkoutModalOverlay').style.display = 'flex';
-    }
-
-    function closeCheckoutModal() {
-        document.getElementById('checkoutModalOverlay').style.display = 'none';
-    }
-
-    function selectPayment(method, element) {
-        document.querySelectorAll('.payment-option-card').forEach(card => card.classList.remove('selected'));
-        element.classList.add('selected');
-
-        const instruction = document.getElementById('paymentInstruction');
-        if (method === 'pix') {
-            instruction.innerHTML = '<i class="bi bi-qr-code-scan text-primary me-1"></i> Aponte a câmera para o totem para pagar via Pix.';
-        } else if (method === 'credito') {
-            instruction.innerHTML = '<i class="bi bi-credit-card-fill text-primary me-1"></i> Insira ou aproxime seu cartão de Crédito no terminal.';
-        } else {
-            instruction.innerHTML = '<i class="bi bi-credit-card-2-front-fill text-primary me-1"></i> Insira ou aproxime seu cartão de Débito no terminal.';
-        }
-    }
-
-    function processPayment() {
-        const nameInput = document.getElementById('clientNameInput').value.trim();
-        const clientName = nameInput !== '' ? nameInput : 'Cliente';
-
-        document.getElementById('displayClientName').innerText = clientName;
-
-        document.getElementById('stepPayment').style.display = 'none';
-        document.getElementById('stepSuccess').style.display = 'block';
-    }
-
-    function clearCartAndReset() {
-        localStorage.removeItem('mokkaCart');
-    }
-
-    document.addEventListener('DOMContentLoaded', renderCart);
-
-    ViewData["Title"] = "Seu Carrinho";
-}
-
-<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
-
-    <h2 style="font-size: 2.5em; text-align: center; color: #333;">🛒 O Seu Pedido</h2>
-
-    <div id="itensCarrinho" style="margin-top: 30px; margin-bottom: 30px; background: #fff; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 20px;">
-        <!-- Itens injetados via JS -->
-    </div>
-
-    <h3 id="totalCarrinho" style="font-size: 2em; color: #28a745; text-align: right; margin-bottom: 40px;">Total: R$ 0.00</h3>
-
-    <hr style="border: 1px solid #ddd; margin: 40px 0;" />
-
-    <!-- Área de Confirmação e Geração de Senha -->
-    <div style="background-color: #f8f9fa; padding: 40px 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
-        <h3 style="font-size: 2em; color: #333; margin-bottom: 10px;">Finalizar Pedido</h3>
-        <p style="font-size: 1.3em; color: #666; margin-bottom: 30px;">Confirme os seus itens. Uma senha será gerada automaticamente.</p>
+<!-- MODAL 2: SENHA DO PEDIDO COM RETORNO AUTOMÁTICO DE 5 SEGUNDOS -->
+<div class="mokka-modal-overlay" id="successOrderModal">
+    <div class="mokka-modal-card">
+        <div class="text-success fs-1 mb-1">
+            <i class="bi bi-check-circle-fill"></i>
+        </div>
+        <h3 class="fw-bold m-0" style="color: var(--mokka-green-dark);">Pedido Confirmado!</h3>
+        <p class="text-muted small mb-2">Sua comanda já foi enviada para a Cozinha.</p>
         
-        <button onclick="finalizarPedido()" style="background-color: #28a745; color: white; border: none; padding: 20px 30px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 1.5em; width: 100%; max-width: 400px; box-shadow: 0 6px 12px rgba(40,167,69,0.3);">
-            ✔️ Pagar e Gerar Senha
-        </button>
-        <br />
+        <p class="m-0 fw-bold text-uppercase small text-secondary">Senha de Acompanhamento:</p>
+        <div class="ticket-badge" id="generatedOrderCode">#1044</div>
 
-        <button onclick="cancelarPedidoTotem()" style="background-color: #dc3545; color: white; border: none; padding: 20px 30px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 1.5em; width: 100%; max-width: 400px; margin-top: 20px; box-shadow: 0 6px 12px rgba(220,53,69,0.3);">
-            ❌ Cancelar e Sair
+        <p class="small text-muted mb-4">Acompanhe a chamada pelo painel do Totem.</p>
+
+        <button class="btn btn-mokka-submit w-100 rounded-4 py-3 fw-bold text-white" style="background: var(--mokka-green-dark);" onclick="redirectToMenu()">
+            Voltar ao Menu Principal <span class="timer-btn-badge" id="timerCount">5s</span>
         </button>
     </div>
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        carregarCarrinho();
+    // DADOS INICIAIS DO CARRINHO (Simulação com estado em memória)
+    let cartItems = [
+        {
+            id: 1,
+            nome: 'Combo Manhã Mokka',
+            preco: 14.90,
+            qtd: 1,
+            obs: 'Pão aquecido, Expresso sem açúcar',
+            foto: 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80'
+        },
+        {
+            id: 2,
+            nome: 'Combo Tarde Doce',
+            preco: 21.50,
+            qtd: 1,
+            obs: 'Cappuccino com leite de aveia',
+            foto: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80'
+        }
+    ];
+
+    let countdownTimer = null;
+    let secondsLeft = 5;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderCart();
     });
 
-    function carregarCarrinho() {
-        let carrinho = JSON.parse(localStorage.getItem('carrinhoMokka')) || [];
-        let container = document.getElementById("itensCarrinho");
-        let elementoTotal = document.getElementById("totalCarrinho");
-        
-        container.innerHTML = "";
-        let total = 0;
+    function renderCart() {
+        const container = document.getElementById('cartItemsContainer');
+        const btnPayment = document.getElementById('btnPaymentTrigger');
 
-        if (carrinho.length === 0) {
-            container.innerHTML = "<p style='color: #666; font-size: 1.5em; text-align: center;'>O seu carrinho está vazio.</p>";
-            elementoTotal.innerHTML = "Total: R$ 0.00";
+        if (!cartItems || cartItems.length === 0) {
+            container.innerHTML = `<div class="text-center text-muted py-5 fw-bold">Seu carrinho está vazio.</div>`;
+            document.getElementById('subtotalVal').innerText = 'R$ 0,00';
+            document.getElementById('totalVal').innerText = 'R$ 0,00';
+            document.getElementById('totalItemsCount').innerText = '0';
+            btnPayment.disabled = true;
+            btnPayment.style.opacity = '0.5';
             return;
         }
 
-        carrinho.forEach((item, index) => {
-            let subtotal = item.preco * item.quantidade;
-            total += subtotal;
+        btnPayment.disabled = false;
+        btnPayment.style.opacity = '1';
 
-            container.innerHTML += `
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 15px 0;">
-                    <span style="font-size: 1.5em; color: #333;"><strong>${item.quantidade}x</strong> ${item.nome}</span>
-                    <span style="font-size: 1.5em; color: #333;">R$ ${subtotal.toFixed(2)}</span>
-                    <button onclick="removerDoCarrinho(${index})" style="background-color: #ffc107; color: #000; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 1.2em; font-weight: bold;">
-                        Remover
-                    </button>
+        let html = '';
+        let totalVal = 0;
+        let totalCount = 0;
+
+        cartItems.forEach((item, index) => {
+            const itemSubtotal = item.preco * item.qtd;
+            totalVal += itemSubtotal;
+            totalCount += item.qtd;
+
+            html += `
+                <div class="cart-item-row">
+                    <img src="${item.foto}" class="cart-item-thumb" alt="${item.nome}">
+                    <div class="cart-item-details">
+                        <h6 class="cart-item-title">${item.nome}</h6>
+                        <div class="cart-item-obs"><i class="bi bi-sliders me-1"></i>Obs: ${item.obs}</div>
+                        <span class="fw-bold text-muted small">R$ ${item.preco.toFixed(2).replace('.', ',')} un.</span>
+                    </div>
+                    <div class="cart-qty-control">
+                        <button class="btn-qty" onclick="changeQty(${index}, -1)">-</button>
+                        <span class="fw-bold px-2">${item.qtd}</span>
+                        <button class="btn-qty" onclick="changeQty(${index}, 1)">+</button>
+                    </div>
+                    <span class="fw-bold fs-6 ms-2" style="color: var(--mokka-brown-dark);">R$ ${itemSubtotal.toFixed(2).replace('.', ',')}</span>
                 </div>
             `;
         });
 
-        elementoTotal.innerHTML = "Total: R$ " + total.toFixed(2).replace(".", ",");
+        container.innerHTML = html;
+        document.getElementById('subtotalVal').innerText = `R$ ${totalVal.toFixed(2).replace('.', ',')}`;
+        document.getElementById('totalVal').innerText = `R$ ${totalVal.toFixed(2).replace('.', ',')}`;
+        document.getElementById('totalItemsCount').innerText = totalCount;
     }
 
-    function removerDoCarrinho(index) {
-        let carrinho = JSON.parse(localStorage.getItem('carrinhoMokka')) || [];
-        carrinho.splice(index, 1);
-        localStorage.setItem('carrinhoMokka', JSON.stringify(carrinho));
-        carregarCarrinho();
+    // BOTÕES DE + E - FUNCIONANDO
+    function changeQty(index, delta) {
+        if (cartItems[index]) {
+            cartItems[index].qtd += delta;
+            if (cartItems[index].qtd <= 0) {
+                cartItems.splice(index, 1);
+            }
+            renderCart();
+        }
     }
 
-    function finalizarPedido() {
-         let carrinho = JSON.parse(localStorage.getItem('carrinhoMokka')) || [];
-         if (carrinho.length === 0) {
-             alert("O carrinho está vazio. Adicione produtos primeiro!");
-             return;
-         }
-
-         // Vai buscar o modo de consumo que o cliente escolheu anteriormente
-         let modo = localStorage.getItem('modoConsumoMokka') || 'Comer Aqui';
-
-         // Gera a senha (ex: 100 a 999)
-         let numeroSenha = Math.floor(Math.random() * 900) + 100;
-
-         // Simula a impressão da notinha
-         alert(
-             "🧾 MOKKA CAFÉ - RECIBO\n" +
-             "=========================\n" +
-             "✅ Pedido Confirmado!\n" +
-             "Senha: " + numeroSenha + "\n" +
-             "Modo: " + modo + "\n\n" +
-             "Aguarde ser chamado no monitor."
-         );
-
-         // Limpa a máquina após a compra com sucesso
-         localStorage.removeItem('carrinhoMokka');
-         localStorage.removeItem('modoConsumoMokka'); // Limpa também o modo
-
-         // Volta ao ecrã inicial de repouso
-         window.location.href = "/AreaPublica/IndexPublico";
-     }
-
-        // Gera uma senha aleatória entre 100 e 999
-        let numeroSenha = Math.floor(Math.random() * 900) + 100;
-        
-        alert("✅ Pedido Confirmado!\n\nA sua senha é: " + numeroSenha + "\n\nAguarde ser chamado na receção.");
-        
-        // Limpa a máquina após a compra com sucesso e volta ao Login
-        localStorage.removeItem('carrinhoMokka');
-        window.location.href = "/AreaPublica/Login"; 
+    function clearCart() {
+        cartItems = [];
+        renderCart();
     }
 
-    function cancelarPedidoTotem() {
-        // Limpa a máquina caso o cliente desista a meio
-        localStorage.removeItem('carrinhoMokka');
-        window.location.href = "/AreaPublica/Logout"; 
+    // ABRIR E FECHAR MODAL DE PAGAMENTO
+    function openPaymentModal() {
+        if (cartItems.length > 0) {
+            document.getElementById('paymentModalOverlay').style.display = 'flex';
+        }
     }
->>>>>>> a6c1d1408130b5d6f3934d65f6b556570caa4afa
+
+    function closePaymentModal() {
+        document.getElementById('paymentModalOverlay').style.display = 'none';
+    }
+
+    function selectPayment(element, type) {
+        document.querySelectorAll('.payment-option-card').forEach(card => card.classList.remove('active'));
+        element.classList.add('active');
+    }
+
+    // CONFIRMAR PAGAMENTO E GERAR SENHA COM TIMER DE 5s
+    function confirmPaymentAndFinish() {
+        closePaymentModal();
+
+        // Gera código de pedido aleatório
+        const randomCode = '#' + Math.floor(1000 + Math.random() * 9000);
+        document.getElementById('generatedOrderCode').innerText = randomCode;
+
+        // Exibe modal da senha
+        document.getElementById('successOrderModal').style.display = 'flex';
+
+        // Zera o carrinho interno
+        cartItems = [];
+        renderCart();
+
+        // Inicia temporizador regressivo de 5 segundos
+        secondsLeft = 5;
+        document.getElementById('timerCount').innerText = secondsLeft + 's';
+
+        clearInterval(countdownTimer);
+        countdownTimer = setInterval(() => {
+            secondsLeft--;
+            document.getElementById('timerCount').innerText = secondsLeft + 's';
+
+            if (secondsLeft <= 0) {
+                clearInterval(countdownTimer);
+                redirectToMenu();
+            }
+        }, 1000);
+    }
+
+    function redirectToMenu() {
+        clearInterval(countdownTimer);
+        window.location.href = '/AreaPublica/Cardapio';
+    }
 </script>

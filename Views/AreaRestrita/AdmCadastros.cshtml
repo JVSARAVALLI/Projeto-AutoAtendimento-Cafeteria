@@ -1,47 +1,165 @@
 ﻿@{
-    ViewData["Title"] = "Central de Cadastros";
+    ViewData["Title"] = "Gerenciamento de Produtos - Mokka Café";
+    Layout = "_Layout_Restrito";
 }
 
-<div style="padding: 40px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f8; min-height: 100vh;">
+<style>
+    :root {
+        --mokka-green-dark: #2E3E26;
+        --mokka-green: #718968;
+        --mokka-green-light: #E8EFE6;
+        --mokka-brown: #A66A38;
+        --mokka-brown-dark: #3E2012;
+        --mokka-bg: #FAF7F4;
+    }
+
+    .admin-title {
+        color: var(--mokka-green-dark);
+        font-weight: 800;
+        font-size: 1.6rem;
+        letter-spacing: -0.4px;
+    }
+
+    .mokka-panel {
+        background-color: #FFFFFF;
+        border-radius: 24px;
+        border: 1px solid rgba(113, 137, 104, 0.15);
+        box-shadow: 0 8px 24px rgba(46, 62, 38, 0.05);
+        padding: 2rem;
+    }
+
+    .form-label-mokka {
+        font-weight: 700;
+        color: var(--mokka-green-dark);
+        font-size: 0.9rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .form-control-mokka {
+        background-color: var(--mokka-bg);
+        border: 1px solid rgba(113, 137, 104, 0.25);
+        border-radius: 14px;
+        padding: 0.7rem 1rem;
+        font-weight: 600;
+        color: var(--mokka-brown-dark);
+        transition: all 0.2s ease;
+    }
+
+    .form-control-mokka:focus {
+        background-color: #FFFFFF;
+        border-color: var(--mokka-green);
+        box-shadow: 0 0 0 3px rgba(113, 137, 104, 0.15);
+        outline: none;
+    }
+
+    .btn-mokka-save {
+        background: linear-gradient(135deg, var(--mokka-brown) 0%, var(--mokka-brown-dark) 100%);
+        color: #FFFFFF !important;
+        font-weight: 800;
+        font-size: 0.95rem;
+        border: none;
+        border-radius: 14px;
+        padding: 0.75rem 1.8rem;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 14px rgba(62, 32, 18, 0.22);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-mokka-save:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(62, 32, 18, 0.3);
+    }
+
+    .mokka-switch .form-check-input:checked {
+        background-color: var(--mokka-green);
+        border-color: var(--mokka-green-dark);
+    }
+
+    .badge-promo {
+        background-color: #FEF3C7;
+        color: #92400E;
+        font-weight: 800;
+        font-size: 0.75rem;
+        padding: 0.3rem 0.7rem;
+        border-radius: 20px;
+        border: 1px solid #FDE68A;
+    }
+</style>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="admin-title m-0">
+        <i class="bi bi-pencil-square me-2"></i> Cadastro & Modificação de Produtos
+    </h3>
+    <a asp-controller="AreaRestrita" asp-action="AdmCatalogo" class="btn btn-outline-secondary rounded-3 fw-bold btn-sm">
+        <i class="bi bi-list-ul me-1"></i> Ver Cardápio Completo
+    </a>
+</div>
+
+<!-- FORMULÁRIO DE CADASTRO / EDIÇÃO -->
+<div class="mokka-panel mb-4">
+    <h5 class="fw-bold mb-3" style="color: var(--mokka-green-dark);">Dados do Produto</h5>
     
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-        <h2 style="font-size: 2.5em; color: #333; margin: 0;">📝 Central de Cadastros</h2>
-    </div>
-
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
-        
-        <!-- Cadastrar Produtos -->
-        <div style="background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
-            <div>
-                <div style="font-size: 4em; margin-bottom: 15px;">🍔</div>
-                <h3 style="font-size: 1.5em; color: #333;">Produtos e Cardápio</h3>
-                <p style="color: #666; margin-bottom: 20px;">Adicione novos itens, preços e imagens ao catálogo do Totem.</p>
+    <form asp-controller="AreaRestrita" asp-action="SalvarProduto" method="post">
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <label class="form-label-mokka">Nome do Produto</label>
+                <input type="text" name="Nome" class="form-control form-control-mokka" placeholder="Ex: Cappuccino Mokka Especial" required />
             </div>
-            <!-- Alterado de <button> para <a> -->
-            <a href="/AreaRestrita/AdmCardapio" style="display: block; text-decoration: none; background-color: #007bff; color: white; padding: 12px 25px; border-radius: 8px; font-weight: bold; width: 100%; box-sizing: border-box; transition: background 0.2s;">Gerir Produtos</a>
-        </div>
 
-        <!-- Cadastrar Funcionários -->
-        <div style="background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
-            <div>
-                <div style="font-size: 4em; margin-bottom: 15px;">👨‍🍳</div>
-                <h3 style="font-size: 1.5em; color: #333;">Equipa (Funcionários)</h3>
-                <p style="color: #666; margin-bottom: 20px;">Registo de colaboradores, cargos, salários e turnos.</p>
+            <div class="col-12 col-md-3">
+                <label class="form-label-mokka">Categoria</label>
+                <select name="Categoria" class="form-select form-control-mokka" required>
+                    <option value="">Selecione...</option>
+                    <option value="Combos">Combos</option>
+                    <option value="Cafés Quentes">Cafés Quentes</option>
+                    <option value="Bebidas Geladas">Bebidas Geladas</option>
+                    <option value="Salgados">Salgados</option>
+                    <option value="Sobremesas">Sobremesas</option>
+                </select>
             </div>
-            <!-- Alterado de <button> para <a> -->
-            <a href="/AreaRestrita/AdmFuncionarios" style="display: block; text-decoration: none; background-color: #17a2b8; color: white; padding: 12px 25px; border-radius: 8px; font-weight: bold; width: 100%; box-sizing: border-box; transition: background 0.2s;">Gerir Equipa</a>
-        </div>
 
-        <!-- Cadastrar Usuários -->
-        <div style="background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
-            <div>
-                <div style="font-size: 4em; margin-bottom: 15px;">🔐</div>
-                <h3 style="font-size: 1.5em; color: #333;">Usuários do Sistema</h3>
-                <p style="color: #666; margin-bottom: 20px;">Criação de acessos, senhas e permissões (Admin / Cozinha).</p>
+            <div class="col-12 col-md-3">
+                <label class="form-label-mokka">Preço (R$)</label>
+                <input type="number" step="0.01" name="Preco" class="form-control form-control-mokka" placeholder="0,00" required />
             </div>
-            <!-- Alterado de <button> para <a> -->
-            <a href="/AreaRestrita/AdmUsuarios" style="display: block; text-decoration: none; background-color: #6f42c1; color: white; padding: 12px 25px; border-radius: 8px; font-weight: bold; width: 100%; box-sizing: border-box; transition: background 0.2s;">Gerir Acessos</a>
-        </div>
 
-    </div>
+            <div class="col-12 col-md-8">
+                <label class="form-label-mokka">Descrição Curta</label>
+                <input type="text" name="Descricao" class="form-control form-control-mokka" placeholder="Ex: Acompanha chantilly e calda de cacau 70%" />
+            </div>
+
+            <div class="col-12 col-md-4">
+                <label class="form-label-mokka">URL da Imagem</label>
+                <input type="url" name="ImagemUrl" class="form-control form-control-mokka" placeholder="https://..." />
+            </div>
+
+            <!-- OPÇÕES E PROMOÇÃO -->
+            <div class="col-12 pt-2">
+                <div class="d-flex align-items-center gap-4 p-3 rounded-3 mokka-switch" style="background-color: var(--mokka-bg);">
+                    <div class="form-check form-switch m-0">
+                        <input class="form-check-input" type="checkbox" id="emPromocao" name="EmPromocao" value="true">
+                        <label class="form-check-label fw-bold ms-2" for="emPromocao" style="color: var(--mokka-green-dark);">
+                            🔥 Produto em Promoção (Exibir no Destaque do Totem)
+                        </label>
+                    </div>
+
+                    <div class="form-check form-switch m-0">
+                        <input class="form-check-input" type="checkbox" id="ativoTotem" name="AtivoTotem" value="true" checked>
+                        <label class="form-check-label fw-bold ms-2" for="ativoTotem" style="color: var(--mokka-green-dark);">
+                            ✅ Visível para Compra no Totem
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 text-end mt-4">
+                <button type="submit" class="btn-mokka-save">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Salvar Alterações</span>
+                </button>
+            </div>
+        </div>
+    </form>
 </div>

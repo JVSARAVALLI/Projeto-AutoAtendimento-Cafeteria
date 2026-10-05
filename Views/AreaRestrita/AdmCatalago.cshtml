@@ -1,0 +1,245 @@
+@{
+    ViewData["Title"] = "Gerenciar Cardápio - Mokka Café";
+    Layout = "_Layout_Restrito";
+}
+
+<style>
+    :root {
+        --mokka-green-dark: #2E3E26;
+        --mokka-green: #718968;
+        --mokka-green-light: #E8EFE6;
+        --mokka-brown: #A66A38;
+        --mokka-brown-dark: #3E2012;
+        --mokka-bg: #FAF7F4;
+    }
+
+    .admin-title {
+        color: var(--mokka-green-dark);
+        font-weight: 800;
+        font-size: 1.6rem;
+        letter-spacing: -0.4px;
+    }
+
+    .mokka-panel {
+        background-color: #FFFFFF;
+        border-radius: 24px;
+        border: 1px solid rgba(113, 137, 104, 0.15);
+        box-shadow: 0 8px 24px rgba(46, 62, 38, 0.05);
+        padding: 1.6rem;
+    }
+
+    .btn-mokka-add {
+        background: linear-gradient(135deg, var(--mokka-brown) 0%, var(--mokka-brown-dark) 100%);
+        color: #FFFFFF !important;
+        font-weight: 800;
+        font-size: 0.9rem;
+        border: none;
+        border-radius: 14px;
+        padding: 0.65rem 1.25rem;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 12px rgba(62, 32, 18, 0.2);
+    }
+
+    .btn-mokka-add:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(62, 32, 18, 0.3);
+    }
+
+    .mokka-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 0.6rem;
+    }
+
+    .mokka-table tbody tr {
+        background-color: var(--mokka-bg);
+        transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    .mokka-table tbody tr:hover {
+        background-color: #F2EBE5;
+        transform: scale(1.002);
+    }
+
+    .mokka-table td, .mokka-table th {
+        padding: 0.9rem 1.1rem;
+        vertical-align: middle;
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: var(--mokka-brown-dark);
+    }
+
+    .mokka-table th {
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        color: #6C757D;
+        border: none;
+    }
+
+    .mokka-table td:first-child { border-top-left-radius: 16px; border-bottom-left-radius: 16px; }
+    .mokka-table td:last-child { border-top-right-radius: 16px; border-bottom-right-radius: 16px; }
+
+    .product-thumb {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        object-fit: cover;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .badge-promo {
+        background-color: #FEF3C7;
+        color: #92400E;
+        font-weight: 800;
+        font-size: 0.72rem;
+        padding: 0.3rem 0.7rem;
+        border-radius: 20px;
+        border: 1px solid #FDE68A;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .badge-status-on {
+        background-color: #E8EFE6;
+        color: var(--mokka-green-dark);
+        font-weight: 800;
+        font-size: 0.72rem;
+        padding: 0.3rem 0.7rem;
+        border-radius: 20px;
+        border: 1px solid rgba(113, 137, 104, 0.3);
+    }
+
+    .btn-action-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+
+    .btn-edit { background-color: var(--mokka-green-light); color: var(--mokka-green-dark); }
+    .btn-edit:hover { background-color: var(--mokka-green); color: #ffffff; }
+
+    .btn-delete { background-color: #FCE8E6; color: #C5221F; }
+    .btn-delete:hover { background-color: #C5221F; color: #ffffff; }
+</style>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="admin-title m-0">
+        <i class="bi bi-cup-hot-fill me-2"></i> Gerenciamento do Cardápio
+    </h3>
+    <a asp-controller="AreaRestrita" asp-action="AdmCadastros" class="btn-mokka-add">
+        <i class="bi bi-plus-circle-fill"></i>
+        <span>Cadastrar Novo Item</span>
+    </a>
+</div>
+
+<div class="mokka-panel">
+    <div class="table-responsive">
+        <table class="mokka-table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th style="width: 70px;">Imagem</th>
+                    <th>Nome do Produto</th>
+                    <th>Categoria</th>
+                    <th>Preço</th>
+                    <th>Destaques / Status</th>
+                    <th class="text-end" style="width: 140px;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- EXEMPLO ITEM 1 -->
+                <tr>
+                    <td>
+                        <img src="https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80" class="product-thumb" alt="Combo Manhã">
+                    </td>
+                    <td>
+                        <div class="fw-bold fs-6">Combo Manhã Mokka</div>
+                        <div class="text-muted small">Expresso Tradicional + Croissant de Manteiga</div>
+                    </td>
+                    <td><span class="fw-bold">Combos</span></td>
+                    <td class="fw-bold fs-6" style="color: var(--mokka-brown-dark);">R$ 14,90</td>
+                    <td>
+                        <span class="badge-promo"><i class="bi bi-fire"></i> Promoção</span>
+                        <span class="badge-status-on ms-1">No Totem</span>
+                    </td>
+                    <td class="text-end">
+                        <a asp-controller="AreaRestrita" asp-action="AdmCadastros" class="btn-action-icon btn-edit me-1" title="Editar"><i class="bi bi-pencil-fill"></i></a>
+                        <a href="#" class="btn-action-icon btn-delete" title="Excluir"><i class="bi bi-trash-fill"></i></a>
+                    </td>
+                </tr>
+
+                <!-- EXEMPLO ITEM 2 -->
+                <tr>
+                    <td>
+                        <img src="https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=600&q=80" class="product-thumb" alt="Cappuccino Mokka">
+                    </td>
+                    <td>
+                        <div class="fw-bold fs-6">Cappuccino Mokka</div>
+                        <div class="text-muted small">Expresso, leite vaporizado, espuma cremosa e cacau</div>
+                    </td>
+                    <td><span class="fw-bold">Cafés Quentes</span></td>
+                    <td class="fw-bold fs-6" style="color: var(--mokka-brown-dark);">R$ 12,90</td>
+                    <td>
+                        <span class="badge-status-on">No Totem</span>
+                    </td>
+                    <td class="text-end">
+                        <a asp-controller="AreaRestrita" asp-action="AdmCadastros" class="btn-action-icon btn-edit me-1" title="Editar"><i class="bi bi-pencil-fill"></i></a>
+                        <a href="#" class="btn-action-icon btn-delete" title="Excluir"><i class="bi bi-trash-fill"></i></a>
+                    </td>
+                </tr>
+
+                <!-- EXEMPLO ITEM 3 -->
+                <tr>
+                    <td>
+                        <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=600&q=80" class="product-thumb" alt="Croissant">
+                    </td>
+                    <td>
+                        <div class="fw-bold fs-6">Croissant de Manteiga</div>
+                        <div class="text-muted small">Massa folhada francesa aquecida na hora</div>
+                    </td>
+                    <td><span class="fw-bold">Salgados</span></td>
+                    <td class="fw-bold fs-6" style="color: var(--mokka-brown-dark);">R$ 9,80</td>
+                    <td>
+                        <span class="badge-status-on">No Totem</span>
+                    </td>
+                    <td class="text-end">
+                        <a asp-controller="AreaRestrita" asp-action="AdmCadastros" class="btn-action-icon btn-edit me-1" title="Editar"><i class="bi bi-pencil-fill"></i></a>
+                        <a href="#" class="btn-action-icon btn-delete" title="Excluir"><i class="bi bi-trash-fill"></i></a>
+                    </td>
+                </tr>
+
+                <!-- EXEMPLO ITEM 4 -->
+                <tr>
+                    <td>
+                        <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80" class="product-thumb" alt="Brownie">
+                    </td>
+                    <td>
+                        <div class="fw-bold fs-6">Brownie Cacau 70%</div>
+                        <div class="text-muted small">Brownie denso de chocolate amargo com nozes</div>
+                    </td>
+                    <td><span class="fw-bold">Sobremesas</span></td>
+                    <td class="fw-bold fs-6" style="color: var(--mokka-brown-dark);">R$ 11,00</td>
+                    <td>
+                        <span class="badge-promo"><i class="bi bi-fire"></i> Promoção</span>
+                        <span class="badge-status-on ms-1">No Totem</span>
+                    </td>
+                    <td class="text-end">
+                        <a asp-controller="AreaRestrita" asp-action="AdmCadastros" class="btn-action-icon btn-edit me-1" title="Editar"><i class="bi bi-pencil-fill"></i></a>
+                        <a href="#" class="btn-action-icon btn-delete" title="Excluir"><i class="bi bi-trash-fill"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
