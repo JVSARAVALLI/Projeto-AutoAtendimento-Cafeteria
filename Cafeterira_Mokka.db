@@ -1,0 +1,85 @@
+--Tabela usuario
+
+CREATE TABLE USUARIO (
+    id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    senha TEXT NULL,
+    cargo TEXT NOT NULL,
+    ativo INTEGER DEFAULT 1,-- booleano
+    data_cadastro DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+--tabela produto
+
+CREATE TABLE PRODUTO (
+    id_produto INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    descricao TEXT NULL,
+    preco_atual REAL NOT NULL, 
+    disponivel INTEGER DEFAULT 1,
+    categoria TEXT NOT NULL
+);
+
+-- tabela de insumos
+
+CREATE TABLE INSUMOS (
+    id_insumo INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    unidade_medida TEXT NOT NULL,
+    quantidade_estoque REAL NOT NULL DEFAULT 0.000,
+    estoque_minimo REAL NOT NULL DEFAULT 0.000,
+    custo_unitario REAL NOT NULL DEFAULT 0.00
+);
+
+--tabela associativa sobre composição do produto
+
+CREATE TABLE COMPOSTO_POR (
+    id_insumo INTEGER NOT NULL,
+    id_produto INTEGER NOT NULL,
+    quantidade_necessaria REAL NOT NULL,
+    PRIMARY KEY (id_insumo, id_produto),
+    FOREIGN KEY (id_insumo) REFERENCES INSUMOS (id_insumo) ON DELETE RESTRICT,
+    FOREIGN KEY (id_produto) REFERENCES PRODUTO (id_produto) ON DELETE CASCADE
+);
+
+-- tabela de pedidos
+
+CREATE TABLE PEDIDO (
+    id_pedido INTEGER PRIMARY KEY AUTOINCREMENT,
+    numero_senha INTEGER NOT NULL,
+    data_hora_pedido DATETIME DEFAULT CURRENT_TIMESTAMP,
+    status TEXT NOT NULL DEFAULT 'pendente',
+    valor_total REAL NOT NULL DEFAULT 0.00,
+    id_atendente INTEGER NULL,
+    id_cliente INTEGER NULL,
+    FOREIGN KEY (id_atendente) REFERENCES USUARIO (id_usuario) ON DELETE SET NULL,
+    FOREIGN KEY (id_cliente) REFERENCES USUARIO (id_usuario) ON DELETE SET NULL
+);
+
+-- tabela associativa sobre os itens do pedido
+
+CREATE TABLE CONTEM (
+    id_pedido INTEGER NOT NULL,
+    id_produto INTEGER NOT NULL,
+    quantidade INTEGER NOT NULL,
+    preco_unitario REAL NOT NULL,
+    observacao TEXT NULL,
+    PRIMARY KEY (id_pedido, id_produto),
+    FOREIGN KEY (id_pedido) REFERENCES PEDIDO (id_pedido) ON DELETE CASCADE,
+    FOREIGN KEY (id_produto) REFERENCES PRODUTO (id_produto) ON DELETE RESTRICT
+);
+
+-- tabela de movimentação de estoque
+
+CREATE TABLE MOVIMENTACAO_ESTOQUE (
+    id_mov_estq INTEGER PRIMARY KEY AUTOINCREMENT,
+    tipo TEXT NOT NULL,
+    data DATETIME DEFAULT CURRENT_TIMESTAMP,
+    quantidade REAL NOT NULL,
+    observacao TEXT NULL,
+    id_insumo INTEGER NOT NULL,
+    id_pedido INTEGER NULL,
+    FOREIGN KEY (id_insumo) REFERENCES INSUMOS (id_insumo) ON DELETE RESTRICT,
+    FOREIGN KEY (id_pedido) REFERENCES PEDIDO (id_pedido) ON DELETE SET NULL
+);
