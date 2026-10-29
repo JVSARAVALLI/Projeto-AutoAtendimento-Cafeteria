@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Data.Sqlite;
 
-namespace Cafeteria.Data
+namespace Projeto_do_semestre.Data
 {
     public class Banco
     {
