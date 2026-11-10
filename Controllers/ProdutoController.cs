@@ -1,93 +1,66 @@
 ﻿using AspNetCoreGeneratedDocument;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Projeto_do_semestre.Dao;
 using Projeto_do_semestre.Models;
 
-namespace Projeto_do_semestre.Controllers
+namespace Projeto_do_semestre.Controllers;
+
+public class ProdutoController : Controller
 {
-    public class ProdutoController : Controller
+    private readonly ProdutoDao _produtoDao;
+
+    public ProdutoController(ProdutoDao produtoDao)
     {
-        private readonly ProdutoDao _produtoDao;
+        _produtoDao = produtoDao;
+    }
 
+    // Área Administrativa -> AreaRestrita/AdmCatalago.cshtml
+    public IActionResult Index(string? categoria)
+    {
+        List<Produto> produtos = string.IsNullOrEmpty(categoria)
+            ? _produtoDao.ListarTodos()
+            : _produtoDao.BuscarPorCategoria(categoria);
 
-        public ProdutoController(ProdutoDao produtoDao)
+        return View("~/Views/AreaRestrita/AdmCatalago.cshtml", produtos);
+    }
+
+    // Tela de Cadastro -> AreaRestrita/AdmCadastros.cshtml
+    public IActionResult Criar()
+    {
+        return View("~/Views/AreaRestrita/AdmCadastros.cshtml", new Produto());
+    }
+
+    [HttpPost]
+    public IActionResult Criar(Produto produto)
+    {
+        if (ModelState.IsValid)
         {
-            _produtoDao = produtoDao;
-        }
-
-        //lista e filtra(READ)
-        [HttpGet]
-        public IActionResult Index([FromQuery] string? categoria)
-        {
-            List<Produto> produtos;
-
-            if (!string.IsNullOrEmpty(categoria))
-            {
-                produtos = _produtoDao.BuscarPorCategoria(categoria);
-            }
-            else
-            {
-                produtos = _produtoDao.ListarTodos();
-            }
-
-            return Ok(produtos); // Retorna JSON 200 OK
-        }
-
-        //busca por id
-
-        [HttpGet("{id; int;}")]
-        public IActionResult BuscarPorId(int id)
-        {
-            var produto = _produtoDao.BuscarPorId(id);
-            if (produto == null)
-            {
-                return NotFound(new { mensagem = "Produto não encontrado!" });
-            }
-            return Ok(produto);
-        }
-
-        //salvar no banco 
-        [HttpPost]
-        public IActionResult Criar([FromBody] Produto produto)
-        {
-            if (produto == null || string.IsNullOrWhiteSpace(produto.Nome))
-            {
-                return BadRequest(new { mensagem = "Dados inválidos." });
-            }
-
             _produtoDao.Inserir(produto);
-            return Ok(new { mensagem = "Produto cadastrado com sucesso!" });
+            return RedirectToAction(nameof(Index));
         }
+        return View("~/Views/AreaRestrita/AdmCadastros.cshtml", produto);
+    }
 
-        //atualizar
-        [HttpPut("{id; int;}")]
-        public IActionResult Editar(int id, [FromBody] Produto produto)
-        {
-            var produtoExistente = _produtoDao.BuscarPorId(id);
-            if (produtoExistente == null)
-            {
-                return NotFound(new { mensagem = "Produto não encontrado para atualização." });
-            }
+    [HttpPost]
+    public IActionResult Excluir(int id)
+    {
+        _produtoDao.Excluir(id);
+        return RedirectToAction(nameof(Index));
+    }
 
-            produto.IdProduto = id;
-            _produtoDao.Atualizar(produto);
+    // Totem de Autoatendimento -> AreaPublica/Catalogo.cshtml
+    public IActionResult Cardapio(string? categoria)
+    {
+        List<Produto> produtos = string.IsNullOrEmpty(categoria)
+            ? _produtoDao.ListarTodos()
+            : _produtoDao.BuscarPorCategoria(categoria);
 
-            return Ok(new { mensagem = "Produto atualizado com sucesso!" });
-        }
-
-        //excluir(DELETE)
-        [HttpDelete("{id; int;}")]
-        public IActionResult Excluir(int id)
-        {
-            var produtoExistente = _produtoDao.BuscarPorId(id);
-            if (produtoExistente == null)
-            {
-                return NotFound(new { mensagem = "Produto não encontrado para realizar exclusão." });
-            }
-
-            _produtoDao.Excluir(id);
-            return Ok(new { mensagem = "Produto excluido com sucesso!"});
-        }
-        
+        // Removido o '~/' e o '.cshtml' para resolver a compatibilidade de tipo do Razor
+        return View("~/Views/AreaPublica/Catalogo.cshtml", produtos);
     }
 }
+
+
+
+
