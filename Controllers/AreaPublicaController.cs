@@ -17,6 +17,7 @@ namespace Projeto_do_semestre.Controllers
         [AllowAnonymous]
         public IActionResult IndexPublico()
         {
+            HttpContext.Session.Remove("CarrinhoTotem");
             return View();
         }
 
@@ -31,7 +32,7 @@ namespace Projeto_do_semestre.Controllers
         [AllowAnonymous]
         public IActionResult Carrinho()
         {
-            return View();
+            return RedirectToAction("Carrinho", "Pedido");
         }
 
         // 1. Acesso Interno / Login (GET: Exibe a tela de Login da equipe)
@@ -103,14 +104,7 @@ namespace Projeto_do_semestre.Controllers
         [AllowAnonymous]
         public IActionResult Catalogo()
         {
-            var produtos = new List<dynamic>
-            {
-                new { Id = 1, Nome = "Expresso", Preco = 2.50, Imagem = "☕", Categoria = "Bebidas Quentes", Descricao = "Puro e intenso" },
-                new { Id = 2, Nome = "Cappuccino", Preco = 4.80, Imagem = "☕", Categoria = "Bebidas Quentes", Descricao = "Com espuma cremosa" },
-                new { Id = 3, Nome = "Pão de Queijo", Preco = 3.50, Imagem = "🥐", Categoria = "Salgados", Descricao = "Tradicional mineiro" },
-                new { Id = 4, Nome = "Bolo Chocolate", Preco = 5.50, Imagem = "🍰", Categoria = "Sobremesas", Descricao = "Fatia generosa" }
-            };
-            return View(produtos);
+            return RedirectToAction("Cardapio", "Produto");
         }
 
         // 7. OPÇÕES (Acessibilidade e Atendente)
@@ -131,6 +125,7 @@ namespace Projeto_do_semestre.Controllers
         [AllowAnonymous]
         public IActionResult Logout()
         {
+            HttpContext.Session.Remove("CarrinhoTotem");
             return RedirectToAction("IndexPublico", "AreaPublica");
         }
     }

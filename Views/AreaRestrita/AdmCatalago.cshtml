@@ -1,3 +1,4 @@
+@model List<Projeto_do_semestre.Models.Produto>
 @{
     ViewData["Title"] = "Gerenciar Cardápio - Mokka Café";
     Layout = "_Layout_Restrito";
@@ -158,87 +159,84 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- EXEMPLO ITEM 1 -->
-                <tr>
-                    <td>
-                        <img src="https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80" class="product-thumb" alt="Combo Manhã">
-                    </td>
-                    <td>
-                        <div class="fw-bold fs-6">Combo Manhã Mokka</div>
-                        <div class="text-muted small">Expresso Tradicional + Croissant de Manteiga</div>
-                    </td>
-                    <td><span class="fw-bold">Combos</span></td>
-                    <td class="fw-bold fs-6" style="color: var(--mokka-brown-dark);">R$ 14,90</td>
-                    <td>
-                        <span class="badge-promo"><i class="bi bi-fire"></i> Promoção</span>
-                        <span class="badge-status-on ms-1">No Totem</span>
-                    </td>
-                    <td class="text-end">
-                        <a asp-controller="AreaRestrita" asp-action="AdmCadastros" class="btn-action-icon btn-edit me-1" title="Editar"><i class="bi bi-pencil-fill"></i></a>
-                        <a href="#" class="btn-action-icon btn-delete" title="Excluir"><i class="bi bi-trash-fill"></i></a>
-                    </td>
-                </tr>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var produto in Model)
+                    {
+                        <tr>
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(produto.Imagem))
+                                {
+                                    <img src="@produto.Imagem"
+                                         alt="@produto.Nome"
+                                         class="product-thumb" />
+                                }
+                                else
+                                {
+                                    <span>Sem imagem</span>
+                                }
+                            </td>
 
-                <!-- EXEMPLO ITEM 2 -->
-                <tr>
-                    <td>
-                        <img src="https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=600&q=80" class="product-thumb" alt="Cappuccino Mokka">
-                    </td>
-                    <td>
-                        <div class="fw-bold fs-6">Cappuccino Mokka</div>
-                        <div class="text-muted small">Expresso, leite vaporizado, espuma cremosa e cacau</div>
-                    </td>
-                    <td><span class="fw-bold">Cafés Quentes</span></td>
-                    <td class="fw-bold fs-6" style="color: var(--mokka-brown-dark);">R$ 12,90</td>
-                    <td>
-                        <span class="badge-status-on">No Totem</span>
-                    </td>
-                    <td class="text-end">
-                        <a asp-controller="AreaRestrita" asp-action="AdmCadastros" class="btn-action-icon btn-edit me-1" title="Editar"><i class="bi bi-pencil-fill"></i></a>
-                        <a href="#" class="btn-action-icon btn-delete" title="Excluir"><i class="bi bi-trash-fill"></i></a>
-                    </td>
-                </tr>
+                            <td>
+                                <div class="fw-bold">@produto.Nome</div>
+                            </td>
 
-                <!-- EXEMPLO ITEM 3 -->
-                <tr>
-                    <td>
-                        <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=600&q=80" class="product-thumb" alt="Croissant">
-                    </td>
-                    <td>
-                        <div class="fw-bold fs-6">Croissant de Manteiga</div>
-                        <div class="text-muted small">Massa folhada francesa aquecida na hora</div>
-                    </td>
-                    <td><span class="fw-bold">Salgados</span></td>
-                    <td class="fw-bold fs-6" style="color: var(--mokka-brown-dark);">R$ 9,80</td>
-                    <td>
-                        <span class="badge-status-on">No Totem</span>
-                    </td>
-                    <td class="text-end">
-                        <a asp-controller="AreaRestrita" asp-action="AdmCadastros" class="btn-action-icon btn-edit me-1" title="Editar"><i class="bi bi-pencil-fill"></i></a>
-                        <a href="#" class="btn-action-icon btn-delete" title="Excluir"><i class="bi bi-trash-fill"></i></a>
-                    </td>
-                </tr>
+                            <td>@produto.Categoria</td>
 
-                <!-- EXEMPLO ITEM 4 -->
-                <tr>
-                    <td>
-                        <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80" class="product-thumb" alt="Brownie">
-                    </td>
-                    <td>
-                        <div class="fw-bold fs-6">Brownie Cacau 70%</div>
-                        <div class="text-muted small">Brownie denso de chocolate amargo com nozes</div>
-                    </td>
-                    <td><span class="fw-bold">Sobremesas</span></td>
-                    <td class="fw-bold fs-6" style="color: var(--mokka-brown-dark);">R$ 11,00</td>
-                    <td>
-                        <span class="badge-promo"><i class="bi bi-fire"></i> Promoção</span>
-                        <span class="badge-status-on ms-1">No Totem</span>
-                    </td>
-                    <td class="text-end">
-                        <a asp-controller="AreaRestrita" asp-action="AdmCadastros" class="btn-action-icon btn-edit me-1" title="Editar"><i class="bi bi-pencil-fill"></i></a>
-                        <a href="#" class="btn-action-icon btn-delete" title="Excluir"><i class="bi bi-trash-fill"></i></a>
-                    </td>
-                </tr>
+                            <td>
+                                @produto.PrecoAtual.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("pt-BR"))
+                            </td>
+
+                            <td>
+                                @if (produto.Disponivel)
+                                {
+                                    <span class="badge-status-on">Disponível</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Indisponível</span>
+                                }
+                            </td>
+
+                            <td class="text-end">
+                                <a asp-controller="Produto"
+                                   asp-action="Editar"
+                                   asp-route-id="@produto.IdProduto"
+                                   class="btn-action-icon"
+                                   title="Editar">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </a>
+
+                                <form asp-controller="Produto"
+                                      asp-action="Excluir"
+                                      method="post"
+                                      class="d-inline">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@produto.IdProduto" />
+
+                                    <button type="submit"
+                                            class="btn-action-icon btn-delete"
+                                            title="Excluir"
+                                            onclick="return confirm('Deseja realmente excluir este produto?')">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-4">
+                            Nenhum produto cadastrado.
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<Projeto_do_semestre.Models.ItemCarrinho>
+@{
     Layout = "_Layout_Publico";
     ViewData["Title"] = "Meu Pedido - Mokka Café";
 }
@@ -213,7 +214,7 @@
         <h2 class="cart-title m-0">
             <i class="bi bi-cart-fill text-success"></i> Meu Pedido
         </h2>
-        <a asp-controller="AreaPublica" asp-action="Catalogo" class="btn btn-outline-secondary rounded-4 fw-bold">
+        <a asp-controller="Produto" asp-action="Cardapio" class="btn btn-outline-secondary rounded-4 fw-bold">
             ← Continuar Comprando
         </a>
     </div>
@@ -230,7 +231,31 @@
                 </div>
 
                 <div id="cartItemsContainer">
-                    <!-- Gerado via JavaScript dinamicamente -->
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <div class="cart-item-row">
+                                <img src="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=600&q=80" class="cart-item-thumb" alt="@item.Produto.Nome">
+                                <div class="cart-item-details">
+                                    <h6 class="cart-item-title">@item.Produto.Nome</h6>
+                                    @if (!string.IsNullOrEmpty(item.Observacao))
+                                    {
+                                        <div class="cart-item-obs"><i class="bi bi-sliders me-1"></i>Obs: @item.Observacao</div>
+                                    }
+                                    <span class="fw-bold text-muted small">R$ @item.Produto.PrecoAtual.ToString("F2") un.</span>
+                                </div>
+                                <div class="cart-qty-control">
+                                    <span class="fw-bold px-2">@item.Quantidade</span>
+                                </div>
+                                <span class="fw-bold fs-6 ms-2" style="color: var(--mokka-brown-dark);">R$ @item.Subtotal.ToString("F2")</span>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center text-muted py-5 fw-bold">Seu carrinho está vazio.</div>
+                    }
                 </div>
             </div>
         </div>
@@ -294,10 +319,12 @@
             </div>
         </div>
 
-        <button class="btn-go-payment w-100" onclick="confirmPaymentAndFinish()">
-            <span>Confirmar e Pagar</span>
-            <i class="bi bi-check-circle-fill fs-5"></i>
-        </button>
+        <form asp-controller="Pedido" asp-action="FinalizarPedido" method="post">
+            <button type="submit" class="btn-go-payment w-100">
+                <span>Confirmar e Pagar</span>
+                <i class="bi bi-check-circle-fill fs-5"></i>
+            </button>
+        </form>
     </div>
 </div>
 
