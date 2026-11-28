@@ -4,8 +4,10 @@ namespace Projeto_do_semestre.Data
 {
     public class Banco
     {
-        private const string ConnectionString =
-            "Data Source=BD_cafeteria.db";
+        private static readonly string ConnectionString =
+        $"Data Source={Path.GetFullPath(Path.Combine(
+        AppContext.BaseDirectory,
+        "..", "..", "..", "BD_cafeteria.db"))}";
 
         public static SqliteConnection ObterConexao()
         {

@@ -319,12 +319,12 @@
             </div>
         </div>
 
-        <form asp-controller="Pedido" asp-action="FinalizarPedido" method="post">
-            <button type="submit" class="btn-go-payment w-100">
-                <span>Confirmar e Pagar</span>
-                <i class="bi bi-check-circle-fill fs-5"></i>
-            </button>
-        </form>
+        <button type="button"
+                class="btn-go-payment w-100"
+                onclick="confirmPaymentAndFinish()">
+            <span>Confirmar e Pagar</span>
+            <i class="bi bi-check-circle-fill fs-5"></i>
+        </button>
     </div>
 </div>
 
@@ -350,24 +350,19 @@
 
 <script>
     // DADOS INICIAIS DO CARRINHO (Simulação com estado em memória)
-    let cartItems = [
-        {
-            id: 1,
-            nome: 'Combo Manhã Mokka',
-            preco: 14.90,
-            qtd: 1,
-            obs: 'Pão aquecido, Expresso sem açúcar',
-            foto: 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80'
-        },
-        {
-            id: 2,
-            nome: 'Combo Tarde Doce',
-            preco: 21.50,
-            qtd: 1,
-            obs: 'Cappuccino com leite de aveia',
-            foto: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80'
-        }
-    ];
+        let cartItems = @Html.Raw(
+                System.Text.Json.JsonSerializer.Serialize(
+                        Model.Select(item => new
+                        {
+                                id = item.Produto.IdProduto,
+                                nome = item.Produto.Nome,
+                                preco = item.PrecoUnitario,
+                                qtd = item.Quantidade,
+                                obs = item.Observacao,
+                                foto = item.Produto.Imagem
+                        })
+                )
+        );
 
     let countdownTimer = null;
     let secondsLeft = 5;
@@ -376,15 +371,21 @@
         renderCart();
     });
 
+
     function renderCart() {
         const container = document.getElementById('cartItemsContainer');
         const btnPayment = document.getElementById('btnPaymentTrigger');
 
         if (!cartItems || cartItems.length === 0) {
-            container.innerHTML = `<div class="text-center text-muted py-5 fw-bold">Seu carrinho está vazio.</div>`;
+            container.innerHTML = `
+                <div class="text-center text-muted py-5 fw-bold">
+                    Seu carrinho está vazio.
+                </div>`;
+
             document.getElementById('subtotalVal').innerText = 'R$ 0,00';
             document.getElementById('totalVal').innerText = 'R$ 0,00';
             document.getElementById('totalItemsCount').innerText = '0';
+
             btnPayment.disabled = true;
             btnPayment.style.opacity = '0.5';
             return;
@@ -399,47 +400,107 @@
 
         cartItems.forEach((item, index) => {
             const itemSubtotal = item.preco * item.qtd;
+
             totalVal += itemSubtotal;
             totalCount += item.qtd;
 
             html += `
                 <div class="cart-item-row">
-                    <img src="${item.foto}" class="cart-item-thumb" alt="${item.nome}">
+                    <img src="${item.foto || ''}"
+                         class="cart-item-thumb"
+                         alt="${item.nome}">
+
                     <div class="cart-item-details">
                         <h6 class="cart-item-title">${item.nome}</h6>
-                        <div class="cart-item-obs"><i class="bi bi-sliders me-1"></i>Obs: ${item.obs}</div>
-                        <span class="fw-bold text-muted small">R$ ${item.preco.toFixed(2).replace('.', ',')} un.</span>
+
+                        <div class="cart-item-obs">
+                            <i class="bi bi-sliders me-1"></i>
+                            Obs: ${item.obs || 'Nenhuma personalização'}
+                        </div>
+
+                        <span class="fw-bold text-muted small">
+                            R$ ${item.preco.toFixed(2).replace('.', ',')} un.
+                        </span>
                     </div>
+
                     <div class="cart-qty-control">
-                        <button class="btn-qty" onclick="changeQty(${index}, -1)">-</button>
+                        <button class="btn-qty"
+                                onclick="changeQty(${index}, -1)">-</button>
+
                         <span class="fw-bold px-2">${item.qtd}</span>
-                        <button class="btn-qty" onclick="changeQty(${index}, 1)">+</button>
+
+                        <button class="btn-qty"
+                                onclick="changeQty(${index}, 1)">+</button>
                     </div>
-                    <span class="fw-bold fs-6 ms-2" style="color: var(--mokka-brown-dark);">R$ ${itemSubtotal.toFixed(2).replace('.', ',')}</span>
+
+                    <span class="fw-bold fs-6 ms-2"
+                          style="color: var(--mokka-brown-dark);">
+                        R$ ${itemSubtotal.toFixed(2).replace('.', ',')}
+                    </span>
                 </div>
             `;
         });
 
         container.innerHTML = html;
-        document.getElementById('subtotalVal').innerText = `R$ ${totalVal.toFixed(2).replace('.', ',')}`;
-        document.getElementById('totalVal').innerText = `R$ ${totalVal.toFixed(2).replace('.', ',')}`;
+
+        document.getElementById('subtotalVal').innerText =
+            `R$ ${totalVal.toFixed(2).replace('.', ',')}`;
+
+        document.getElementById('totalVal').innerText =
+            `R$ ${totalVal.toFixed(2).replace('.', ',')}`;
+
         document.getElementById('totalItemsCount').innerText = totalCount;
     }
 
     // BOTÕES DE + E - FUNCIONANDO
-    function changeQty(index, delta) {
-        if (cartItems[index]) {
-            cartItems[index].qtd += delta;
-            if (cartItems[index].qtd <= 0) {
-                cartItems.splice(index, 1);
+
+    async function changeQty(index, delta) {
+        if (!cartItems[index]) return;
+
+        try {
+            const dados = new URLSearchParams();
+            dados.append("index", index);
+            dados.append("delta", delta);
+
+            const resposta = await fetch("/Pedido/AlterarQuantidade", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: dados
+            });
+
+            if (!resposta.ok) {
+                alert("Não foi possível atualizar a quantidade.");
+                return;
             }
-            renderCart();
+
+            // Atualiza a página com os dados atuais da Session
+            window.location.reload();
+        }
+        catch (erro) {
+            console.error("Erro ao alterar quantidade:", erro);
+            alert("Ocorreu um erro ao atualizar o carrinho.");
         }
     }
 
-    function clearCart() {
-        cartItems = [];
-        renderCart();
+    async function clearCart() {
+        try {
+            const resposta = await fetch("/Pedido/LimparCarrinho", {
+                method: "POST"
+            });
+
+            if (!resposta.ok) {
+                alert("Não foi possível limpar o carrinho.");
+                return;
+            }
+
+            window.location.reload();
+        }
+        catch (erro) {
+            console.error("Erro ao limpar carrinho:", erro);
+            alert("Ocorreu um erro ao limpar o carrinho.");
+        }
     }
 
     // ABRIR E FECHAR MODAL DE PAGAMENTO
@@ -459,38 +520,59 @@
     }
 
     // CONFIRMAR PAGAMENTO E GERAR SENHA COM TIMER DE 5s
-    function confirmPaymentAndFinish() {
+
+    async function confirmPaymentAndFinish() {
         closePaymentModal();
 
-        // Gera código de pedido aleatório
-        const randomCode = '#' + Math.floor(1000 + Math.random() * 9000);
-        document.getElementById('generatedOrderCode').innerText = randomCode;
+        try {
+            // Envia o pedido para o Controller
+            const resposta = await fetch("/Pedido/FinalizarPedido", {
+                method: "POST"
+            });
 
-        // Exibe modal da senha
-        document.getElementById('successOrderModal').style.display = 'flex';
+            if (!resposta.ok) {
+                alert("Não foi possível finalizar o pedido.");
+                return;
+            }
 
-        // Zera o carrinho interno
-        cartItems = [];
-        renderCart();
+            // Recebe a senha verdadeira gerada pelo banco
+            const resultado = await resposta.json();
 
-        // Inicia temporizador regressivo de 5 segundos
-        secondsLeft = 5;
-        document.getElementById('timerCount').innerText = secondsLeft + 's';
+            // Exibe a senha no modal de sucesso
+            document.getElementById('generatedOrderCode').innerText =
+                '#' + resultado.senha;
 
-        clearInterval(countdownTimer);
-        countdownTimer = setInterval(() => {
-            secondsLeft--;
+            document.getElementById('successOrderModal').style.display = 'flex';
+
+            // Limpa os itens exibidos no carrinho
+            cartItems = [];
+            renderCart();
+
+            // Inicia a contagem regressiva de 5 segundos
+            secondsLeft = 5;
             document.getElementById('timerCount').innerText = secondsLeft + 's';
 
-            if (secondsLeft <= 0) {
-                clearInterval(countdownTimer);
-                redirectToMenu();
-            }
-        }, 1000);
+            clearInterval(countdownTimer);
+
+            countdownTimer = setInterval(() => {
+                secondsLeft--;
+
+                document.getElementById('timerCount').innerText =
+                    secondsLeft + 's';
+
+                if (secondsLeft <= 0) {
+                    clearInterval(countdownTimer);
+                    redirectToMenu();
+                }
+            }, 1000);
+        }
+        catch (erro) {
+            console.error("Erro ao finalizar pedido:", erro);
+            alert("Ocorreu um erro ao finalizar o pedido.");
+        }
     }
 
     function redirectToMenu() {
-        clearInterval(countdownTimer);
-        window.location.href = '/AreaPublica/IndexPublico'; // Redireciona para a tela de login ou menu principal
+    window.location.href = "/AreaPublica/IndexPublico";
     }
 </script>

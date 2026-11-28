@@ -365,20 +365,22 @@
                 <div class="col product-item @classeCategoria">
 
                     <div class="card card-coffee h-100"
-                         onclick="openCustomizeModal(
-                                 this.dataset.nome,
-                                 Number(this.dataset.preco),
-                                 this.dataset.descricao,
-                                 this.dataset.imagem,
-                                 this.dataset.nutri,
-                                 this.dataset.tipo
-                             )"
+                         data-id="@produto.IdProduto"
                          data-nome="@produto.Nome"
                          data-preco="@produto.PrecoAtual.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)"
                          data-descricao="Consulte a tabela nutricional deste produto."
                          data-imagem="@imagemProduto"
                          data-nutri="@informacaoNutricional"
-                         data-tipo="@tipoProduto">
+                         data-tipo="@tipoProduto"
+                         onclick="openCustomizeModal(
+                                     this.dataset.id,
+                                     this.dataset.nome,
+                                     Number(this.dataset.preco),
+                                     this.dataset.descricao,
+                                     this.dataset.imagem,
+                                     this.dataset.nutri,
+                                     this.dataset.tipo
+                                 )">
 
                         <div class="card-img-container">
 
@@ -577,7 +579,8 @@
             type: 'bebida'
         };
 
-        function openCustomizeModal(nome, preco, descricao, imagem, nutri, type) {
+        function openCustomizeModal(id, nome, preco, descricao, imagem, nutri, type) {
+            currentItem.id = id;
             currentItem.name = nome;
             currentItem.basePrice = preco;
             currentItem.image = imagem;
@@ -634,69 +637,146 @@
             document.getElementById('modalTotalPrice').innerText = 'R$ ' + finalTotal.toFixed(2).replace('.', ',');
         }
 
-        function confirmAddToCart() {
+
+        async function confirmAddToCart() {
             let finalPriceUnit = currentItem.basePrice;
             let obs = [];
 
+            // PERSONALIZAÇÕES DE BEBIDAS
             if (currentItem.type === 'bebida') {
-                if (document.getElementById('removeSugar').checked) obs.push("Sem Açúcar");
-                if (document.getElementById('removeCacao').checked) obs.push("Sem Cacau");
-                if (document.getElementById('addShot').checked) { obs.push("+Shot Expresso"); finalPriceUnit += 3.50; }
-                if (document.getElementById('addChantilly').checked) { obs.push("+Chantilly"); finalPriceUnit += 2.50; }
-                if (document.getElementById('addOatMilk').checked) { obs.push("+Leite Aveia"); finalPriceUnit += 2.00; }
-            } else if (currentItem.type === 'comida') {
-                if (document.getElementById('serveWarm').checked) obs.push("Aquecido");
-                if (document.getElementById('addExpressoOption').checked) { obs.push("+Expresso"); finalPriceUnit += 6.50; }
-                if (document.getElementById('addSodaOption').checked) { obs.push("+Bebida"); finalPriceUnit += 7.50; }
-            } else if (currentItem.type === 'sobremesa') {
-                if (document.getElementById('addIceCream').checked) { obs.push("+Sorvete"); finalPriceUnit += 5.00; }
-                if (document.getElementById('addExtraSyrup').checked) { obs.push("+Calda Extra"); finalPriceUnit += 3.00; }
-                if (document.getElementById('addCoffeeSide').checked) { obs.push("+Expresso"); finalPriceUnit += 6.50; }
-            } else if (currentItem.type === 'combo') {
-                if (document.getElementById('upgradeDrink').checked) { obs.push("+Bebida Grande"); finalPriceUnit += 4.00; }
-                if (document.getElementById('addExtraSauce').checked) { obs.push("+Geleia/Manteiga"); finalPriceUnit += 2.50; }
+                if (document.getElementById('removeSugar').checked)
+                    obs.push("Sem Açúcar");
+
+                if (document.getElementById('removeCacao').checked)
+                    obs.push("Sem Cacau");
+
+                if (document.getElementById('addShot').checked) {
+                    obs.push("+Shot Expresso");
+                    finalPriceUnit += 3.50;
+                }
+
+                if (document.getElementById('addChantilly').checked) {
+                    obs.push("+Chantilly");
+                    finalPriceUnit += 2.50;
+                }
+
+                if (document.getElementById('addOatMilk').checked) {
+                    obs.push("+Leite Aveia");
+                    finalPriceUnit += 2.00;
+                }
             }
 
-            let displayName = currentItem.name;
-            if (obs.length > 0) {
-                displayName += ` (${obs.join(', ')})`;
+            // PERSONALIZAÇÕES DE COMIDAS
+            else if (currentItem.type === 'comida') {
+                if (document.getElementById('serveWarm').checked)
+                    obs.push("Aquecido");
+
+                if (document.getElementById('addExpressoOption').checked) {
+                    obs.push("+Expresso");
+                    finalPriceUnit += 6.50;
+                }
+
+                if (document.getElementById('addSodaOption').checked) {
+                    obs.push("+Bebida");
+                    finalPriceUnit += 7.50;
+                }
             }
 
-            let cart = JSON.parse(localStorage.getItem('mokkaCart')) || [];
-            const existing = cart.find(i => i.name === displayName);
+            // PERSONALIZAÇÕES DE SOBREMESAS
+            else if (currentItem.type === 'sobremesa') {
+                if (document.getElementById('addIceCream').checked) {
+                    obs.push("+Sorvete");
+                    finalPriceUnit += 5.00;
+                }
 
-            if (existing) {
-                existing.quantity += currentItem.quantity;
-            } else {
-                cart.push({
-                    name: displayName,
-                    price: finalPriceUnit,
-                    image: currentItem.image,
-                    quantity: currentItem.quantity
+                if (document.getElementById('addExtraSyrup').checked) {
+                    obs.push("+Calda Extra");
+                    finalPriceUnit += 3.00;
+                }
+
+                if (document.getElementById('addCoffeeSide').checked) {
+                    obs.push("+Expresso");
+                    finalPriceUnit += 6.50;
+                }
+            }
+
+            // PERSONALIZAÇÕES DE COMBOS
+            else if (currentItem.type === 'combo') {
+                if (document.getElementById('upgradeDrink').checked) {
+                    obs.push("+Bebida Grande");
+                    finalPriceUnit += 4.00;
+                }
+
+                if (document.getElementById('addExtraSauce').checked) {
+                    obs.push("+Geleia/Manteiga");
+                    finalPriceUnit += 2.50;
+                }
+            }
+
+            // ORGANIZA AS OBSERVAÇÕES
+            const observacoes = obs.join(', ');
+
+            // PREPARA OS DADOS PARA ENVIAR AO CONTROLLER
+            const dados = new URLSearchParams();
+
+            dados.append("idProduto", currentItem.id);
+            dados.append("quantidade", currentItem.quantity);
+            dados.append("observacao", observacoes);
+
+            // Envia o preço com ponto decimal, conforme o PedidoController
+            dados.append("precoUnitario", finalPriceUnit.toFixed(2));
+
+            try {
+                const resposta = await fetch("/Pedido/AdicionarAoCarrinho", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: dados
                 });
-            }
 
-            localStorage.setItem('mokkaCart', JSON.stringify(cart));
-            updateFloatingBar();
-            closeCustomizeModal();
+                if (!resposta.ok) {
+                    alert("Não foi possível adicionar o produto ao carrinho.");
+                    return;
+                }
+
+                // Fecha a janela de personalização
+                closeCustomizeModal();
+
+                // Abre o carrinho com os produtos da Session
+                window.location.href = "/Pedido/Carrinho";
+            }
+            catch (erro) {
+                console.error("Erro ao adicionar produto:", erro);
+                alert("Ocorreu um erro ao adicionar o produto ao carrinho.");
+            }
         }
 
-        function updateFloatingBar() {
-            const cart = JSON.parse(localStorage.getItem('mokkaCart')) || [];
-            let totalCount = 0;
-            let totalPrice = 0.00;
 
-            cart.forEach(item => {
-                totalCount += item.quantity;
-                totalPrice += item.price * item.quantity;
-            });
-
+        async function updateFloatingBar() {
             const countBadge = document.getElementById('cartCount');
             const totalText = document.getElementById('cartTotal');
+            const floatingBar = document.querySelector('.floating-cart-bar');
 
-            if (countBadge && totalText) {
-                countBadge.innerText = totalCount;
-                totalText.innerText = 'R$ ' + totalPrice.toFixed(2).replace('.', ',');
+            try {
+                const resposta = await fetch("/Pedido/ResumoCarrinho");
+
+                if (!resposta.ok) {
+                    throw new Error("Não foi possível consultar o carrinho.");
+                }
+
+                const resumo = await resposta.json();
+
+                countBadge.innerText = resumo.quantidadeItens;
+                totalText.innerText =
+                    'R$ ' + Number(resumo.valorTotal).toFixed(2).replace('.', ',');
+
+                // Esconde a barra quando o carrinho estiver vazio
+                floatingBar.style.display =
+                    resumo.quantidadeItens > 0 ? 'flex' : 'none';
+            }
+            catch (erro) {
+                console.error("Erro ao atualizar a barra do carrinho:", erro);
             }
         }
 

@@ -1,35 +1,60 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using Projeto_do_semestre.Dao;
 using Projeto_do_semestre.Models;
 using System.Text.Json;
+using System.Globalization;
 
 namespace Projeto_do_semestre.Controllers;
 
 public class PedidoController(PedidoDao pedidoDao, ProdutoDao produtoDao) : Controller
 {
-
-        // POST: /Pedido/AdicionarAoCarrinho
+    // POST: /Pedido/AdicionarAoCarrinho
     [HttpPost]
-    public IActionResult AdicionarAoCarrinho(int idProduto, int quantidade, string? observacao)
+    public IActionResult AdicionarAoCarrinho(
+        int idProduto,
+        int quantidade,
+        string? observacao,
+        string precoUnitario)
     {
-        var produto = produtoDao.BuscarPorId(idProduto);
-        if (produto == null) return NotFound();
+        if (quantidade <= 0)
+            return BadRequest("Quantidade inválida.");
 
-        // 1. Ler da Session manualmente sem a classe Helper
-        string? jsonCarrinho = HttpContext.Session.GetString("CarrinhoTotem");
+        // Converte o preço enviado pelo JavaScript
+        if (!decimal.TryParse(
+            precoUnitario,
+            NumberStyles.Number,
+            CultureInfo.InvariantCulture,
+            out decimal preco))
+        {
+            return BadRequest("Preço inválido.");
+        }
+
+        if (preco < 0)
+            return BadRequest("Preço inválido.");
+
+        var produto = produtoDao.BuscarPorId(idProduto);
+
+        if (produto == null)
+            return NotFound();
+
+        string? jsonCarrinho =
+            HttpContext.Session.GetString("CarrinhoTotem");
+
         var carrinho = string.IsNullOrEmpty(jsonCarrinho)
             ? new List<ItemCarrinho>()
-            : JsonSerializer.Deserialize<List<ItemCarrinho>>(jsonCarrinho) ?? new List<ItemCarrinho>();
+            : JsonSerializer.Deserialize<List<ItemCarrinho>>(jsonCarrinho)
+              ?? new List<ItemCarrinho>();
 
-        // 2. Adicionar ou atualizar o item
-        var itemExistente = carrinho.FirstOrDefault(i => i.Produto.IdProduto == idProduto);
+        // Verifica se já existe o mesmo produto com a mesma personalização
+        var itemExistente = carrinho.FirstOrDefault(i =>
+            i.Produto.IdProduto == idProduto &&
+            i.Observacao == observacao &&
+            i.PrecoUnitario == preco);
+
         if (itemExistente != null)
         {
             itemExistente.Quantidade += quantidade;
-            if (!string.IsNullOrEmpty(observacao))
-            {
-                itemExistente.Observacao = observacao;
-            }
         }
         else
         {
@@ -37,38 +62,86 @@ public class PedidoController(PedidoDao pedidoDao, ProdutoDao produtoDao) : Cont
             {
                 Produto = produto,
                 Quantidade = quantidade,
-                Observacao = observacao
+                Observacao = observacao,
+                PrecoUnitario = preco
             });
         }
 
-        // 3. Salvar de volta na Session em formato JSON
-        string jsonAtualizado = JsonSerializer.Serialize(carrinho);
-        HttpContext.Session.SetString("CarrinhoTotem", jsonAtualizado);
+        // Salva os produtos na Session
+        HttpContext.Session.SetString(
+            "CarrinhoTotem",
+            JsonSerializer.Serialize(carrinho)
+        );
 
-        return RedirectToAction(nameof(Carrinho));
+        return Ok();
     }
 
-    // GET: /Pedido/Carrinho (Abre a View AreaPublica/Carrinho.cshtml)
+    // GET: /Pedido/Carrinho
     public IActionResult Carrinho()
     {
-        string? jsonCarrinho = HttpContext.Session.GetString("CarrinhoTotem");
+        string? jsonCarrinho =
+            HttpContext.Session.GetString("CarrinhoTotem");
+
         var carrinho = string.IsNullOrEmpty(jsonCarrinho)
             ? new List<ItemCarrinho>()
-            : JsonSerializer.Deserialize<List<ItemCarrinho>>(jsonCarrinho) ?? new List<ItemCarrinho>();
+            : JsonSerializer.Deserialize<List<ItemCarrinho>>(jsonCarrinho)
+              ?? new List<ItemCarrinho>();
 
         return View("~/Views/AreaPublica/Carrinho.cshtml", carrinho);
+    }
+
+    // POST: /Pedido/AlterarQuantidade
+    [HttpPost]
+    public IActionResult AlterarQuantidade(int index, int delta)
+    {
+        string? jsonCarrinho =
+            HttpContext.Session.GetString("CarrinhoTotem");
+
+        var carrinho = string.IsNullOrEmpty(jsonCarrinho)
+            ? new List<ItemCarrinho>()
+            : JsonSerializer.Deserialize<List<ItemCarrinho>>(jsonCarrinho)
+              ?? new List<ItemCarrinho>();
+
+        if (index < 0 || index >= carrinho.Count)
+            return BadRequest();
+
+        carrinho[index].Quantidade += delta;
+
+        if (carrinho[index].Quantidade <= 0)
+        {
+            carrinho.RemoveAt(index);
+        }
+
+        HttpContext.Session.SetString(
+            "CarrinhoTotem",
+            JsonSerializer.Serialize(carrinho)
+        );
+
+        return Ok();
+    }
+
+    // POST: /Pedido/LimparCarrinho
+    [HttpPost]
+    public IActionResult LimparCarrinho()
+    {
+        HttpContext.Session.Remove("CarrinhoTotem");
+
+        return Ok();
     }
 
     // POST: /Pedido/FinalizarPedido
     [HttpPost]
     public IActionResult FinalizarPedido(int? idCliente)
     {
-        string? jsonCarrinho = HttpContext.Session.GetString("CarrinhoTotem");
+        string? jsonCarrinho =
+            HttpContext.Session.GetString("CarrinhoTotem");
+
         var carrinho = string.IsNullOrEmpty(jsonCarrinho)
             ? new List<ItemCarrinho>()
-            : JsonSerializer.Deserialize<List<ItemCarrinho>>(jsonCarrinho);
+            : JsonSerializer.Deserialize<List<ItemCarrinho>>(jsonCarrinho)
+              ?? new List<ItemCarrinho>();
 
-        if (carrinho == null || carrinho.Count == 0)
+        if (carrinho.Count == 0)
         {
             return RedirectToAction(nameof(Carrinho));
         }
@@ -76,35 +149,61 @@ public class PedidoController(PedidoDao pedidoDao, ProdutoDao produtoDao) : Cont
         var novoPedido = new Pedido
         {
             Status = "pendente",
+
             ValorTotal = carrinho.Sum(i => i.Subtotal),
+
             IdCliente = idCliente,
+
             Itens = carrinho.Select(i => new ItemPedido
             {
                 IdProduto = i.Produto.IdProduto,
                 Quantidade = i.Quantidade,
-                PrecoUnitario = i.Produto.PrecoAtual,
+
+                // Registra o preço incluindo os adicionais
+                PrecoUnitario = i.PrecoUnitario,
+
                 Observacao = i.Observacao
+
             }).ToList()
         };
 
-        // Grava no SQLite e retorna o ID e o número da senha gerada
+        // Grava o pedido no SQLite
         int idPedido = pedidoDao.CriarPedido(novoPedido);
 
-        // Limpa a Session
         HttpContext.Session.Remove("CarrinhoTotem");
 
-        ViewBag.SenhaGerada = novoPedido.NumeroSenha;
-        return View("~/Views/AreaPublica/IndexPublico.cshtml");
+        return Json(new
+        {
+            sucesso = true,
+            senha = novoPedido.NumeroSenha
+        });
     }
+    [HttpGet]
+    public IActionResult ResumoCarrinho()
+    {
+        string? jsonCarrinho =
+            HttpContext.Session.GetString("CarrinhoTotem");
 
+        var carrinho = string.IsNullOrEmpty(jsonCarrinho)
+            ? new List<ItemCarrinho>()
+            : JsonSerializer.Deserialize<List<ItemCarrinho>>(jsonCarrinho)
+              ?? new List<ItemCarrinho>();
+
+        return Json(new
+        {
+            quantidadeItens = carrinho.Sum(i => i.Quantidade),
+            valorTotal = carrinho.Sum(i => i.Subtotal)
+        });
+    }
     // ==========================================
-    // 2. ÁREA DA COZINHA
+    // ÁREA DA COZINHA
     // ==========================================
 
-    // GET: /Pedido/Cozinha (Abre a View AreaCozinha/CozIndex.cshtml)
+    // GET: /Pedido/Cozinha
     public IActionResult Cozinha()
     {
         var pedidosPendentes = pedidoDao.ListarPedidosCozinha();
+
         return View("~/Views/AreaCozinha/CozIndex.cshtml", pedidosPendentes);
     }
 
@@ -113,6 +212,7 @@ public class PedidoController(PedidoDao pedidoDao, ProdutoDao produtoDao) : Cont
     public IActionResult AtualizarStatus(int idPedido, string novoStatus)
     {
         pedidoDao.AtualizarStatus(idPedido, novoStatus);
+
         return RedirectToAction(nameof(Cozinha));
     }
 }

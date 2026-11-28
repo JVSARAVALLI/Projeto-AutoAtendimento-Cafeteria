@@ -62,7 +62,7 @@ app.UseAuthorization();
 // 6. Rota padrão
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Produto}/{action=Cardapio}/{id?}"
+    pattern: "{controller=AreaPublica}/{action=Index}/{id?}"
 );
 
 app.Run();
